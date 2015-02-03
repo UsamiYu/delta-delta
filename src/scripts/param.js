@@ -84,6 +84,42 @@ var myClass = myClass || {};
             ][num]);
         },
     };
+    
+    myClass.TweenAnimation = function(obj, type, time, param){
+        param = param.$safe({
+            scaleX  : 1.0,
+            scaleY  : 1.0,
+            alpha   : 1.0,
+            rotation: 0,
+        });
+        
+        if(time < 1) return;
+
+        switch (type){
+            case "in":
+                obj.tweener
+                   .clear()
+                   .to(param, time);
+            break;
+            case "out":
+                obj.update = function(){};
+                obj.tweener
+                   .clear()
+                   .to(param, time)
+                   .call(function(){ if(this.parent) this.remove(); }.bind(obj));
+            break;
+            case "draw_phase":
+                obj.tweener
+                   .clear()
+                   .to({scaleX: 1.0, scaleY: 1.0}, time)
+                   .wait(time * 2)
+                   .to(param, time)
+                   .call(function(){ if(this.parent) this.remove(); }.bind(obj));
+            break;
+            default:
+            break;
+        };
+    };
 
     var bulletImage = tm.graphics.Canvas().resize(32 * 11, 32 * 2);
     for(var i = 0;i < 11; i++){
@@ -172,7 +208,7 @@ var myClass = myClass || {};
     
     myClass.danmakuList = function(num){
         var list = [
-            ["stage3_03"],
+            ["test1"],
             ["stage0_01", "stage0_02", "stage0_03"],
             ["stage1_01", "stage1_03", "stage2_01"],
             ["stage3_03", "stage2_02", "stage3_02"],

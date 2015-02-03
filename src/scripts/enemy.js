@@ -13,6 +13,8 @@ var myClass = myClass || {};
             .call(function(){ if(this.parent) this.remove(); }.bind(elm));
     };
     
+    
+    
     myClass.EnemyCore = tm.createClass({
         superClass: tm.bulletml.Bullet,
         
@@ -82,7 +84,7 @@ var myClass = myClass || {};
                 return;
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
-            if(dist > 16384){  //距離128px ^ 2
+            if(dist > 10000){  //距離100px ^ 2
                 var explode = myClass.EnemyExplosion(this.x, this.y, ~~(this.radius / 16 * (this.sides - 1)));
                 explode.addChildTo(this.scene.enemyLayer);
             }
@@ -203,7 +205,8 @@ var myClass = myClass || {};
                             var bullet = myClass.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, this.radius * 2, vec.x, vec.y);
                             bullet.addChildTo(field);
                             this.remove();
-                            player.power += (this.radius - 7);
+//                            player.power += (this.radius - 7);
+                            player.power--;
                             scoreLabel.score += (scoreLabel.v * this.radius);
                             return;
                         }

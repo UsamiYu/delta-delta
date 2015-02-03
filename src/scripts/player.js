@@ -97,6 +97,7 @@ var myClass = myClass || {};
             var scene = this.getRoot();
             scene.missCount++;
             if(scene.missCount < 10) scene.scoreLabel.score++;
+
             this.tweener
                 .clear()
                 .to({scaleX: 10, scaleY: 0.01}, 250)
@@ -117,10 +118,9 @@ var myClass = myClass || {};
             this.x = 320;
             this.y = 720 - this.radius;
             this.setScale(10);
-
+            
+            myClass.TweenAnimation(this, "in", 200, { scaleX: 1.0, scaleY: 1.0});
             this.tweener
-                .clear()
-                .scale(1.0, 200)
                 .call(function(){
                     this.hitFlagCount = GAME_FPS;
                     this.mode = "shot";

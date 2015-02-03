@@ -44,21 +44,27 @@ var myClass = myClass || {};
             this.danmaku = "";
             this.danmakuList = myClass.danmakuList(this.stage);
             this.age = this.timeBounus = this.missCount = 0;
+            this.phase = 0;
             this.stepTick();
         },
 
         stepTick: function(){
-            this.danmaku = this.danmakuList[0];
-            if(this.danmakuList.length < 1){
+            this.danmaku = this.danmakuList[this.phase];
+            if(this.danmakuList.length <= this.phase){
                 this.result();
                 return;
             }
-            this.danmakuList.splice(0, 1);
+//            this.danmakuList.splice(0, 1);
             if(this.danmaku === "") return;
 
             this.stopDanmaku();
             myClass.setDanmaku(this, this.player, this);
             this.timeBounus += 60 * GAME_FPS;
+            this.phase++;
+
+            myClass.EffectiveText("PHASE " + ("00" + this.phase).substr(-2))
+                   .setPosition(320, 240)
+                   .addChildTo(this);
         },
         
         update: function(){
