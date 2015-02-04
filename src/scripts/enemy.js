@@ -137,7 +137,43 @@ var myClass = myClass || {};
         },
 
     });
-    
+
+    myClass.InvisibleEnemy = tm.createClass({
+        superClass: tm.bulletml.Bullet,
+        
+        init: function(runner, attr){
+            this.superInit(runner);
+            
+            this.fieldOutCheck = attr.fieldOutCheck;
+            
+        },
+        
+        onadded: function(){
+            this.scene = this.getRoot();
+        },
+
+        update: function(){
+            this.runner.update();
+            this.setPosition(this.runner.x, this.runner.y);
+            
+            if(this.fieldOutCheck && this.parent){
+                if(this.x < GAME_FIELD_LEFT ||
+                   this.x > GAME_FIELD_RIGHT ||
+                   this.y < GAME_FIELD_TOP ||
+                   this.y > GAME_FIELD_BOTTOM){
+                    this.remove();
+                    return;
+                }
+            }
+
+            var player = this.scene.player;
+            if(player.mode === "refrection" && this.parent){
+                var r = player.refrectionField.radius * player.refrectionField.radius;
+                if(tm.geom.Vector2(this.x, this.y).distanceSquared(player) < r) this.remove();
+            }
+        },
+    });
+
     myClass.EnemyBullet = tm.createClass({
         superClass: tm.bulletml.Bullet,
         

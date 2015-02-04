@@ -65,6 +65,11 @@ var myClass = myClass || {};
             width : 64,
             height: 64,
         };
+        
+        var invisible = {
+            type         : "invisible",
+            fieldOutCheck: false
+        }
 
         var pattern = {
             test1: function(obj){
@@ -239,12 +244,81 @@ var myClass = myClass || {};
                     ])
                 };
             },
+            test3: function(obj){
+                boss.hp = 2700;
+                boss.danmaku = "boss6";
+                invisible.fieldOutCheck = true;
+                return {
+                    top: d.action([
+                        d.wait(60),
+                        d.fire(
+                            d.offsetX(320),
+                            d.speed(6),
+                            d.bullet(boss, d.action([
+                                d.changeSpeed(d.speed(0), 60),
+                                d.repeat(99, [
+                                    d.wait(60),
+                                    d.actionRef("move")
+                                ])
+                            ]))
+                        ),
+                    ]),
+                    top2: d.action([
+                        d.repeat(99, [
+                            d.wait(360),
+                            d.actionRef("bullet_point",  32,  32),
+                            d.wait(240),
+                            d.actionRef("bullet_point", 608, 360),
+                            d.wait(240),
+                            d.actionRef("bullet_point", 608,  32),
+                            d.wait(240),
+                            d.actionRef("bullet_point",  32, 360),
+                        ])
+                    ]),
+                    bullet_point: d.action([
+                        d.fire(
+                            d.offsetX("$1"),
+                            d.offsetY("$2"),
+                            d.direction("($rand < 0.5) ? 10 : -10", "aim"),
+                            d.speed(10),
+                            d.bullet(invisible, d.actionRef("bullet"))
+                        ),
+                    ]),
+                    bullet: d.action([
+                        d.repeat(30, [
+                            d.wait(4),
+                            d.fire(
+                                d.direction(0, "aim"),
+                                d.speed(0),
+                                d.bullet(middleBullet, d.action([ d.changeSpeed(d.speed(4), 240) ]))
+                            ),
+                        ])
+                    ]),
+                    move: d.action([
+                        d.changeSpeed(d.speed(1), 1),
+                        d.repeat(2, [
+                            d.actionRef("changeDirection", 120,  60),
+                            d.actionRef("changeDirection",  60,  60),
+                            d.actionRef("changeDirection", 300,  60),
+                            d.actionRef("changeDirection", 240, 120),
+                            d.actionRef("changeDirection", 300,  60),
+                            d.actionRef("changeDirection",  60,  60),
+                            d.actionRef("changeDirection", 120,  60),
+                        ]),
+                        d.changeSpeed(d.speed(0), 1)
+                    ]),
+                    changeDirection: d.action([
+                        d.changeDirection(d.direction("$1", "absolute"), 1),
+                        d.wait("$2"),
+                    ])
+                };
+            },
 
             stage0_01: function(obj){
                 boss.hp = 450;
                 return {
                     top: d.action([
-                        d.wait(30),
+                        d.wait(60),
                         d.notify("cutin", "画面をスライドして、自機を操作。弾は自動で発射します"),
                         d.fire(
                             d.offsetX(320),
@@ -1221,6 +1295,27 @@ var myClass = myClass || {};
                          d.wait(60),
                          d.changeSpeed(d.speed(3), 90)
                      ])
+                };
+            },
+            boss6: function(obj){
+                return {
+                    top: d.action([
+                        d.wait(60),
+                        d.repeat(99, [
+                            d.repeat(50, [
+                                d.repeat("6 + $loop.index", [
+                                    d.fire(
+                                        d.direction(185, "sequence"),
+                                        d.speed(3),
+                                        d.bullet()
+                                    ),
+                                    d.wait(1)
+                                ]),
+                                d.wait("50 - $loop.index")
+                            ]),
+                            d.wait(180)
+                        ])
+                    ])
                 };
             }
         }

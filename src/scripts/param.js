@@ -193,7 +193,7 @@ var myClass = myClass || {};
                         var enemy = myClass.EnemyCore(runner, attr).addChildTo(scene.enemyLayer);
                     break;
                     case "invisible":
-                    //実装予定
+                        var enemy = myClass.InvisibleEnemy(runner, attr).addChildTo(scene.bulletLayer);
                     break;
                     default:
                         var bullet = myClass.EnemyBullet(runner, attr).addChildTo(scene.bulletLayer);
@@ -208,7 +208,7 @@ var myClass = myClass || {};
     
     myClass.danmakuList = function(num){
         var list = [
-            ["test1", "test2"],
+            ["test3", "test2", "test1"],
             ["stage0_01", "stage0_02", "stage0_03"],
             ["stage1_01", "stage1_03", "stage2_01"],
             ["stage3_03", "stage2_02", "stage3_02"],
