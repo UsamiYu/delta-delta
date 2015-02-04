@@ -62,7 +62,7 @@ var myClass = myClass || {};
             this.timeBounus += 60 * GAME_FPS;
             this.phase++;
 
-            myClass.EffectiveText("PHASE " + ("00" + this.phase).substr(-2))
+            myClass.EffectiveText("PHASE " + ("00" + this.phase + "/").substr(-3) + ("00" + this.danmakuList.length).substr(-2))
                    .setPosition(320, 240)
                    .addChildTo(this);
         },

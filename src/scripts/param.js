@@ -112,7 +112,7 @@ var myClass = myClass || {};
                 obj.tweener
                    .clear()
                    .to({scaleX: 1.0, scaleY: 1.0}, time)
-                   .wait(time * 2)
+                   .wait(time * 5)
                    .to(param, time)
                    .call(function(){ if(this.parent) this.remove(); }.bind(obj));
             break;

@@ -57,6 +57,7 @@ var myClass = myClass || {};
             if(!text) return;
             
             this.text = text;
+            this.count = 0;
             this.textColor = myClass.colorStyle.getColorStyle("blue");
             this.age = 0;
 /*
@@ -76,32 +77,41 @@ var myClass = myClass || {};
                 
             } */
         },
-        update: function(){
+        tick: function(){
+            if(this.count >= this.text.length){
+                this.tweener
+                    .clear()
+                    .wait(5000)
+                    .call(function(){
+                        this.update = function(){};
+                        this.remove();
+                    }.bind(this));
+
+                return;
+            }
+
             var textShape = tm.display.TextShape({
                 fontSize: 32,
                 fillStyle: this.textColor.fillStyle,
                 strokeStyle: this.textColor.strokeStyle,
-                text: this.text[this.age]
+                text: this.text[this.count]
             })
-            .setPosition(this.age * 32 - this.text.length * 16, 0)
+            .setPosition(this.count * 32 - this.text.length * 16, 0)
             .addChildTo(this);
+            
+            var sx = textShape.scaleX = 0.2;
+            var sy = textShape.scaleY = 20.0;
 
-            var sx = 0.2;
-            var sy = 9.0;
-            
-            textShape.scaleX = sx;
-            textShape.scaleY = sy;
-            
             myClass.TweenAnimation(textShape, "draw_phase", 250, {scaleX: sx, scaleY: sy});
-
-            this.age++;
-            if(this.age >= this.text.length){
-                this.tweener
-                    .wait(1500)
-                    .call(function(){ this.remove(); }.bind(this));
-
-                this.update = function(){};
+            
+            this.count++;
+        },
+        update: function(){
+            if(this.age > 6){
+                this.tick();
+                this.age = 0;
             }
+            this.age++;
         },
     });
 
