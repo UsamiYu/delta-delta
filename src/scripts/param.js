@@ -208,7 +208,7 @@ var myClass = myClass || {};
     
     myClass.danmakuList = function(num){
         var list = [
-            ["test1"],
+            ["test1", "test2"],
             ["stage0_01", "stage0_02", "stage0_03"],
             ["stage1_01", "stage1_03", "stage2_01"],
             ["stage3_03", "stage2_02", "stage3_02"],

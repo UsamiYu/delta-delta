@@ -27,6 +27,7 @@ var myClass = myClass || {};
             this.y = attr.y;
             this.width = attr.width;
             this.height = attr.height;
+            this.areaWidth = (this.width > this.height) ? this.width : this.height;
             this.hp = this.maxHp = attr.hp;
             this.sides = attr.sides;
             this.danmaku = attr.danmaku;
@@ -85,7 +86,7 @@ var myClass = myClass || {};
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
             if(dist > 10000){  //距離100px ^ 2
-                var explode = myClass.EnemyExplosion(this.x, this.y, ~~(this.radius / 16 * (this.sides - 1)));
+                var explode = myClass.EnemyExplosion(this.x, this.y, ~~(this.radius / 24 * this.sides));
                 explode.addChildTo(this.scene.enemyLayer);
             }
             this.remove();
@@ -112,7 +113,7 @@ var myClass = myClass || {};
             }
             this.setPosition(this.runner.x, this.runner.y);
 
-            if(this.fieldOutCheck && myClass.gameFieldOut(this)){
+            if(this.fieldOutCheck && myClass.gameFieldOut(this) && this.parent){
                 this.remove();
                 return;
             }
@@ -206,7 +207,7 @@ var myClass = myClass || {};
                             bullet.addChildTo(field);
                             this.remove();
 //                            player.power += (this.radius - 7);
-                            player.power--;
+//                            player.power--;
                             scoreLabel.score += (scoreLabel.v * this.radius);
                             return;
                         }

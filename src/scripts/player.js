@@ -216,7 +216,9 @@ var myClass = myClass || {};
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
-                    if(!target.tweener.isPlaying){
+                    if(!target.tweener.isPlaying &&
+                        !(target.areaWidth + target.x < this.left ||
+                        target.areaWidth - target.x > this.rigth)){
                         if(this.isHitElement(target)){
                             target.hp -= this.damage;
                             this.scaleX = 1.5;
