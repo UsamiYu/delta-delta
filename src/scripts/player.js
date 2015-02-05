@@ -145,6 +145,9 @@ var myClass = myClass || {};
                     this.refrectionField.alpha = 0.5;
                     this.setOnShot(false);
                     this.mode = "refrection";
+                    var effect = tm.display.Sprite(this.refrectionField.canvas, 80, 80);
+                    effect.setScale(0.2).setAlpha(0.5).addChildTo(this);
+                    myClass.TweenAnimation(effect, "out", 250, {scaleX: 18.0, scaleY: 18.0, alpha: 0.1});
                 break;
                 case "refrection":
                     this.refrectionField.visible = false;

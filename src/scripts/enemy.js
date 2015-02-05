@@ -37,6 +37,7 @@ var myClass = myClass || {};
 //            this.target = attr.target;
             this.isSyncRotation = attr.isSyncRotation;
             this._isHitTestEnable = true;
+            this.addedAnimation = attr.addedAnimation;
             
             this.scene = "";
 
@@ -98,6 +99,16 @@ var myClass = myClass || {};
             if(this.type === "boss") this.hpGauge.addChildTo(this.scene);
             if(this.danmaku !== "") myClass.setDanmaku(this, this.scene.player, this.scene);
             if(this._isHitTestEnable) this.scene.enemies.push(this);
+            if(this.addedAnimation !== ""){
+                switch(this.addedAnimation){
+                    case "zoom":
+                        this.setScale(2.5);
+                        myClass.TweenAnimation(this, "in", 200, {});
+                    break;
+                    default:
+                    break;
+                };
+            }
         },
 
         onremoved: function(){

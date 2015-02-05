@@ -68,7 +68,7 @@ var myClass = myClass || {};
         
         var invisible = {
             type         : "invisible",
-            fieldOutCheck: false
+            fieldOutCheck: true
         }
 
         var pattern = {
@@ -247,7 +247,6 @@ var myClass = myClass || {};
             test3: function(obj){
                 boss.hp = 2700;
                 boss.danmaku = "boss6";
-                invisible.fieldOutCheck = true;
                 return {
                     top: d.action([
                         d.wait(60),
@@ -268,18 +267,18 @@ var myClass = myClass || {};
                             d.wait(360),
                             d.actionRef("bullet_point",  32,  32),
                             d.wait(240),
-                            d.actionRef("bullet_point", 608, 360),
+                            d.actionRef("bullet_point", 608, 320),
                             d.wait(240),
                             d.actionRef("bullet_point", 608,  32),
                             d.wait(240),
-                            d.actionRef("bullet_point",  32, 360),
+                            d.actionRef("bullet_point",  32, 320),
                         ])
                     ]),
                     bullet_point: d.action([
                         d.fire(
                             d.offsetX("$1"),
                             d.offsetY("$2"),
-                            d.direction("($rand < 0.5) ? 10 : -10", "aim"),
+                            d.direction("($1 < 180) ? 135 : 225", "absolute"),
                             d.speed(10),
                             d.bullet(invisible, d.actionRef("bullet"))
                         ),
@@ -311,6 +310,91 @@ var myClass = myClass || {};
                         d.changeDirection(d.direction("$1", "absolute"), 1),
                         d.wait("$2"),
                     ])
+                };
+            },
+            test4: function(obj){
+                zakoA.addedAnimation = "zoom";
+                boss.hp = 900;
+                return {
+                    top: d.action([
+                        d.wait(60),
+                        d.fire(
+                            d.offsetX(640),
+                            d.offsetY(96),
+                            d.direction(270, "absolute"),
+                            d.speed(12),
+                            d.bullet(boss, d.actionRef("boss"))
+                       )
+                    ]),
+                    boss: d.action([
+                        d.changeSpeed(d.speed(0), 100),
+                        d.wait(100),
+                        d.repeat(99, [
+                            d.fire(
+                                d.direction(180, "absolute"),
+                                d.speed(12),
+                                d.bullet(invisible, d.actionRef("bullet_point1", 1))
+                            ),
+                            d.actionRef("move", 12),
+                            d.fire(
+                                d.direction(180, "absolute"),
+                                d.speed(12),
+                                d.bullet(invisible, d.actionRef("bullet_point1", -1))
+                            ),
+                            d.wait(15),
+                            d.actionRef("move", 12),
+                            d.wait(1),
+                            d.actionRef("move", 2),
+                            d.wait(1),
+                            d.actionRef("move", 2),
+                            d.wait(180)
+                        ])
+                    ]),
+                    move: d.action([
+                        d.changeDirection(d.direction(180, "relative"), 1),
+                        d.changeSpeed(d.speed("$1"), 1),
+                        d.wait("552 / $1"),
+                        d.changeSpeed(d.speed(0), 1)
+                    ]),
+                    bullet_point1: d.action([
+                        d.wait("($1 > 0) ? 1 : 5"),
+                        d.repeat(4, [
+                            d.wait(8),
+                            d.fire(
+                                d.direction("-90 * $1", "relative"),
+                                d.speed(12),
+                                d.bullet(invisible, d.actionRef("bullet_point2"))
+                            ),
+                        ]),
+                        d.vanish()
+                    ]),
+                    bullet_point2: d.action([
+                        d.repeat(6, [
+                            d.fire(
+                                d.direction(0, "relative"),
+                                d.speed(0),
+                                d.bullet(zakoA, d.action([
+                                    d.wait(240),
+                                    d.fire(
+                                        d.direction("~~($rand * 4) * 90", "absolute"),
+                                        d.speed(3),
+                                        d.bullet(middleBullet)
+                                    ),
+                                    d.repeat(3, [
+                                        d.wait(120),
+                                        d.fire(
+                                            d.direction(90, "sequence"),
+                                            d.speed(3),
+                                            d.bullet(middleBullet)
+                                        )
+                                    ]),
+                                    d.changeSpeed(d.speed(4), 1)
+                                ]))
+                            ),
+                            d.wait(8)
+                        ])
+                    ])
+                    
                 };
             },
 
