@@ -404,7 +404,8 @@ var game = game || {};
                             d.wait(1),
                             d.changeSpeed(d.speed(3), 30),
                             d.wait(90),
-                        ])
+                        ]),
+                        d.changeSpeed(d.speed(0), 1)
                     ])
                 };
             },

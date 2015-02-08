@@ -149,7 +149,7 @@ var game = game || {};
                 width     : 640,
                 height    : 48,
                 fontSize  : 48,
-                fontFamily: "font",
+//                fontFamily: "font",
                 text      : "RESULT"});
             var result = tm.display.TextShape(param)
                 .setPosition(320, 140)
@@ -165,7 +165,7 @@ var game = game || {};
                 ("00" + ms).substr(-2)
             );
             param.fontSize = 32;
-            param.fontFamily = "font";
+//            param.fontFamily = "font";
             var time = tm.display.TextShape(param)
                 .setPosition(320, 260)
                 .addChildTo(this);

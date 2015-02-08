@@ -13,7 +13,7 @@ var game = game || {};
              this.superInit("SCORE:0000000000");
              this.setAlign("left");
              this.setFontSize(32);
-             this.setFontFamily("font");
+//             this.setFontFamily();
              this.x = 22;
              this.y = 48;
              
@@ -62,22 +62,6 @@ var game = game || {};
             this.count = 0;
             this.textColor = game.colorStyle.getColorStyle("blue");
             this.age = 0;
-/*
-            for(var i = 0,l = text.length;i < l;i++){
-                var textShape = tm.display.TextShape({
-                    fontSize: 32,
-                    fillStyle: color.fillStyle,
-                    strokeStyle: color.strokeStyle,
-                    text: text[i]
-                })
-                .setPosition(i * 32 - l * 16, 0)
-                .addChildTo(this);
-                textShape.scaleX = 5.0;
-                textShape.scaleY = 0.2;
-
-                game.TweenAnimation(textShape, "in", 250, {scaleX: 1.0, scaleY: 1.0});
-                
-            } */
         },
         tick: function(){
             if(this.count >= this.text.length){
@@ -87,7 +71,7 @@ var game = game || {};
 
             var textShape = tm.display.TextShape({
                 fontSize: 32,
-                fontFamily: "font",
+//                fontFamily: "font",
                 fillStyle: this.textColor.fillStyle,
                 strokeStyle: this.textColor.strokeStyle,
                 text: this.text[this.count]
