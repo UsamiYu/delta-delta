@@ -398,7 +398,7 @@ var game = game || {};
                         d.wait(1),
                         d.changeSpeed(d.speed(1.5), 15),
                         d.wait(75),
-                        d.repeat(99, [
+                        d.repeat(999, [
                             d.changeSpeed(d.speed(0), 1),
                             d.changeDirection(d.direction(180, "relative"), 1),
                             d.wait(1),

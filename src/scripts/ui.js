@@ -64,8 +64,9 @@ var game = game || {};
             this.age = 0;
         },
         tick: function(){
-            if(this.count >= this.text.length){
-                this.update = function(){ if(this.children.length < 1) this.remove(); };
+            var count = this.children.length;
+            if(count >= this.text.length){
+                this.update = function(){ if(count < 1) this.remove(); };
                 return;
             }
 
@@ -74,17 +75,16 @@ var game = game || {};
 //                fontFamily: "font",
                 fillStyle: this.textColor.fillStyle,
                 strokeStyle: this.textColor.strokeStyle,
-                text: this.text[this.count]
+                text: this.text[count]
             })
-            .setPosition(this.count * 32 - this.text.length * 16, 0)
+            .setPosition(count * 32 - this.text.length * 16, 0)
             .addChildTo(this);
             
             var sx = textShape.scaleX = 0.2;
-            var sy = textShape.scaleY = 20.0;
+            var sy = textShape.scaleY = 10.0;
 
-            game.TweenAnimation(textShape, "draw_phase", 250, {scaleX: sx, scaleY: sy});
-            
-            this.count++;
+            game.TweenAnimation(textShape, "draw_phase", 240, {scaleX: sx, scaleY: sy});
+
         },
         update: function(){
             if(this.age > 6){

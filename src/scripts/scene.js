@@ -13,12 +13,6 @@ var game = game || {};
         
         init: function(num){
             this.superInit();
-            //ダブルタップチェック用変数
-            this.pointingCheck = {
-                count: 0,
-                time: 0,
-                durationTime: GAME_FPS / 4, //250ms
-            };
             //ゲーム描画領域(シーン描画領域とは異なる)
             this.gameField = tm.display.CanvasElement().addChildTo(this);
             //敵描画レイヤー
@@ -42,12 +36,20 @@ var game = game || {};
             this.scoreLabel = game.ScoreLabel().addChildTo(this);
             
             this.stage = num || 0;
-            this.danmaku = "";
             this.danmakuList = game.danmakuList(this.stage);
-            this.age = this.timeBounus = this.missCount = 0;
-            this.phase = 0;
             this.stepTick();
         },
+        //ダブルタップチェック用変数
+        pointingCheck: {
+            count: 0,
+            time: 0,
+            durationTime: GAME_FPS / 4, //250ms
+        },
+        age: 0,
+        timeBounus: 0,
+        missCount: 0,
+        danmaku: "",
+        phase: 0,
 
         stepTick: function(){
             this.danmaku = this.danmakuList[this.phase];
@@ -134,14 +136,8 @@ var game = game || {};
 
         oncutin: function(e){
             //チュートリアルなどを差し込む
-//            var scene = tm.app.Scene();
             var text = e.parm;
             alert(e.parm);
-/*            scene.onenterframe = function(){
-               alert(text);
-               this.app.popScene();
-            }
-            this.app.pushScene(scene); */
         },
         result: function(){
             var color = game.colorStyle.getColorStyle("blue");

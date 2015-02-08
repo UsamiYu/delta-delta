@@ -6,37 +6,25 @@ var game = game || {};
 (function(){
 
     game.Player = tm.createClass({
-        superClass: tm.display.TriangleShape,
-//        superClass: tm.display.Sprite,
+//        superClass: tm.display.TriangleShape,
+        superClass: tm.display.Sprite,
 
         init: function(){
-            var style = game.colorStyle.getColorStyle("green");
-            this.superInit({
-                width      : 64,
-                height     : 64,
-                fillStyle  : style.fillStyle,
-                strokeStyle: style.strokeStyle,
-                lineWidth  : 8});
-//            this.superInit("player", 64, 64);
-//            this.setFrameIndex(0);
+//            var style = game.colorStyle.getColorStyle("green");
+//            this.superInit({
+//                width      : 64,
+//                height     : 64,
+//                fillStyle  : style.fillStyle,
+//                strokeStyle: style.strokeStyle,
+//                lineWidth  : 8});
+            this.superInit("player", 64, 64);
+            this.setFrameIndex(0);
 
-            this.maxSpeed = 8;
-            this.speed = 0;
             this._isDestroy = false;
-            this.keyX = this.keyY = 0;
-            this.vx = this.vy = 0;
             this._onShot = false;
             this._shotInterval = 0;
-            this.shotInterval = [8, 6, 4];
-            this.shotLevel = 0;
 
-            this.power = 1;
-            this.maxPower = 1200;
             this.powerGauge = game.PowerGauge(this.maxPower);
-            this.mode = "shot"; // 'shot' or 'refrection'
-
-            this.hitFlag = true;
-            this.hitFlagCount = 0;
 
             this.refrectionField = game.RefrectionField();
             this.refrectionField.addChildTo(this);
@@ -44,6 +32,20 @@ var game = game || {};
 
             this.initStatus();
         },
+        
+        maxSpeed: 8,
+        speed: 0,
+        keyX: 0,
+        keyY: 0,
+        vx: 0,
+        vy: 0,
+        shotInterval: [8, 6, 4],
+        shotLevel: 0,
+        power: 1,
+        maxPower: 1200,
+        mode: "shot", // "shot" or "refrection"
+        hitFlag: true,
+        hitFlagCount: 0,
 
         update: function(app){
 
@@ -169,7 +171,7 @@ var game = game || {};
         superClass: tm.display.CircleShape,
         
         init: function(){
-            var style = game.colorStyle.getColorStyle("green");
+            var style = game.colorStyle.getColorStyle("yellow");
             this.superInit({
                 width      : 80,
                 height     : 80,
@@ -192,16 +194,16 @@ var game = game || {};
                 strokeStyle: style.strokeStyle,
                 lineWidth  : 4});
 
-            this.speed = 28;
             this.x = x;
             this.y = y;
 
             angle = Math.degToRad(angle + 270);
             this.vy = this.speed * Math.sin(angle);
             this.damage = damage;
-            this.boundingType = "rect";
-            this.hitFlag = false; 
         },
+        speed: 28,
+        boundingtype: "rect",
+        hitFlag: false,
 
         update: function(app){
             if(this.hitFlag || game.gameFieldOut(this)){
@@ -247,14 +249,12 @@ var game = game || {};
             this.vx = vx;
             this.vy = vy;
             
-            this.boundingType = 'rect';
-            
             this.damage = size / 2;
             
             this.count = (64 - size) / 8;
-            
-            this.hitFlag = false;
         },
+        boundingType: "rect",
+        hitFlag: false,
         
         update: function(app){
             if(game.gameFieldOut(this)){
@@ -335,10 +335,12 @@ var game = game || {};
                 height: 80,
                 animationFlag: false,
             });
-            this.color = "blue";
-            this.value = this.power = 0;
+
             this.maxPower = maxPower;
         },
+        color: "blue",
+        value: 0,
+        power: 0,
         
         setPower: function(pow){
             if(this.power === pow) return;

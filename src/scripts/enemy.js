@@ -275,9 +275,9 @@ var game = game || {};
             this.superInit();
             
             this.setPosition(x, y);
-            this.danmaku = "explode";
             this.rank = rank;
         },
+        danmaku: "explode",
         onadded: function(){
             var scene = this.getRoot().app.currentScene;
             

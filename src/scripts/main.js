@@ -11,27 +11,20 @@ tm.main(function() {
 
     app.enableStats();
     app.background = "rgba( 55%, 55%, 70%, 1)";
-/*
+
     var loadingScene = tm.ui.LoadingScene({
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         assets: {
-            font: "fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf"
+            player: "./images/player.png"
        },
         nextScene: game.SelectScene,
     });
 
     app.replaceScene(loadingScene);
 
-    var test = tm.display.Sprite("bullet", 24, 24);
-    test.frameIndex = 0;
-    test.blur = 3;
-
-    test.addChildTo(app.currentScene).setPosition(320, 480);
-
-//    var scene = game.ShootingScene(0); */
-    var scene = game.SelectScene();
-    app.replaceScene(scene);
+//    var scene = game.SelectScene();
+//    app.replaceScene(scene);
 
     app.update = function() {
         var scene = this.currentScene;
