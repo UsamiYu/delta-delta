@@ -2,16 +2,18 @@
  * ui.js
  */
 
-var myClass = myClass || {};
+var game = game || {};
 
 (function(){
 
-    myClass.ScoreLabel = tm.createClass({
+    game.ScoreLabel = tm.createClass({
          superClass: tm.display.Label,
          
          init: function(){
              this.superInit("SCORE:0000000000");
              this.setAlign("left");
+             this.setFontSize(32);
+             this.setFontFamily("font");
              this.x = 22;
              this.y = 48;
              
@@ -23,7 +25,7 @@ var myClass = myClass || {};
          },
     });
 
-    myClass.EnemyHpGauge = tm.createClass({
+    game.EnemyHpGauge = tm.createClass({
         superClass: tm.ui.Gauge,
         
         init: function(x, y, maxHp){
@@ -48,7 +50,7 @@ var myClass = myClass || {};
         },
     });
     
-    myClass.EffectiveText = tm.createClass({
+    game.EffectiveText = tm.createClass({
         superClass: tm.display.CanvasElement,
         
         init: function(text){
@@ -58,7 +60,7 @@ var myClass = myClass || {};
             
             this.text = text;
             this.count = 0;
-            this.textColor = myClass.colorStyle.getColorStyle("blue");
+            this.textColor = game.colorStyle.getColorStyle("blue");
             this.age = 0;
 /*
             for(var i = 0,l = text.length;i < l;i++){
@@ -73,25 +75,19 @@ var myClass = myClass || {};
                 textShape.scaleX = 5.0;
                 textShape.scaleY = 0.2;
 
-                myClass.TweenAnimation(textShape, "in", 250, {scaleX: 1.0, scaleY: 1.0});
+                game.TweenAnimation(textShape, "in", 250, {scaleX: 1.0, scaleY: 1.0});
                 
             } */
         },
         tick: function(){
             if(this.count >= this.text.length){
-                this.tweener
-                    .clear()
-                    .wait(5000)
-                    .call(function(){
-                        this.update = function(){};
-                        this.remove();
-                    }.bind(this));
-
+                this.update = function(){ if(this.children.length < 1) this.remove(); };
                 return;
             }
 
             var textShape = tm.display.TextShape({
                 fontSize: 32,
+                fontFamily: "font",
                 fillStyle: this.textColor.fillStyle,
                 strokeStyle: this.textColor.strokeStyle,
                 text: this.text[this.count]
@@ -102,7 +98,7 @@ var myClass = myClass || {};
             var sx = textShape.scaleX = 0.2;
             var sy = textShape.scaleY = 20.0;
 
-            myClass.TweenAnimation(textShape, "draw_phase", 250, {scaleX: sx, scaleY: sy});
+            game.TweenAnimation(textShape, "draw_phase", 250, {scaleX: sx, scaleY: sy});
             
             this.count++;
         },

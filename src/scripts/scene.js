@@ -1,14 +1,14 @@
 /*
  * scene
  */
-var myClass = myClass || {};
+var game = game || {};
 
 (function(){
 /**
  * Sceneクラス
  */
 
-    myClass.ShootingScene = tm.createClass({
+    game.ShootingScene = tm.createClass({
         superClass: tm.app.Scene,
         
         init: function(num){
@@ -25,24 +25,25 @@ var myClass = myClass || {};
             this.enemyLayer = tm.display.CanvasElement().addChildTo(this.gameField);
             this.enemies = [];
 
-            this.player = myClass.Player();
+            this.player = game.Player();
             this.player.addChildTo(this.gameField);
             //弾描画レイヤー
             this.bulletLayer = tm.display.CanvasElement().addChildTo(this.gameField);
 
             //ゲーム描画領域より上に描画するもの
             var frame = tm.display.RectangleShape({
-                width      : 634,
-                height     : 708,
+                width      : 672,
+                height     : 734,
                 fillStyle  : "rgba(0, 0, 0, 0.0)",
-                strokeStyle: myClass.colorStyle.getColorStyle("blue").strokeStyle,
-                lineWidth  : 16}).setPosition(319,369).addChildTo(this);
+                strokeStyle: game.colorStyle.getColorStyle("blue").strokeStyle,
+                lineWidth  : 32
+            }).setPosition(319,369).addChildTo(this);
 
-            this.scoreLabel = myClass.ScoreLabel().addChildTo(this);
+            this.scoreLabel = game.ScoreLabel().addChildTo(this);
             
             this.stage = num || 0;
             this.danmaku = "";
-            this.danmakuList = myClass.danmakuList(this.stage);
+            this.danmakuList = game.danmakuList(this.stage);
             this.age = this.timeBounus = this.missCount = 0;
             this.phase = 0;
             this.stepTick();
@@ -58,11 +59,11 @@ var myClass = myClass || {};
             if(this.danmaku === "") return;
 
             this.stopDanmaku();
-            myClass.setDanmaku(this, this.player, this);
+            game.setDanmaku(this, this.player, this);
             this.timeBounus += 60 * GAME_FPS;
             this.phase++;
 
-            myClass.EffectiveText("PHASE " + ("00" + this.phase + "/").substr(-3) + ("00" + this.danmakuList.length).substr(-2))
+            game.EffectiveText("PHASE " + ("00" + this.phase + "/").substr(-3) + ("00" + this.danmakuList.length).substr(-2))
                    .setPosition(320, 240)
                    .addChildTo(this);
         },
@@ -119,7 +120,7 @@ var myClass = myClass || {};
             for(var i = 0, l = enemies.length;i < l;i++){
                 enemies[i]._isHitTestEnable = false;
                 enemies[i].stopDanmaku();
-                myClass.destroyAnimation(enemies[i]);
+                game.destroyAnimation(enemies[i]);
             }
             this.enemies.length = 0;
             this.bulletLayer.removeChildren();
@@ -143,12 +144,12 @@ var myClass = myClass || {};
             this.app.pushScene(scene); */
         },
         result: function(){
-            var color = myClass.colorStyle.getColorStyle("blue");
+            var color = game.colorStyle.getColorStyle("blue");
             var param = color.$extend({
                 width     : 640,
                 height    : 48,
                 fontSize  : 48,
-                fontFamily: "'Consolas', 'Monaco', 'ＭＳ ゴシック'",
+                fontFamily: "font",
                 text      : "RESULT"});
             var result = tm.display.TextShape(param)
                 .setPosition(320, 140)
@@ -164,7 +165,7 @@ var myClass = myClass || {};
                 ("00" + ms).substr(-2)
             );
             param.fontSize = 32;
-            param.fontFamily = "'Consolas', 'Monaco', 'ＭＳ ゴシック'";
+            param.fontFamily = "font";
             var time = tm.display.TextShape(param)
                 .setPosition(320, 260)
                 .addChildTo(this);
@@ -190,7 +191,7 @@ var myClass = myClass || {};
         }
     });
 
-    myClass.SelectScene = tm.createClass({
+    game.SelectScene = tm.createClass({
         superClass: tm.app.Scene,
         
         init: function(){
@@ -201,11 +202,11 @@ var myClass = myClass || {};
                 var button = tm.ui.FlatButton({
                     width : 240,
                     height: 120,
-                    text  : buttons[i]})
-                    .setPosition((i & 1) * 280 + 180, ~~(i / 2) * 150 + 120).addChildTo(this);
+                    text  : buttons[i]
+                }).setPosition((i & 1) * 280 + 180, ~~(i / 2) * 150 + 120).addChildTo(this);
                 button.num = i;
                 button.onpointingend = function(){
-                    this.parent.app.replaceScene(myClass.ShootingScene(this.num));
+                    this.parent.app.replaceScene(game.ShootingScene(this.num));
                 }
             }
         },

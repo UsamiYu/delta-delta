@@ -1,16 +1,16 @@
 /*
  * player.js
  */
-var myClass = myClass || {};
+var game = game || {};
 
 (function(){
 
-    myClass.Player = tm.createClass({
+    game.Player = tm.createClass({
         superClass: tm.display.TriangleShape,
 //        superClass: tm.display.Sprite,
 
         init: function(){
-            var style = myClass.colorStyle.getColorStyle("green");
+            var style = game.colorStyle.getColorStyle("green");
             this.superInit({
                 width      : 64,
                 height     : 64,
@@ -32,13 +32,13 @@ var myClass = myClass || {};
 
             this.power = 1;
             this.maxPower = 1200;
-            this.powerGauge = myClass.PowerGauge(this.maxPower);
+            this.powerGauge = game.PowerGauge(this.maxPower);
             this.mode = "shot"; // 'shot' or 'refrection'
 
             this.hitFlag = true;
             this.hitFlagCount = 0;
 
-            this.refrectionField = myClass.RefrectionField();
+            this.refrectionField = game.RefrectionField();
             this.refrectionField.addChildTo(this);
             this.powerGauge.addChildTo(this);
 
@@ -119,20 +119,16 @@ var myClass = myClass || {};
             this.y = 720 - this.radius;
             this.setScale(10);
             
-            myClass.TweenAnimation(this, "in", 200, { scaleX: 1.0, scaleY: 1.0});
+            game.TweenAnimation(this, "in", 200, { scaleX: 1.0, scaleY: 1.0});
             this.tweener
                 .call(function(){
                     this.hitFlagCount = GAME_FPS;
                     this.mode = "shot";
-                    this.refrectionField.visible = false;
+                    this.refrectionField.setScale(0.2).setAlpha(1.0);
                     this.setOnShot(true);
                 }.bind(this));
         },
 
-        getOnShot: function(){
-            return this._onShot;
-        },
-        
         setOnShot: function(bool){
             this._onShot = bool
         },
@@ -141,16 +137,15 @@ var myClass = myClass || {};
             switch(this.mode){
                 case "shot":
                     if(this.power < this.maxPower / 2) return;
-                    this.refrectionField.visible = true;
-                    this.refrectionField.alpha = 0.5;
+                    this.refrectionField.setScale(1.0).setAlpha(0.5);
                     this.setOnShot(false);
                     this.mode = "refrection";
                     var effect = tm.display.Sprite(this.refrectionField.canvas, 80, 80);
                     effect.setScale(0.2).setAlpha(0.5).addChildTo(this);
-                    myClass.TweenAnimation(effect, "out", 250, {scaleX: 18.0, scaleY: 18.0, alpha: 0.1});
+                    game.TweenAnimation(effect, "out", 250, {scaleX: 18.0, scaleY: 18.0, alpha: 0.1});
                 break;
                 case "refrection":
-                    this.refrectionField.visible = false;
+                    this.refrectionField.setScale(0.2).setAlpha(1.0);
                     this.setOnShot(true);
                     this.mode = "shot";
                 break;
@@ -161,7 +156,7 @@ var myClass = myClass || {};
 
         shotBullet: function(){
             for(var i = 0;i < 2;i++){
-                var bullet = myClass.PlayerBullet(
+                var bullet = game.PlayerBullet(
                     this.x + i * 24 - 12,
                     this.y - 32,
                     0, 3);
@@ -170,26 +165,26 @@ var myClass = myClass || {};
         },
     });
     
-    myClass.RefrectionField = tm.createClass({
+    game.RefrectionField = tm.createClass({
         superClass: tm.display.CircleShape,
         
         init: function(){
-            var style = myClass.colorStyle.getColorStyle("green");
+            var style = game.colorStyle.getColorStyle("green");
             this.superInit({
                 width      : 80,
                 height     : 80,
                 fillStyle  : "rgba(0, 0, 0, 0.0)",
                 strokeStyle: style.strokeStyle,
                 lineWidth  : 12});
-            this.visible = false;
+            this.setScale(0.2);
         },
     });
    
-    myClass.PlayerBullet = tm.createClass({
+    game.PlayerBullet = tm.createClass({
         superClass: tm.display.CircleShape,
         
         init: function(x, y, angle, damage){
-            var style = myClass.colorStyle.getColorStyle("lime");
+            var style = game.colorStyle.getColorStyle("lime");
             this.superInit({
                 width      : 16,
                 height     : 16,
@@ -209,7 +204,7 @@ var myClass = myClass || {};
         },
 
         update: function(app){
-            if(this.hitFlag || myClass.gameFieldOut(this)){
+            if(this.hitFlag || game.gameFieldOut(this)){
                 this.remove();
                 return;
             }
@@ -236,11 +231,11 @@ var myClass = myClass || {};
         },
     });
     
-    myClass.RefrectionBullet = tm.createClass({
+    game.RefrectionBullet = tm.createClass({
         superClass: tm.display.Sprite,
         
         init: function(x, y, size, vx, vy){
-            var style = myClass.colorStyle.getColorStyle("lime");
+            var style = game.colorStyle.getColorStyle("lime");
             var width = (size !== 24) ? 32 : 24;
             var height = width;
             this.superInit("bullet", width, height);
@@ -262,7 +257,7 @@ var myClass = myClass || {};
         },
         
         update: function(app){
-            if(myClass.gameFieldOut(this)){
+            if(game.gameFieldOut(this)){
                 this.remove();
                 return;
             }
@@ -331,7 +326,7 @@ var myClass = myClass || {};
         }
     });
     
-    myClass.PowerGauge = tm.createClass({
+    game.PowerGauge = tm.createClass({
         superClass: tm.ui.Gauge,
         
         init: function(maxPower){
@@ -356,7 +351,7 @@ var myClass = myClass || {};
             canvas.lineWidth = 4;
             var ratio = this.getRatio();
             var startAngle = Math.degToRad(270);
-            canvas.setStrokeStyle(myClass.colorStyle.getColorStyle(this.color).strokeStyle);
+            canvas.setStrokeStyle(game.colorStyle.getColorStyle(this.color).strokeStyle);
             canvas.strokeArc(0, 0, 34, startAngle, Math.PI * 2 * ratio + startAngle, false);
 
             canvas.restore();

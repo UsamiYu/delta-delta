@@ -20,10 +20,10 @@ var GAME_FPS          = 60;
  *  自分用クラスをグローバルに確保
  */
  
-var myClass = myClass || {};
+var game = game || {};
 
 (function(){
-    myClass.colorStyle = {
+    game.colorStyle = {
         RED   : {fillStyle: "hsl(  0, 100%, 95%)", strokeStyle: "hsl(  0, 100%, 75%)", index: 0 },
         ORANGE: {fillStyle: "hsl( 30, 100%, 95%)", strokeStyle: "hsl( 30, 100%, 75%)", index: 1 },
         YELLOW: {fillStyle: "hsl( 60, 100%, 95%)", strokeStyle: "hsl( 60, 100%, 75%)", index: 2 },
@@ -85,7 +85,7 @@ var myClass = myClass || {};
         },
     };
     
-    myClass.TweenAnimation = function(obj, type, time, param){
+    game.TweenAnimation = function(obj, type, time, param){
         param = param.$safe({
             scaleX  : 1.0,
             scaleY  : 1.0,
@@ -129,7 +129,7 @@ var myClass = myClass || {};
 
         bulletImage.lineWidth = 4;
         
-        var colorStyle = myClass.colorStyle.getIndexOfColor(i);
+        var colorStyle = game.colorStyle.getIndexOfColor(i);
 
         bulletImage.setFillStyle(colorStyle.fillStyle)
                    .fillCircle(12, 12, 10)
@@ -152,7 +152,7 @@ var myClass = myClass || {};
     tm.asset.Manager.set("bullet", bulletImage);
 
 
-    myClass.param = {
+    game.param = {
         ENEMY_DEFAULT_ATTR: {
             x             : 0,
             y             : 0,
@@ -174,7 +174,7 @@ var myClass = myClass || {};
         },
     };
 
-    myClass.gameFieldOut = function(elm){
+    game.gameFieldOut = function(elm){
         if(elm.top    > GAME_FIELD_BOTTOM ||
            elm.bottom < GAME_FIELD_TOP ||
            elm.left   > GAME_FIELD_RIGHT ||
@@ -183,7 +183,7 @@ var myClass = myClass || {};
         return false;
     }
     
-    myClass.setDanmaku = function(elm, target, scene, param){
+    game.setDanmaku = function(elm, target, scene, param){
 
         var config = {
             target: target,
@@ -191,25 +191,25 @@ var myClass = myClass || {};
                 switch(attr.type){
                     case "enemy":
                     case "boss" :
-                        var enemy = myClass.EnemyCore(runner, attr).addChildTo(scene.enemyLayer);
+                        var enemy = game.EnemyCore(runner, attr).addChildTo(scene.enemyLayer);
                     break;
                     case "invisible":
-                        var enemy = myClass.InvisibleEnemy(runner, attr).addChildTo(scene.bulletLayer);
+                        var enemy = game.InvisibleEnemy(runner, attr).addChildTo(scene.bulletLayer);
                     break;
                     default:
-                        var bullet = myClass.EnemyBullet(runner, attr).addChildTo(scene.bulletLayer);
+                        var bullet = game.EnemyBullet(runner, attr).addChildTo(scene.bulletLayer);
                     break;
                 }
             }
         }
 
-        elm.startDanmaku(myClass.danmakuPattern(elm.danmaku, param), config);
+        elm.startDanmaku(game.danmakuPattern(elm.danmaku, param), config);
 
     };
     
-    myClass.danmakuList = function(num){
+    game.danmakuList = function(num){
         var list = [
-            ["test4", "test3", "test2", "test1"],
+            ["test5"],
             ["stage0_01", "stage0_02", "stage0_03"],
             ["stage1_01", "stage1_03", "stage2_01"],
             ["stage3_03", "stage2_02", "stage3_02"],

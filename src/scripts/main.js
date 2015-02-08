@@ -9,32 +9,30 @@ tm.main(function() {
     app.fitWindow();
     app.fps = GAME_FPS;
 
-//    app.enableStats();
+    app.enableStats();
     app.background = "rgba( 55%, 55%, 70%, 1)";
-/*
+
     var loadingScene = tm.ui.LoadingScene({
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         assets: {
-            "shot"  : "./images/shot.png",
-            "player": "./images/player.png",
-            "bullet": "./images/bullet.png"
-        },
-        nextScene: myClass.ShootingScene,
+            font: "fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf"
+       },
+        nextScene: game.SelectScene,
     });
 
-    app.pushScene(loadingScene);
-
+    app.replaceScene(loadingScene);
+/*
     var test = tm.display.Sprite("bullet", 24, 24);
     test.frameIndex = 0;
     test.blur = 3;
 
     test.addChildTo(app.currentScene).setPosition(320, 480);
-*/
-//    var scene = myClass.ShootingScene(0);
-    var scene = myClass.SelectScene();
-    app.replaceScene(scene);
 
+//    var scene = game.ShootingScene(0);
+    var scene = game.SelectScene();
+    app.replaceScene(scene);
+*/
     app.update = function() {
         var scene = this.currentScene;
         var player = scene.player;

@@ -2,7 +2,7 @@
  * danmaku.dsl.js
  */
 
-var myClass = myClass || {};
+var game = game || {};
 
 (function(){
 /*
@@ -10,7 +10,7 @@ var myClass = myClass || {};
  */
     var d = bulletml.dsl;
 
-    myClass.danmakuPattern = function(name, param){
+    game.danmakuPattern = function(name, param){
         param = {rank: 0}.$extend(param);
         var zakoA = {
             type  : "enemy",
@@ -96,30 +96,23 @@ var myClass = myClass || {};
                                 d.speed(4),
                                 d.bullet(zakoA, d.actionRef("zakoA"))
                             ),
-                            d.repeat(5, [
-                                d.fire(
-                                    d.direction(60, "sequence"),
-                                    d.speed(4),
-                                    d.bullet(zakoA, d.actionRef("zakoA"))
-                                )
-                            ]),
+                            d.repeat(5, d.fireRef("wall", 60)),
                             d.fire(
                                 d.direction(30, "absolute"),
                                 d.speed(6),
                                 d.bullet(zakoA, d.actionRef("zakoA"))
                             ),
-                            d.repeat(11, [
-                                d.fire(
-                                    d.direction(30, "sequence"),
-                                    d.speed(6),
-                                    d.bullet(zakoA, d.actionRef("zakoA"))
-                                )
-                            ]),
+                            d.repeat(11, d.fireRef("wall", 30)),
                             d.wait(25),
                             d.actionRef("move"),
                             d.wait(180)
                         ])
                     ]),
+                    wall: d.fire(
+                        d.direction("$1", "sequence"),
+                        d.speed(0, "sequence"),
+                        d.bullet(zakoA, d.actionRef("zakoA"))
+                    ),
                     zakoA: d.action([
                         d.changeSpeed(d.speed(0), 25),
                         d.wait(25),
@@ -148,7 +141,6 @@ var myClass = myClass || {};
                 };
             },
             test2: function(obj){
-
                 return {
                     top: d.action([
                         d.wait(60),
@@ -229,15 +221,7 @@ var myClass = myClass || {};
                             d.changeDirection(d.direction(8, "relative"), 8),
                             d.wait(8),
                         ]),
-                        d.changeSpeed(d.speed(6), 30),
-                        d.repeat(3, [
-                            d.fire(
-                                d.direction("$rand * 20 - 10", "aim"),
-                                d.speed(4),
-                                d.bullet(largeBullet)
-                            ),
-                            d.wait(30)
-                        ])
+                        d.changeSpeed(d.speed(6), 30)
                     ]),
                     change_speed: d.action([
                         d.changeSpeed(d.speed(2), 45)
@@ -252,6 +236,7 @@ var myClass = myClass || {};
                         d.wait(60),
                         d.fire(
                             d.offsetX(320),
+                            d.direction(180, "absolute"),
                             d.speed(6),
                             d.bullet(boss, d.action([
                                 d.changeSpeed(d.speed(0), 60),
@@ -330,17 +315,9 @@ var myClass = myClass || {};
                         d.changeSpeed(d.speed(0), 100),
                         d.wait(100),
                         d.repeat(99, [
-                            d.fire(
-                                d.direction(180, "absolute"),
-                                d.speed(12),
-                                d.bullet(invisible, d.actionRef("bullet_point1", 1))
-                            ),
+                            d.fireRef("invisible", 1),
                             d.actionRef("move", 12),
-                            d.fire(
-                                d.direction(180, "absolute"),
-                                d.speed(12),
-                                d.bullet(invisible, d.actionRef("bullet_point1", -1))
-                            ),
+                            d.fireRef("invisible", -1),
                             d.wait(15),
                             d.actionRef("move", 12),
                             d.wait(1),
@@ -350,6 +327,11 @@ var myClass = myClass || {};
                             d.wait(180)
                         ])
                     ]),
+                    invisible: d.fire(
+                        d.direction(180, "absolute"),
+                        d.speed(12),
+                        d.bullet(invisible, d.actionRef("bullet_point1", "$1"))
+                    ),
                     move: d.action([
                         d.changeDirection(d.direction(180, "relative"), 1),
                         d.changeSpeed(d.speed("$1"), 1),
@@ -395,6 +377,35 @@ var myClass = myClass || {};
                         ])
                     ])
                     
+                };
+            },
+            test5: function(obj){
+                boss.danmaku = "boss7";
+                return {
+                    top: d.action([
+                        d.wait(60),
+                        d.fire(
+                            d.offsetX(320),
+                            d.direction(180, "absolute"),
+                            d.speed(6),
+                            d.bullet(boss, d.actionRef("boss"))
+                        )
+                    ]),
+                    boss: d.action([
+                        d.changeSpeed(d.speed(0), 60),
+                        d.wait(60),
+                        d.changeDirection(d.direction(90, "absolute"), 1),
+                        d.wait(1),
+                        d.changeSpeed(d.speed(1.5), 15),
+                        d.wait(75),
+                        d.repeat(99, [
+                            d.changeSpeed(d.speed(0), 1),
+                            d.changeDirection(d.direction(180, "relative"), 1),
+                            d.wait(1),
+                            d.changeSpeed(d.speed(3), 30),
+                            d.wait(90),
+                        ])
+                    ])
                 };
             },
 
@@ -605,22 +616,15 @@ var myClass = myClass || {};
                     boss: d.action([
                         d.changeSpeed(d.speed(0), 90),
                         d.wait(90),
-                        d.changeDirection(d.direction(120, "absolute"), 1),
                         d.changeSpeed(d.speed(1.5), 1),
-                        d.wait(30),
                         d.repeat(999, [
-                            d.changeDirection(d.direction(60, "absolute"), 1),
-                            d.wait(30),
-                            d.changeDirection(d.direction(300, "absolute"), 1),
-                            d.wait(30),
-                            d.changeDirection(d.direction(240, "absolute"), 1),
-                            d.wait(60),
-                            d.changeDirection(d.direction(300, "absolute"), 1),
-                            d.wait(30),
-                            d.changeDirection(d.direction(60, "absolute"), 1),
-                            d.wait(30),
-                            d.changeDirection(d.direction(120, "absolute"), 1),
-                            d.wait(60)
+                            d.actionRef("change_direction", 120,  30),
+                            d.actionRef("change_direction",  60,  30),
+                            d.actionRef("change_direction", 300,  30),
+                            d.actionRef("change_direction", 240,  60),
+                            d.actionRef("change_direction", 300,  30),
+                            d.actionRef("change_direction",  60,  30),
+                            d.actionRef("change_direction", 120,  30),
                         ]),
                         d.changeSpeed(d.speed(0), 1)
                     ]),
@@ -647,7 +651,11 @@ var myClass = myClass || {};
                                 d.changeDirection(d.direction("$3 * 90", "relative"), 1)
                             ])
                         ]))
-                    )
+                    ),
+                    change_direction: d.action([
+                        d.changeDirection(d.direction("$1", "absolute"), 1),
+                        d.wait("$2"),
+                    ])
                 };
             },
             stage1_03: function(obj){
@@ -681,7 +689,7 @@ var myClass = myClass || {};
                         d.repeat(99, [
                             d.repeat(60, [
                                 d.fire(
-                                    d.offsetX(160),
+                                    d.offsetX(120),
                                     d.offsetY(180),
                                     d.direction(17, "sequence"),
                                     d.speed(3),
@@ -697,7 +705,7 @@ var myClass = myClass || {};
                         d.repeat(99, [
                             d.repeat(60, [
                                 d.fire(
-                                    d.offsetX(480),
+                                    d.offsetX(520),
                                     d.offsetY(180),
                                     d.direction(17, "sequence"),
                                     d.speed(3),
@@ -787,16 +795,8 @@ var myClass = myClass || {};
                                     d.changeSpeed(d.speed(3), 90),
                                     d.wait(60),
                                     d.repeat(11, [
-                                        d.fire(
-                                            d.direction("$loop.index * 7 + 5", "relative"),
-                                            d.speed(3),
-                                            d.bullet()
-                                        ),
-                                        d.fire(
-                                            d.direction("-$loop.index * 7 - 5", "relative"),
-                                            d.speed(3),
-                                            d.bullet()
-                                        ),
+                                        d.fireRef("fire", "$loop.index * 7 + 5"),
+                                        d.fireRef("fire", "-$loop.index * 7 - 5"),
                                         d.wait(5)
                                     ])
                                 ]))
@@ -804,6 +804,11 @@ var myClass = myClass || {};
                             d.wait("~~(Math.cos($loop.index) * 150) + 240")
                         ])
                     ]),
+                    fire: d.fire(
+                        d.direction("$1", "relative"),
+                        d.speed(3),
+                        d.bullet()
+                    ),
                     bossmove: d.action([
                         d.changeSpeed(d.speed(0), 60),
                         d.wait(60),
@@ -855,29 +860,13 @@ var myClass = myClass || {};
                             d.changeDirection(d.direction(270, "absolute"), 1),
                             d.changeSpeed(d.speed(2), 1),
                             d.wait(30),
-                            d.fire(
-                                d.direction(240, "absolute"),
-                                d.speed(12),
-                                d.bullet(zakoC, d.actionRef("zakoC"))
-                            ),
-                            d.fire(
-                                d.direction(300, "absolute"),
-                                d.speed(12),
-                                d.bullet(zakoC, d.actionRef("zakoC"))
-                            ),
+                            d.fireRef("zakoC_fire", 240),
+                            d.fireRef("zakoC_fire", 300),
                             d.changeDirection(d.direction(90, "absolute"), 1),
                             d.changeSpeed(d.speed(2), 1),
                             d.wait(60),
-                            d.fire(
-                                d.direction(120, "absolute"),
-                                d.speed(12),
-                                d.bullet(zakoC, d.actionRef("zakoC"))
-                            ),
-                            d.fire(
-                                d.direction(60, "absolute"),
-                                d.speed(12),
-                                d.bullet(zakoC, d.actionRef("zakoC"))
-                            ),
+                            d.fireRef("zakoC_fire", 120),
+                            d.fireRef("zakoC_fire", 60),
                             d.changeDirection(d.direction(270, "absolute"), 1),
                             d.wait(30),
                             d.changeSpeed(d.speed(0), 1),
@@ -896,6 +885,11 @@ var myClass = myClass || {};
                         d.wait(30),
                         d.vanish()
                     ]),
+                    zakoC_fire: d.fire(
+                        d.direction("$1", "absolute"),
+                        d.speed(12),
+                        d.bullet(zakoC, d.actionRef("zakoC"))
+                    ),
                     zakoC: d.action([
                         d.changeDirection(d.direction(180, "absolute"), 30),
                         d.changeSpeed(d.speed(0), 90),
@@ -906,7 +900,6 @@ var myClass = myClass || {};
                             d.wait(1)
                         ]),
                         d.wait(15),
-
                         d.changeDirection(d.direction(180, "aim"), 1),
                         d.changeSpeed(d.speed(2), 1),
                         d.repeat(15, [
@@ -1281,23 +1274,16 @@ var myClass = myClass || {};
                                 d.speed(4),
                                 d.bullet(zakoB)
                             ),
-                            d.repeat(3, [
-                                d.fire(
-                                    d.direction(20, "sequence"),
-                                    d.speed(4),
-                                    d.bullet(zakoB)
-                                )
-                            ]),
+                            d.repeat(3, d.fireRef("zakoB_fire", 20)),
                             d.wait(30),
-                            d.repeat(3, [
-                                d.fire(
-                                    d.direction(-20, "sequence"),
-                                    d.speed(4),
-                                    d.bullet(zakoB)
-                                )
-                            ]),
+                            d.repeat(3, d.fireRef("zakoB_fire", -20)),
                         ])
-                    ])
+                    ]),
+                    zakoB_fire: d.fire(
+                        d.direction("$1", "sequence"),
+                        d.speed(4),
+                        d.bullet(zakoB)
+                    )
                 };
             },
             boss4: function(obj){
@@ -1322,8 +1308,6 @@ var myClass = myClass || {};
                             d.actionRef("way", "($loop.index & 1) ? 1 : -1"),
                             d.wait("~~(Math.sin($loop.index) * 60) + 120"),
                         ]),
-                        
-                        
                     ]),
                     way: d.action([
                         d.repeat(7, [
@@ -1399,6 +1383,70 @@ var myClass = myClass || {};
                             ]),
                             d.wait(180)
                         ])
+                    ])
+                };
+            },
+            boss7: function(obj){
+                return {
+                    top: d.action([
+                        d.wait(60),
+                        d.repeat(99, [
+                            d.actionRef("nway_zako", -1),
+                            d.wait(15),
+                            d.actionRef("nway_bullet", 1),
+                            d.wait(45),
+                            d.actionRef("nway_zako", 1),
+                            d.wait(15),
+                            d.actionRef("nway_bullet", -1),
+                            d.wait(90)
+                        ]),
+                    ]),
+                    nway_bullet: d.action([
+                        d.fire(
+                            d.direction("$1 * 60", "aim"),
+                            d.speed(12),
+                            d.bullet(largeBullet, d.actionRef("burst"))
+                        ),
+                        d.repeat(10, [
+                            d.wait(3),
+                            d.fire(
+                                d.direction("-15 * $1", "sequence"),
+                                d.speed(-1, "sequence"),
+                                d.bullet(largeBullet, d.actionRef("burst"))
+                            )
+                        ])
+                    ]),
+                    nway_zako: d.action([
+                        d.fire(
+                            d.direction("$1 * 45", "aim"),
+                            d.speed(12),
+                            d.bullet(zakoC, d.actionRef("change_speed", 3, 45, 45))
+                        ),
+                        d.repeat(10, [
+                            d.wait(3),
+                            d.fire(
+                                d.direction("-10 * $1", "sequence"),
+                                d.speed(-1, "sequence"),
+                                d.bullet(zakoC, d.actionRef("change_speed", 3, 45, 45))
+                            )
+                        ])
+
+                    ]),
+                    burst: d.action([
+                        d.actionRef("change_speed", 0, 45, 15),
+                        d.repeat(6, [
+                            d.fire(
+                                d.direction("$rand * 60 - 30", "relative"),
+                                d.speed(3),
+                                d.bullet(middleBullet)
+                            ),
+                            d.wait(5)
+                        ]),
+                        d.vanish()
+                    ]),
+                    change_speed: d.action([
+                        d.changeSpeed(d.speed("$1"), "$2"),
+                        d.wait("$3")
                     ])
                 };
             }

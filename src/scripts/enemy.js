@@ -1,11 +1,11 @@
 /*
  * enemy
  */
-var myClass = myClass || {};
+var game = game || {};
 
 (function(){
     
-    myClass.destroyAnimation = function(elm){
+    game.destroyAnimation = function(elm){
         elm.update = function(){};
         elm.tweener
             .clear()
@@ -15,13 +15,13 @@ var myClass = myClass || {};
     
     
     
-    myClass.EnemyCore = tm.createClass({
+    game.EnemyCore = tm.createClass({
         superClass: tm.bulletml.Bullet,
         
         init: function(runner, attr){
             this.superInit(runner);
 
-            attr = {}.$extend(myClass.param.ENEMY_DEFAULT_ATTR, attr);
+            attr = {}.$extend(game.param.ENEMY_DEFAULT_ATTR, attr);
             
             this.x = attr.x;
             this.y = attr.y;
@@ -42,7 +42,7 @@ var myClass = myClass || {};
             this.scene = "";
 
             var graphics;
-            var style = myClass.colorStyle.getColorStyle(attr.color);
+            var style = game.colorStyle.getColorStyle(attr.color);
             
             switch (this.sides){
                 case 3:
@@ -73,7 +73,7 @@ var myClass = myClass || {};
                 break;
             }
 
-            if(this.type === "boss") this.hpGauge = myClass.EnemyHpGauge(0, 0, this.maxHp);
+            if(this.type === "boss") this.hpGauge = game.EnemyHpGauge(0, 0, this.maxHp);
 
         },
         ondestroy: function(){
@@ -87,7 +87,7 @@ var myClass = myClass || {};
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
             if(dist > 10000){  //距離100px ^ 2
-                var explode = myClass.EnemyExplosion(this.x, this.y, ~~(this.radius / 24 * this.sides));
+                var explode = game.EnemyExplosion(this.x, this.y, ~~(this.radius / 24 * this.sides));
                 explode.addChildTo(this.scene.enemyLayer);
             }
             this.remove();
@@ -97,13 +97,13 @@ var myClass = myClass || {};
             this.visible = true;
             this.scene = this.getRoot().app.currentScene;
             if(this.type === "boss") this.hpGauge.addChildTo(this.scene);
-            if(this.danmaku !== "") myClass.setDanmaku(this, this.scene.player, this.scene);
+            if(this.danmaku !== "") game.setDanmaku(this, this.scene.player, this.scene);
             if(this._isHitTestEnable) this.scene.enemies.push(this);
             if(this.addedAnimation !== ""){
                 switch(this.addedAnimation){
                     case "zoom":
                         this.setScale(2.5);
-                        myClass.TweenAnimation(this, "in", 200, {});
+                        game.TweenAnimation(this, "in", 200, {});
                     break;
                     default:
                     break;
@@ -124,7 +124,7 @@ var myClass = myClass || {};
             }
             this.setPosition(this.runner.x, this.runner.y);
 
-            if(this.fieldOutCheck && myClass.gameFieldOut(this) && this.parent){
+            if(this.fieldOutCheck && game.gameFieldOut(this) && this.parent){
                 this.remove();
                 return;
             }
@@ -149,7 +149,7 @@ var myClass = myClass || {};
 
     });
 
-    myClass.InvisibleEnemy = tm.createClass({
+    game.InvisibleEnemy = tm.createClass({
         superClass: tm.bulletml.Bullet,
         
         init: function(runner, attr){
@@ -185,13 +185,13 @@ var myClass = myClass || {};
         },
     });
 
-    myClass.EnemyBullet = tm.createClass({
+    game.EnemyBullet = tm.createClass({
         superClass: tm.bulletml.Bullet,
         
         init: function(runner, attr){
             this.superInit(runner);
             
-            attr = {}.$extend(myClass.param.BULLET_DEFAULT_ATTR, attr);
+            attr = {}.$extend(game.param.BULLET_DEFAULT_ATTR, attr);
             
             this.width = attr.width;
             this.height = attr.height;
@@ -202,7 +202,7 @@ var myClass = myClass || {};
             var height = (this.height === 64) ? 32 : this.height;
 
             var graphic = tm.display.Sprite("bullet", width, height);
-            graphic.setFrameIndex(myClass.colorStyle.getColorIndex(attr.color) + (width !== 24) ? 11 : 0);
+            graphic.setFrameIndex(game.colorStyle.getColorIndex(attr.color) + (width !== 24) ? 11 : 0);
 
             graphic.alpha = 0.9;
             graphic.setScale((this.width === 64) ? 2 : 1);
@@ -218,7 +218,7 @@ var myClass = myClass || {};
             this.runner.update();
             this.setPosition(this.runner.x, this.runner.y);
 
-            if(this.fieldOutCheck && myClass.gameFieldOut(this)){
+            if(this.fieldOutCheck && game.gameFieldOut(this)){
                 this.remove();
                 return;
             }
@@ -250,7 +250,7 @@ var myClass = myClass || {};
                             var bulletPoint = tm.geom.Vector2.mul(vec, distance);
 
                             vec.mul(bounding.radius - this.radius);
-                            var bullet = myClass.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, this.radius * 2, vec.x, vec.y);
+                            var bullet = game.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, this.radius * 2, vec.x, vec.y);
                             bullet.addChildTo(field);
                             this.remove();
 //                            player.power += (this.radius - 7);
@@ -268,7 +268,7 @@ var myClass = myClass || {};
         
     });
     
-    myClass.EnemyExplosion = tm.createClass({
+    game.EnemyExplosion = tm.createClass({
         superClass: tm.display.CanvasElement,
         
         init: function(x, y, rank){
@@ -281,7 +281,7 @@ var myClass = myClass || {};
         onadded: function(){
             var scene = this.getRoot().app.currentScene;
             
-            myClass.setDanmaku(this, scene.player, scene, {rank: this.rank});
+            game.setDanmaku(this, scene.player, scene, {rank: this.rank});
         }
     });
 
