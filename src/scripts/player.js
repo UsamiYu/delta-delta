@@ -142,8 +142,8 @@ var game = game || {};
                     this.refrectionField.setScale(1.0).setAlpha(0.5);
                     this.setOnShot(false);
                     this.mode = "refrection";
-                    var effect = tm.display.Sprite(this.refrectionField.canvas, 80, 80);
-                    effect.setScale(0.2).setAlpha(0.5).addChildTo(this);
+                    var effect = tm.display.Sprite("circle", 80, 80);
+                    effect.setFrameIndex(2).setScale(0.2).setAlpha(0.5).addChildTo(this);
                     game.TweenAnimation(effect, "out", 250, {scaleX: 18.0, scaleY: 18.0, alpha: 0.1});
                 break;
                 case "refrection":
@@ -158,20 +158,18 @@ var game = game || {};
 
         shotBullet: function(){
             for(var i = 0;i < 2;i++){
-                var bullet = game.PlayerBullet(
-                    this.x + i * 24 - 12,
-                    this.y - 32,
-                    0, 3);
+                var bullet = game.PlayerBullet(this.x + i * 24 - 12, this.y - 32, 3);
                 bullet.addChildTo(this.parent);
             }
         },
     });
     
     game.RefrectionField = tm.createClass({
-        superClass: tm.display.CircleShape,
+//        superClass: tm.display.CircleShape,
+        superClass: tm.display.Sprite,
         
         init: function(){
-            var style = game.colorStyle.getColorStyle("yellow");
+/*            var style = game.colorStyle.getColorStyle("yellow");
             this.superInit({
                 width      : 80,
                 height     : 80,
@@ -179,29 +177,37 @@ var game = game || {};
                 strokeStyle: style.strokeStyle,
                 lineWidth  : 12});
             this.setScale(0.2);
+        }, */
+            this.superInit("circle", 80, 80);
+            this.setFrameIndex(2);
+            this.setScale(0.2);
         },
     });
    
     game.PlayerBullet = tm.createClass({
-        superClass: tm.display.CircleShape,
+//        superClass: tm.display.CircleShape,
+        superClass: tm.display.Sprite,
         
-        init: function(x, y, angle, damage){
-            var style = game.colorStyle.getColorStyle("lime");
-            this.superInit({
+        init: function(x, y, damage){
+//            var style = game.colorStyle.getColorStyle("lime");
+            this.superInit("circle", 48, 24);
+            this.setFrameIndex(2);
+/*            this.superInit({
                 width      : 16,
                 height     : 16,
                 fillStyle  : style.fillStyle,
                 strokeStyle: style.strokeStyle,
                 lineWidth  : 4});
-
+*/
             this.x = x;
             this.y = y;
 
-            angle = Math.degToRad(angle + 270);
-            this.vy = this.speed * Math.sin(angle);
+//            angle = Math.degToRad(angle + 270);
+            this.setRotation(90);
+            this.vy = -this.speed;
             this.damage = damage;
         },
-        speed: 28,
+        speed: 32,
         boundingtype: "rect",
         hitFlag: false,
 
@@ -216,13 +222,11 @@ var game = game || {};
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
-                    if(!target.tweener.isPlaying &&
-                        !(target.areaWidth + target.x < this.left ||
-                        target.areaWidth - target.x > this.rigth)){
-                        if(this.isHitElement(target)){
+                    if(!target.tweener.isPlaying){
+                        if(this.isHitElementRect(target)){
                             target.hp -= this.damage;
-                            this.scaleX = 1.5;
-                            this.scaleY = 0.25;
+                            this.scaleX = 0.25;
+                            this.scaleY = 1.2;
                             this.hitFlag = true;
                             break;
                         }
@@ -230,6 +234,13 @@ var game = game || {};
                 }
             }
             this.y += this.vy;
+        },
+        getBoundingRect: function(){
+            return tm.geom.Rect(
+                this.x - this.height * this.originX,
+                this.y - this.width  * this.originY,
+                this.height,
+                this.width);
         },
     });
     

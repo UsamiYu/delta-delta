@@ -16,7 +16,8 @@ tm.main(function() {
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         assets: {
-            player: "./src/images/player.png"
+            player: "./src/images/player.png",
+            circle: "./src/images/circleImage2.png",
        },
         nextScene: game.SelectScene,
     });
