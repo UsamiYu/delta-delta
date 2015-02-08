@@ -16,7 +16,7 @@ tm.main(function() {
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         assets: {
-            player: "./images/player.png"
+            player: "./src/images/player.png"
        },
         nextScene: game.SelectScene,
     });

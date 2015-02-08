@@ -335,11 +335,12 @@ var game = game || {};
                 height: 80,
                 animationFlag: false,
             });
-
+            
+            
+            this.color = "blue";
+            this.value = 0;
             this.maxPower = maxPower;
         },
-        color: "blue",
-        value: 0,
         power: 0,
         
         setPower: function(pow){
