@@ -9,15 +9,17 @@ tm.main(function() {
     app.fitWindow();
     app.fps = GAME_FPS;
 
-    app.enableStats();
+//    app.enableStats();
     app.background = "rgba( 55%, 55%, 70%, 1)";
 
     var loadingScene = tm.ui.LoadingScene({
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         assets: {
-            player: "./src/images/player.png",
-            circle: "./src/images/circleImage2.png",
+            "circle"   : "./src/images/circleImage2.png",
+            "triangle" : "./src/images/triangleImage.png",
+            "rectangle": "./src/images/rectangleImage.png",
+            "polygon"  : "./src/images/polygonImage.png"
        },
         nextScene: game.SelectScene,
     });

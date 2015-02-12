@@ -95,4 +95,28 @@ var game = game || {};
         },
     });
 
+    game.ModeChangeButton = tm.createClass({
+        superClass: tm.display.Sprite,
+        
+        init: function(){
+            this.superInit("polygon", 96, 96);
+            this.setFrameIndex(2);
+            
+            this.setInteractive(true);
+            this.boundingType = "circle";
+            var text = tm.display.TextShape({
+                text: "C",
+                fontSize: 48,
+            }).addChildTo(this);
+        },
+        onpointingstart: function(){
+            this.setScale(0.9);
+        },
+        onpointingend: function(){
+            this.setScale(1);
+            var scene = this.parent;
+            scene.pointingCheck = 0;
+            scene.player.fire(tm.event.Event("changemode"));
+        }
+    });
 })();

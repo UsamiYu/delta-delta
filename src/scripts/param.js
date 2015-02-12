@@ -121,46 +121,15 @@ var game = game || {};
         };
     };
 
-    var bulletImage = tm.graphics.Canvas().resize(32 * 11, 32 * 2);
-    for(var i = 0;i < 11; i++){
- //24x24弾画像
-        bulletImage.save();
-        bulletImage.translate(24 * i, 0);
-
-        bulletImage.lineWidth = 4;
-        
-        var colorStyle = game.colorStyle.getIndexOfColor(i);
-
-        bulletImage.setFillStyle(colorStyle.fillStyle)
-                   .fillCircle(12, 12, 10)
-                   .setStrokeStyle(colorStyle.strokeStyle)
-                   .strokeCircle(12, 12, 9);
-        bulletImage.restore();
-//32x32弾画像
-        bulletImage.save();
-        bulletImage.translate(32 * i, 32);
-        
-        bulletImage.lineWidth = 6;
-        
-        bulletImage.setFillStyle(colorStyle.fillStyle)
-                   .fillCircle(16, 16, 13)
-                   .setStrokeStyle(colorStyle.strokeStyle)
-                   .strokeCircle(16, 16, 13);
-        bulletImage.restore();
-    }
-
-    tm.asset.Manager.set("bullet", bulletImage);
-
-
     game.param = {
         ENEMY_DEFAULT_ATTR: {
-            x             : 0,
-            y             : 0,
             width         : 48,
             height        : 48,
             hp            : 2000,
-            sides         : 6,
-            color         : "purple",
+            image         : "",
+            frameIndex    : 0,
+            boundingType  : "circle",
+            type          : "enemy",
             danmaku       : "",
             fieldOutCheck : true,
             addedAnimation: "",
@@ -168,9 +137,11 @@ var game = game || {};
             target        : "player",
         },
         BULLET_DEFAULT_ATTR: {
-            width : 24,
-            height: 24,
-            color : "red",
+            width         : 24,
+            height        : 24,
+            color         : "red",
+            frameIndex    : 0,
+            isSyncRotation: false
         },
     };
 
@@ -191,7 +162,7 @@ var game = game || {};
                 switch(attr.type){
                     case "enemy":
                     case "boss" :
-                        var enemy = game.EnemyCore(runner, attr).addChildTo(scene.enemyLayer);
+                        var enemy = game.Enemy(runner, attr).addChildTo(scene.enemyLayer);
                     break;
                     case "invisible":
                         var enemy = game.InvisibleEnemy(runner, attr).addChildTo(scene.bulletLayer);
@@ -209,9 +180,9 @@ var game = game || {};
     
     game.danmakuList = function(num){
         var list = [
-            ["test5"],
+            ["stage3_03"],
             ["stage0_01", "stage0_02", "stage0_03"],
-            ["stage1_01", "stage1_03", "stage2_01"],
+            ["stage1_01", "test4", "stage2_01"],
             ["stage3_03", "stage2_02", "stage3_02"],
             ["stage3_01", "stage2_03", "stage1_02"]
         ];

@@ -15,64 +15,36 @@ var game = game || {};
     
     
     
-    game.EnemyCore = tm.createClass({
+    game.Enemy = tm.createClass({
         superClass: tm.bulletml.Bullet,
         
         init: function(runner, attr){
             this.superInit(runner);
 
-            attr = {}.$extend(game.param.ENEMY_DEFAULT_ATTR, attr);
-            
-            this.x = attr.x;
-            this.y = attr.y;
+            attr = attr.$safe(game.param.ENEMY_DEFAULT_ATTR);
+            this.fromJSON(attr);
+/*
             this.width = attr.width;
             this.height = attr.height;
             this.areaWidth = (this.width > this.height) ? this.width : this.height;
             this.hp = this.maxHp = attr.hp;
-            this.sides = attr.sides;
+//            this.sides = attr.sides;
             this.danmaku = attr.danmaku;
 //            this.danmakuList = attr.danmakuList;
             this.fieldOutCheck = attr.fieldOutCheck;
             this.type = attr.type;
 //            this.target = attr.target;
             this.isSyncRotation = attr.isSyncRotation;
-            this._isHitTestEnable = true;
             this.addedAnimation = attr.addedAnimation;
-            
+*/
+            this._isHitTestEnable = true;
+            this.type = attr.type;
+            this.maxHp = this.hp;
+            this.preHitTestArea = (this.width > this.height) ? this.width : this.height;
             this.scene = "";
 
-            var graphics;
-            var style = game.colorStyle.getColorStyle(attr.color);
-            
-            switch (this.sides){
-                case 3:
-                    graphics = tm.display.TriangleShape({
-                        width      : this.width,
-                        height     : this.height,
-                        fillStyle  : style.fillStyle,
-                        strokeStyle: style.strokeStyle,
-                        lineWidth  : Math.max(this.width, this.height) * 0.2 }).addChildTo(this);
-                break;
-                case 5:
-                case 6:
-                    graphics = tm.display.PolygonShape({
-                        width      : this.width,
-                        height     : this.height,
-                        sides      : this.sides,
-                        fillStyle  : style.fillStyle,
-                        strokeStyle: style.strokeStyle,
-                        lineWidth  : Math.max(this.width, this.height) * 0.2 }).addChildTo(this);
-                break;
-                default:
-                    graphics = tm.display.RectangleShape({
-                        width      : this.width,
-                        height     : this.height,
-                        fillStyle  : style.fillStyle,
-                        strokeStyle: style.strokeStyle,
-                        lineWidth  : Math.max(this.width, this. height) * 0.2 }).addChildTo(this);                    
-                break;
-            }
-
+            var image = tm.display.Sprite(this.image, this.width, this.height);
+            image.setFrameIndex(this.frameIndex).addChildTo(this);
             if(this.type === "boss") this.hpGauge = game.EnemyHpGauge(0, 0, this.maxHp);
 
         },
@@ -87,7 +59,7 @@ var game = game || {};
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
             if(dist > 10000){  //距離100px ^ 2
-                var explode = game.EnemyExplosion(this.x, this.y, ~~(this.radius / 24 * this.sides));
+                var explode = game.EnemyExplosion(this.x, this.y, Math.min(9, ~~((this.radius + this.maxHp) / 12)));
                 explode.addChildTo(this.scene.enemyLayer);
             }
             this.remove();
@@ -120,7 +92,7 @@ var game = game || {};
             this.runner.update();
             if(this.isSyncRotation){
                 var vec = tm.geom.Vector2(this.runner.x - this.x, this.runner.y - this.y).toAngle();
-                this.rotation = Math.radToDeg(vec) + 90;
+                this.rotation = Math.radToDeg(vec);
             }
             this.setPosition(this.runner.x, this.runner.y);
 
@@ -146,6 +118,26 @@ var game = game || {};
                 }
             }
         },
+        preHitTest: function(player){
+            if((this.width === this.heigth) || this.rotation === 0 || this.rotation === 180){
+                return this.isHitElemntRect(player);
+            }
+//            var length = (this.width > this.height) ? this.width : this.height;
+            var rect = tm.geom.Rect(
+                this.x - this.preHitTestArea * 0.5,
+                this.y - this.preHitTestArea * 0.5,
+                this.preHitTestArea,
+                this.preHitTestArea);
+            return tm.collision.testRectRect(rect, player.getBoundingRect());
+        },
+        isHitPlayer: function(player){
+            if(!this.preHitTest(player)) return false;
+            if(this.boundingType === "circle") return this.isHitPointCircle(player.x, player.y);
+            if((this.width === this.height) && (this.rotation === 0 || this.rotation === 180)){
+                return this.isHitPointRect(player.x, player.y);
+            }
+            return this.HitPointRectHierarchy(player.x, player.y);
+        }
 
     });
 
@@ -179,7 +171,7 @@ var game = game || {};
 
             var player = this.scene.player;
             if(player.mode === "refrection" && this.parent){
-                var r = player.refrectionField.radius * player.refrectionField.radius;
+                var r = 1600; // refrectionField.radius ^ 2
                 if(tm.geom.Vector2(this.x, this.y).distanceSquared(player) < r) this.remove();
             }
         },
@@ -195,17 +187,17 @@ var game = game || {};
             
             this.width = attr.width;
             this.height = attr.height;
-            this.radius = this.width / 2;
+//            this.radius = this.width / 2;
             this.fieldOutCheck = true;
-
+            this.isSyncRotation = attr.isSyncRotation;
+/*
             var width = (this.width === 64) ? 32 : this.width;
             var height = (this.height === 64) ? 32 : this.height;
-
-            var graphic = tm.display.Sprite("bullet", width, height);
-            graphic.setFrameIndex(game.colorStyle.getColorIndex(attr.color) + (width !== 24) ? 11 : 0);
-
-            graphic.alpha = 0.9;
-            graphic.setScale((this.width === 64) ? 2 : 1);
+*/
+            var graphic = tm.display.Sprite("circle", this.width, this.height);
+//            graphic.setFrameIndex(game.colorStyle.getColorIndex(attr.color) + (width !== 24) ? 11 : 0);
+            graphic.setFrameIndex(attr.frameIndex).setAlpha(0.9);
+//            graphic.setScale((this.width === 64) ? 2 : 1);
             graphic.addChildTo(this);
 
         },
@@ -214,8 +206,12 @@ var game = game || {};
             this.scene = this.getRoot();
         },
         
-        update: function(e){
+        update: function(){
             this.runner.update();
+            if(this.isSyncRotation){
+                var vec = tm.geom.Vector2(this.runner.x - this.x, this.runner.y - this.y).toAngle();
+                this.rotation = Math.radToDeg(vec);
+            }
             this.setPosition(this.runner.x, this.runner.y);
 
             if(this.fieldOutCheck && game.gameFieldOut(this)){
@@ -229,17 +225,17 @@ var game = game || {};
             if(player.getParent() === field && player.hitFlag && this.parent){
                 switch (player.mode) {
                     case "shot": 
-                        if(this.isHitElementRect(player)){
+                        if(this.preHitTest(player)){
                             player.power++;
                             scoreLabel.score += scoreLabel.v;
-                            if(this.isHitPointCircle(player.x, player.y)){
+                            if(this.isHitPlayer(player)){
                                 player.fire(tm.event.Event("destroy"));
                                 return;
                             }
                         }
                     break;
                     case "refrection":
-                        var bounding = tm.geom.Circle(player.x, player.y, player.refrectionField.radius);
+                        var bounding = tm.geom.Circle(player.x, player.y, 40);
 
                         if(tm.collision.testCircleCircle(this.getBoundingCircle(), bounding)){
                         //反射
@@ -250,7 +246,7 @@ var game = game || {};
                             var bulletPoint = tm.geom.Vector2.mul(vec, distance);
 
                             vec.mul(bounding.radius - this.radius);
-                            var bullet = game.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, this.radius * 2, vec.x, vec.y);
+                            var bullet = game.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, vec.x, vec.y, this);
                             bullet.addChildTo(field);
                             this.remove();
 //                            player.power += (this.radius - 7);
@@ -264,6 +260,22 @@ var game = game || {};
                 }
             }
            
+        },
+        preHitTest: function(player){
+            if(this.width === this.height) return this.isHitElementRect(player);
+            var length = 0.5 * ((this.width > this.height) ? this.width : this.height);
+            var rect = tm.geom.Rect(this.x - length, this.y - length, length * 2, length * 2);
+            return tm.collision.testRectRect(rect, player.getBoundingRect());
+        },
+        isHitPlayer: function(player){
+            if(this.width === this.height) return this.isHitPointCircle(player.x, player.y);
+            if(this.rotation === 0 || this.rotation === 180) return this.isHitPointRect(player.x, player.y);
+            var vec = tm.geom.Vector2(player.x - this.x, player.y - this.y);
+            var p = tm.geom.Vector2().setRadian(vec.toAngle() - Math.degToRad(this.rotation), vec.length());
+            var hW = this.width * 0.5;
+            var hH = this.height * 0.5;
+            if((p.x > -hW) && (p.x < hW) && (p.y > -hH) && (p.y < hH)) return true;
+            return false;
         },
         
     });

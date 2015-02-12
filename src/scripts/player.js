@@ -17,8 +17,8 @@ var game = game || {};
 //                fillStyle  : style.fillStyle,
 //                strokeStyle: style.strokeStyle,
 //                lineWidth  : 8});
-            this.superInit("player", 64, 64);
-            this.setFrameIndex(0);
+            this.superInit("triangle", 64, 64);
+            this.setFrameIndex(5);
 
             this._isDestroy = false;
             this._onShot = false;
@@ -126,7 +126,7 @@ var game = game || {};
                 .call(function(){
                     this.hitFlagCount = GAME_FPS;
                     this.mode = "shot";
-                    this.refrectionField.setScale(0.2).setAlpha(1.0);
+                    this.refrectionField.setScale(0.5);
                     this.setOnShot(true);
                 }.bind(this));
         },
@@ -139,17 +139,22 @@ var game = game || {};
             switch(this.mode){
                 case "shot":
                     if(this.power < this.maxPower / 2) return;
-                    this.refrectionField.setScale(1.0).setAlpha(0.5);
+                    this.refrectionField.fire(tm.event.Event("changemode"));
                     this.setOnShot(false);
                     this.mode = "refrection";
-                    var effect = tm.display.Sprite("circle", 80, 80);
-                    effect.setFrameIndex(2).setScale(0.2).setAlpha(0.5).addChildTo(this);
-                    game.TweenAnimation(effect, "out", 250, {scaleX: 18.0, scaleY: 18.0, alpha: 0.1});
+                    this.timeline.clear()
+                        .call(  0, function(){ this.setFrameIndex(4); }.bind(this), 250)
+                        .call(500, function(){ this.setFrameIndex(3); }.bind(this), 250);
+                    var effect = tm.display.Sprite("circle", 32, 32);
+                    effect.setFrameIndex(8).setAlpha(0.5).addChildTo(this);
+                    game.TweenAnimation(effect, "out", 250, {scaleX: 50.0, scaleY: 50.0, alpha: 0.1});
                 break;
                 case "refrection":
-                    this.refrectionField.setScale(0.2).setAlpha(1.0);
-                    this.setOnShot(true);
+                    this.refrectionField.fire(tm.event.Event("changemode"));
                     this.mode = "shot";
+                    this.timeline.clear()
+                        .call(  0, function(){ this.setFrameIndex(4); }.bind(this), 250)
+                        .call(500, function(){ this.setFrameIndex(5); this.setOnShot(true); }.bind(this), 250);
                 break;
                 default:
                 break;
@@ -178,10 +183,14 @@ var game = game || {};
                 lineWidth  : 12});
             this.setScale(0.2);
         }, */
-            this.superInit("circle", 80, 80);
-            this.setFrameIndex(2);
-            this.setScale(0.2);
+            this.superInit("circle", 32, 32);
+            this.setFrameIndex(8);
+            this.setAlpha(0.5);
         },
+        onchangemode: function(){
+            this.scaleX = (this.scaleX === 0.5) ? 2.5 : 0.5;
+            this.scaleY = (this.scaleY === 0.5) ? 2.5 : 0.5;
+        }
     });
    
     game.PlayerBullet = tm.createClass({
@@ -207,7 +216,7 @@ var game = game || {};
             this.vy = -this.speed;
             this.damage = damage;
         },
-        speed: 32,
+        speed: 40,
         boundingtype: "rect",
         hitFlag: false,
 
@@ -247,22 +256,27 @@ var game = game || {};
     game.RefrectionBullet = tm.createClass({
         superClass: tm.display.Sprite,
         
-        init: function(x, y, size, vx, vy){
-            var style = game.colorStyle.getColorStyle("lime");
-            var width = (size !== 24) ? 32 : 24;
-            var height = width;
-            this.superInit("bullet", width, height);
-            this.setFrameIndex(style.index + ((size !== 24) ? 12 : 0));
-            this.setScale((size === 64) ? 2 : 1);
+        init: function(x, y, vx, vy, obj){
+//            var style = game.colorStyle.getColorStyle("lime");
+//            var width = (size !== 24) ? 32 : 24;
+//            var height = width;
+//            this.superInit("bullet", width, height);
+            this.superInit("circle", obj.width, obj.height);
+            this.setFrameIndex(obj.children[0].frameIndex + 1);
+//            this.setScale((size === 64) ? 2 : 1);
             this.x = x;
             this.y = y;
             
             this.vx = vx;
             this.vy = vy;
             
-            this.damage = size / 2;
+            this.damage = this.radius / 2;
             
-            this.count = (64 - size) / 8;
+            this.count = (28 - this.radius) / 4;
+
+            this.isSyncRotation = obj.isSyncRotation;
+
+            this.syncRotation();
         },
         boundingType: "rect",
         hitFlag: false,
@@ -273,6 +287,7 @@ var game = game || {};
                 return;
             }
             if(this.hitFlag) return;
+            
             var enemies = app.currentScene.enemies;
             var l = enemies.length;
  
@@ -280,7 +295,7 @@ var game = game || {};
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
                     if(!target.tweener.isPlaying){
-                        if(this.isHitElement(target)){
+                        if(this.isHitElementRect(target)){
                             target.hp -= this.damage;
                             this.update = this.explode;
                             this.tweener
@@ -301,21 +316,25 @@ var game = game || {};
                     this.y += (GAME_FIELD_TOP - this.top);
                     this.vy *= -1;
                     this.count--;
+                    this.syncRotation();
                 }
                 if(this.bottom > GAME_FIELD_BOTTOM){
                     this.y += (GAME_FIELD_BOTTOM - this.bottom);
                     this.vy *= -1;
                     this.count--;
+                    this.syncRotation();
                 }
                 if(this.left < GAME_FIELD_LEFT){
                     this.x += (GAME_FIELD_LEFT - this.left);
                     this.vx *= -1;
                     this.count--;
+                    this.syncRotation();
                 }
                 if(this.right > GAME_FIELD_RIGHT){
                     this.x += (GAME_FIELD_RIGHT - this.right);
                     this.vx *= -1;
                     this.count--;
+                    this.syncRotation();
                 }
             }
         },
@@ -334,6 +353,10 @@ var game = game || {};
                     }
                 }
             }
+        },
+        syncRotation: function(){
+            if(!this.isSyncRotation) return;
+            this.rotation = Math.radToDeg(tm.geom.Vector2(this.vx, this.vy).toAngle());
         }
     });
     

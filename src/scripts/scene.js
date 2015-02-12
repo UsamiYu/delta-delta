@@ -26,7 +26,7 @@ var game = game || {};
 
             //ゲーム描画領域より上に描画するもの
             var frame = tm.display.RectangleShape({
-                width      : 672,
+                width      : 652,
                 height     : 734,
                 fillStyle  : "rgba(0, 0, 0, 0.0)",
                 strokeStyle: game.colorStyle.getColorStyle("blue").strokeStyle,
@@ -34,6 +34,8 @@ var game = game || {};
             }).setPosition(319,369).addChildTo(this);
 
             this.scoreLabel = game.ScoreLabel().addChildTo(this);
+            
+            this.button = game.ModeChangeButton().setPosition(72, 654).setAlpha(0.3).addChildTo(this);
             
             this.stage = num || 0;
             this.danmakuList = game.danmakuList(this.stage);
