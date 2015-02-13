@@ -39,7 +39,7 @@ var game = game || {};
 */
             this._isHitTestEnable = true;
             this.type = attr.type;
-            this.maxHp = this.hp;
+            this.maxHp = this._lastHp = this.hp;
             this.preHitTestArea = (this.width > this.height) ? this.width : this.height;
             this.scene = "";
 
@@ -108,6 +108,11 @@ var game = game || {};
                     this._isHitTestEnable = false;
                     this.fire(tm.event.Event("destroy"));
                     return;
+                }
+                if(this.scene.app.frame & 1) this.children[0].setFrameIndex(this.frameIndex);
+                if(this._lastHp > this.hp){
+                    this.children[0].setFrameIndex(this.frameIndex + 1);
+                    this._lastHp = this.hp;
                 }
                 var player = this.scene.player;
                 if(player.hitFlag){

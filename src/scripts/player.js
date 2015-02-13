@@ -6,17 +6,9 @@ var game = game || {};
 (function(){
 
     game.Player = tm.createClass({
-//        superClass: tm.display.TriangleShape,
         superClass: tm.display.Sprite,
 
         init: function(){
-//            var style = game.colorStyle.getColorStyle("green");
-//            this.superInit({
-//                width      : 64,
-//                height     : 64,
-//                fillStyle  : style.fillStyle,
-//                strokeStyle: style.strokeStyle,
-//                lineWidth  : 8});
             this.superInit("triangle", 64, 64);
             this.setFrameIndex(5);
 
@@ -109,14 +101,13 @@ var game = game || {};
                 .wait(500)
                 .call(function(){
                     this.power = 1;
-                    this.initStatus("shot");
+                    this.initStatus();
                 }.bind(this));
         },
         
         initStatus: function(){
             this.visible = true;
             this._isDestroy = false;
-//            this.setOnShot(true);
             this.x = 320;
             this.y = 720 - this.radius;
             this.setScale(10);
@@ -170,19 +161,9 @@ var game = game || {};
     });
     
     game.RefrectionField = tm.createClass({
-//        superClass: tm.display.CircleShape,
         superClass: tm.display.Sprite,
         
         init: function(){
-/*            var style = game.colorStyle.getColorStyle("yellow");
-            this.superInit({
-                width      : 80,
-                height     : 80,
-                fillStyle  : "rgba(0, 0, 0, 0.0)",
-                strokeStyle: style.strokeStyle,
-                lineWidth  : 12});
-            this.setScale(0.2);
-        }, */
             this.superInit("circle", 32, 32);
             this.setFrameIndex(8);
             this.setAlpha(0.5);
@@ -194,24 +175,15 @@ var game = game || {};
     });
    
     game.PlayerBullet = tm.createClass({
-//        superClass: tm.display.CircleShape,
         superClass: tm.display.Sprite,
         
         init: function(x, y, damage){
-//            var style = game.colorStyle.getColorStyle("lime");
             this.superInit("circle", 48, 24);
             this.setFrameIndex(2);
-/*            this.superInit({
-                width      : 16,
-                height     : 16,
-                fillStyle  : style.fillStyle,
-                strokeStyle: style.strokeStyle,
-                lineWidth  : 4});
-*/
+
             this.x = x;
             this.y = y;
 
-//            angle = Math.degToRad(angle + 270);
             this.setRotation(90);
             this.vy = -this.speed;
             this.damage = damage;
@@ -232,7 +204,7 @@ var game = game || {};
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
                     if(!target.tweener.isPlaying){
-                        if(this.isHitElementRect(target)){
+                        if(this.isHitEnemy(target)){
                             target.hp -= this.damage;
                             this.scaleX = 0.25;
                             this.scaleY = 1.2;
@@ -251,19 +223,23 @@ var game = game || {};
                 this.height,
                 this.width);
         },
+        isHitEnemy: function(target){
+            if((target.width === target.height) ||
+                (target.rotation === 0) ||
+                (target.rotation === 180)){
+                return this.isHitElementRect(target);
+            }
+            var rect = tm.geom.Rect(target.x - target.radius, target.y - target.radius, target.radius * 2, target.radius * 2);
+            return tm.collision.testRectRect(rect, this.getBoundingRect());
+        }
     });
     
     game.RefrectionBullet = tm.createClass({
         superClass: tm.display.Sprite,
         
         init: function(x, y, vx, vy, obj){
-//            var style = game.colorStyle.getColorStyle("lime");
-//            var width = (size !== 24) ? 32 : 24;
-//            var height = width;
-//            this.superInit("bullet", width, height);
             this.superInit("circle", obj.width, obj.height);
             this.setFrameIndex(obj.children[0].frameIndex + 1);
-//            this.setScale((size === 64) ? 2 : 1);
             this.x = x;
             this.y = y;
             

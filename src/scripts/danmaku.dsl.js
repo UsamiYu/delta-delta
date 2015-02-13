@@ -1361,17 +1361,17 @@ var game = game || {};
                         d.repeat(7, [
                             d.fire(
                                 d.direction("$1 * $loop.index * 20 + (($1 === 1) ? 90 : 270)", "absolute"),
-                                d.speed(3),
-                                d.bullet(longBullet)
+                                d.speed(5),
+                                d.bullet()
                             ),
                             d.repeat(3, [
                                 d.fire(
                                     d.direction("$1 * 20", "sequence"),
-                                    d.speed(3),
-                                    d.bullet(longBullet)
+                                    d.speed(5),
+                                    d.bullet()
                                 )
                             ]),
-                            d.wait(15)
+                            d.wait(6)
                         ])
                     ])
                 };
