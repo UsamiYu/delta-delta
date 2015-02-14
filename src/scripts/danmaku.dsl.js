@@ -1410,16 +1410,16 @@ var game = game || {};
                     "top": d.action([
                         d.wait(60),
                         d.repeat(99, [
-                            d.repeat(50, [
+                            d.repeat(24, [
                                 d.repeat("6 + $loop.index", [
                                     d.fire(
                                         d.direction(185, "sequence"),
-                                        d.speed(3),
-                                        d.bullet()
+                                        d.speed(4),
+                                        d.bullet(zakoP)
                                     ),
                                     d.wait(1)
                                 ]),
-                                d.wait("50 - $loop.index")
+                                d.wait(90)
                             ]),
                             d.wait(180)
                         ])

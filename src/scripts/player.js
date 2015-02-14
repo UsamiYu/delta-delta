@@ -75,12 +75,8 @@ var game = game || {};
                 if(this.hitFlagCount < 1) this.hitFlag = this.visible = true; 
             }
 
-            this.x += (this.left   + this.keyX + this.vx < GAME_FIELD_LEFT ||
-                       this.right  + this.keyX + this.vx > GAME_FIELD_RIGHT) ?
-                        0 : (this.keyX + this.vx);
-            this.y += (this.top    + this.keyY + this.vy < GAME_FIELD_TOP ||
-                       this.bottom + this.keyY + this.vy > GAME_FIELD_BOTTOM) ?
-                        0 : (this.keyY + this.vy);
+            this.x = Math.clamp(this.x + this.keyX + this.vx, GAME_FIELD_LEFT + this.radius, GAME_FIELD_RIGHT - this.radius);
+            this.y = Math.clamp(this.y + this.keyY + this.vy, GAME_FIELD_TOP + this.radius, GAME_FIELD_BOTTOM - this.radius);
         },
         
         ondestroy: function(){
@@ -91,6 +87,9 @@ var game = game || {};
             var scene = this.getRoot();
             scene.missCount++;
             if(scene.missCount < 10) scene.scoreLabel.score++;
+            var e = tm.event.Event("quake");
+            e.count = 3;
+            this.parent.dispatchEvent(e);
 
             this.tweener
                 .clear()
@@ -130,7 +129,7 @@ var game = game || {};
             switch(this.mode){
                 case "shot":
                     if(this.power < this.maxPower / 2) return;
-                    this.refrectionField.fire(tm.event.Event("changemode"));
+                    this.refrectionField.dispatchEvent(tm.event.Event("changemode"));
                     this.setOnShot(false);
                     this.mode = "refrection";
                     this.timeline.clear()
@@ -141,7 +140,7 @@ var game = game || {};
                     game.TweenAnimation(effect, "out", 250, {scaleX: 50.0, scaleY: 50.0, alpha: 0.1});
                 break;
                 case "refrection":
-                    this.refrectionField.fire(tm.event.Event("changemode"));
+                    this.refrectionField.dispatchEvent(tm.event.Event("changemode"));
                     this.mode = "shot";
                     this.timeline.clear()
                         .call(  0, function(){ this.setFrameIndex(4); }.bind(this), 250)
@@ -171,7 +170,10 @@ var game = game || {};
         onchangemode: function(){
             this.scaleX = (this.scaleX === 0.5) ? 2.5 : 0.5;
             this.scaleY = (this.scaleY === 0.5) ? 2.5 : 0.5;
-        }
+        },
+        getBoundingCircle: function(){
+            return tm.geom.Circle(this.parent.x, this.parent.y, 40); //refrection radius
+        },
     });
    
     game.PlayerBullet = tm.createClass({

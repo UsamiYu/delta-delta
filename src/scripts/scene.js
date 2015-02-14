@@ -15,6 +15,21 @@ var game = game || {};
             this.superInit();
             //ゲーム描画領域(シーン描画領域とは異なる)
             this.gameField = tm.display.CanvasElement().addChildTo(this);
+            this.gameField.onquake = function(e){
+                var rx = (Math.rand() * 2 < 1) ? 1 : -1;
+                var ry = (Math.rand() * 2 < 1) ? 1 : -1;
+                this.tweener
+                    .clear()
+                    .moveBy(-6 * rx, -6 * ry, ~~(1000 / GAME_FPS))
+                    .moveBy(12 * rx, 12 * ry, ~~(2000 / GAME_FPS))
+                    .move(0, 0, ~~(1000 / GAME_FPS))
+                    .call(function(){
+                        if(e.count > 0){
+                            e.count -= 1;
+                            this.tweener.rewind();
+                        }
+                    }.bind(this), ~~(1000 / GAME_FPS));
+            }
             //敵描画レイヤー
             this.enemyLayer = tm.display.CanvasElement().addChildTo(this.gameField);
             this.enemies = [];
@@ -59,7 +74,6 @@ var game = game || {};
                 this.result();
                 return;
             }
-//            this.danmakuList.splice(0, 1);
             if(this.danmaku === "") return;
 
             this.stopDanmaku();
@@ -89,7 +103,7 @@ var game = game || {};
             if(this.pointingCheck.count === 2){
                 this.pointingCheck.count = 0;
                 var player = this.player;
-                if(player.getParent() === this.gameField) player.fire(tm.event.Event("changemode"));
+                if(player.getParent() === this.gameField) player.dispatchEvent(tm.event.Event("changemode"));
             };
         },
 
@@ -99,7 +113,6 @@ var game = game || {};
             var player = this.player;
             if(player.getParent() === this.gameField){
                 player.vx = player.vy = 0;
-//                if(this.pointingCheck.count === 3) player.changeMode();
             }
             
         },

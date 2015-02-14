@@ -109,17 +109,35 @@ var game = game || {};
                     this.fire(tm.event.Event("destroy"));
                     return;
                 }
-                if(this.scene.app.frame & 1) this.children[0].setFrameIndex(this.frameIndex);
-                if(this._lastHp > this.hp){
-                    this.children[0].setFrameIndex(this.frameIndex + 1);
-                    this._lastHp = this.hp;
-                }
+                
                 var player = this.scene.player;
                 if(player.hitFlag){
+                    if(player.mode === "refrection"){
+                        var bounding = player.refrectionField.getBoundingCircle();
+                        if(tm.collision.testCircleCircle(this, bounding)){
+                            var v = Math.min(6, this.hp);
+                            player.power -= v;
+                            this.hp -= v;
+                            var vec = tm.geom.Vector2(player.x - this.x, player.y - this.y).normalize().mul(v);
+//                            player.x += vec.x;
+//                            player.y += vec.y;
+                            player.x = Math.clamp(player.x + vec.x, GAME_FIELD_LEFT + player.radius, GAME_FIELD_RIGHT - player.radius);
+                            player.y = Math.clamp(player.y + vec.y, GAME_FIELD_TOP + player.radius, GAME_FIELD_BOTTOM - player.radius);
+                            var e = tm.event.Event("quake");
+                            e.count = 1;
+                            this.scene.gameField.dispatchEvent(e);
+                        }
+                    }
                     if(this.isHitPointRectHierarchy(player.x, player.y)){
                         player.dispatchEvent(tm.event.Event("destroy"));
                         return;
                     }
+                
+                }
+                if(this.scene.app.frame & 1) this.children[0].setFrameIndex(this.frameIndex);
+                if(this._lastHp > this.hp){
+                    this.children[0].setFrameIndex(this.frameIndex + 1);
+                    this._lastHp = this.hp;
                 }
             }
         },
@@ -127,7 +145,6 @@ var game = game || {};
             if((this.width === this.heigth) || this.rotation === 0 || this.rotation === 180){
                 return this.isHitElemntRect(player);
             }
-//            var length = (this.width > this.height) ? this.width : this.height;
             var rect = tm.geom.Rect(
                 this.x - this.preHitTestArea * 0.5,
                 this.y - this.preHitTestArea * 0.5,
@@ -173,12 +190,6 @@ var game = game || {};
                     return;
                 }
             }
-
-            var player = this.scene.player;
-            if(player.mode === "refrection" && this.parent){
-                var r = 1600; // refrectionField.radius ^ 2
-                if(tm.geom.Vector2(this.x, this.y).distanceSquared(player) < r) this.remove();
-            }
         },
     });
 
@@ -187,28 +198,28 @@ var game = game || {};
         
         init: function(runner, attr){
             this.superInit(runner);
-            
-            attr = {}.$extend(game.param.BULLET_DEFAULT_ATTR, attr);
-            
-            this.width = attr.width;
-            this.height = attr.height;
+            attr = attr.$safe(game.param.BULLET_DEFAULT_ATTR);
+            this.fromJSON(attr);
+//            this.width = attr.width;
+//            this.height = attr.height;
 //            this.radius = this.width / 2;
-            this.fieldOutCheck = true;
-            this.isSyncRotation = attr.isSyncRotation;
+//            this.fieldOutCheck = true;
+//            this.isSyncRotation = attr.isSyncRotation;
 /*
             var width = (this.width === 64) ? 32 : this.width;
             var height = (this.height === 64) ? 32 : this.height;
 */
             var graphic = tm.display.Sprite("circle", this.width, this.height);
-//            graphic.setFrameIndex(game.colorStyle.getColorIndex(attr.color) + (width !== 24) ? 11 : 0);
             graphic.setFrameIndex(attr.frameIndex).setAlpha(0.9);
-//            graphic.setScale((this.width === 64) ? 2 : 1);
             graphic.addChildTo(this);
 
         },
+
+        fieldOutCheck: true,
         
         onadded: function(){
             this.scene = this.getRoot();
+            if(this.scene.player.mode === "refrection" && tm.collision.testCircleCircle(this.getBoundingCircle(), this.scene.player.refrectionField.getBoundingCircle())) this.remove();
         },
         
         update: function(){
@@ -234,15 +245,15 @@ var game = game || {};
                             player.power++;
                             scoreLabel.score += scoreLabel.v;
                             if(this.isHitPlayer(player)){
-                                player.fire(tm.event.Event("destroy"));
+                                player.dispatchEvent(tm.event.Event("destroy"));
                                 return;
                             }
                         }
                     break;
                     case "refrection":
-                        var bounding = tm.geom.Circle(player.x, player.y, 40);
+                        var bounding = player.refrectionField.getBoundingCircle();
 
-                        if(tm.collision.testCircleCircle(this.getBoundingCircle(), bounding)){
+                        if(tm.collision.testCircleCircle(this, bounding)){
                         //反射
                             var vec = tm.geom.Vector2(this.x - bounding.x, this.y - bounding.y);
                             var len = vec.length();
@@ -254,8 +265,6 @@ var game = game || {};
                             var bullet = game.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, vec.x, vec.y, this);
                             bullet.addChildTo(field);
                             this.remove();
-//                            player.power += (this.radius - 7);
-//                            player.power--;
                             scoreLabel.score += (scoreLabel.v * this.radius);
                             return;
                         }

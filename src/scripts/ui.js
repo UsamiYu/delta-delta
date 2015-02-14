@@ -116,7 +116,7 @@ var game = game || {};
             this.setScale(1);
             var scene = this.parent;
             scene.pointingCheck.count = 0;
-            scene.player.fire(tm.event.Event("changemode"));
+            scene.player.dispatchEvent(tm.event.Event("changemode"));
         }
     });
 })();
