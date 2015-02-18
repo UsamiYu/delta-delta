@@ -119,4 +119,22 @@ var game = game || {};
             scene.player.dispatchEvent(tm.event.Event("changemode"));
         }
     });
+    
+    game.GameFieldFrame = tm.createClass({
+        superClass: tm.display.Shape,
+        
+        init: function(){
+            this.superInit({
+                width    : 640,
+                height   : 960,
+                fillStyle: "rgb(127, 127, 196)"
+            });
+
+            this.autoRender = false;
+        },
+        _render: function(){
+            this.canvas.fillRect(0, 0, this.width, this.height);
+            this.canvas.clear(GAME_FIELD_LEFT, GAME_FIELD_TOP, 608, 688);
+        }
+    });
 })();

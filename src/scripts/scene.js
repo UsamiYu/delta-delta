@@ -16,12 +16,12 @@ var game = game || {};
             //ゲーム描画領域(シーン描画領域とは異なる)
             this.gameField = tm.display.CanvasElement().addChildTo(this);
             this.gameField.onquake = function(e){
-                var rx = (Math.rand() * 2 < 1) ? 1 : -1;
-                var ry = (Math.rand() * 2 < 1) ? 1 : -1;
+                var rx = (Math.random() * 2 < 1) ? 8 : -8;
+                var ry = (Math.random() * 2 < 1) ? 8 : -8;
                 this.tweener
                     .clear()
-                    .moveBy(-6 * rx, -6 * ry, ~~(1000 / GAME_FPS))
-                    .moveBy(12 * rx, 12 * ry, ~~(2000 / GAME_FPS))
+                    .moveBy(rx, ry, ~~(1000 / GAME_FPS))
+                    .moveBy(-2 * rx, -2 * ry, ~~(2000 / GAME_FPS))
                     .move(0, 0, ~~(1000 / GAME_FPS))
                     .call(function(){
                         if(e.count > 0){
@@ -40,17 +40,11 @@ var game = game || {};
             this.bulletLayer = tm.display.CanvasElement().addChildTo(this.gameField);
 
             //ゲーム描画領域より上に描画するもの
-            var frame = tm.display.RectangleShape({
-                width      : 652,
-                height     : 734,
-                fillStyle  : "rgba(0, 0, 0, 0.0)",
-                strokeStyle: game.colorStyle.getColorStyle("blue").strokeStyle,
-                lineWidth  : 32
-            }).setPosition(319,369).addChildTo(this);
+            var frame = game.GameFieldFrame().setPosition(319,479).addChildTo(this);
 
             this.scoreLabel = game.ScoreLabel().addChildTo(this);
             
-            this.button = game.ModeChangeButton().setPosition(72, 654).setAlpha(0.3).addChildTo(this);
+            this.button = game.ModeChangeButton().setPosition(64, 654).setAlpha(0.3).addChildTo(this);
             
             this.stage = num || 0;
             this.danmakuList = game.danmakuList(this.stage);
@@ -145,10 +139,6 @@ var game = game || {};
             this.stepTick();
         },
 
-        ondanmakuend: function(){
-            this.stepTick();
-        },
-
         oncutin: function(e){
             //チュートリアルなどを差し込む
             var text = e.parm;
@@ -207,7 +197,7 @@ var game = game || {};
         
         init: function(){
             this.superInit();
-            var buttons = ["Test", "Tutrial", "Stage1", "Stage2", "Stage3"];
+            var buttons = ["Test", "Tutrial", "Stage1", "Stage2", "Stage3", "Stage4"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
                 var button = tm.ui.FlatButton({

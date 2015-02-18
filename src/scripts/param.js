@@ -180,11 +180,13 @@ var game = game || {};
     
     game.danmakuList = function(num){
         var list = [
-            ["test3"],
+            ["stage1_03"],
             ["stage0_01", "stage0_02", "stage0_03"],
             ["stage1_01", "test4", "stage2_01"],
             ["stage3_03", "stage2_02", "stage3_02"],
-            ["stage3_01", "stage2_03", "stage1_02"]
+            ["stage3_01", "stage2_03", "stage1_02"],
+            ["test5", "test1", "stage1_03", "test3"]
+            
         ];
         
         return list[num];

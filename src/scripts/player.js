@@ -88,7 +88,7 @@ var game = game || {};
             scene.missCount++;
             if(scene.missCount < 10) scene.scoreLabel.score++;
             var e = tm.event.Event("quake");
-            e.count = 3;
+            e.count = 5;
             this.parent.dispatchEvent(e);
 
             this.tweener
@@ -153,7 +153,7 @@ var game = game || {};
 
         shotBullet: function(){
             for(var i = 0;i < 2;i++){
-                var bullet = game.PlayerBullet(this.x + i * 24 - 12, this.y - 32, 3);
+                var bullet = game.PlayerBullet(this.x + i * 24 - 12, this.y - 40, 3);
                 bullet.addChildTo(this.parent);
             }
         },
@@ -319,14 +319,14 @@ var game = game || {};
         explode: function(app){
             var enemies = app.currentScene.enemies;
             var l = enemies.length;
-            var bounding = tm.geom.Circle(this.x, this.y, this.width * this.scaleX / 2);
-            
+            var bounding = tm.geom.Circle(this.x, this.y, this.radius * this.scaleX);
+
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
                     if(!target.tweener.isPlaying){
                         if(tm.collision.testCircleCircle(bounding, target.getBoundingCircle())){
-                             target.hp--;
+                            target.hp--;
                         }
                     }
                 }

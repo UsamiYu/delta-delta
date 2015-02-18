@@ -14,7 +14,6 @@ var game = game || {};
     };
     
     
-    
     game.Enemy = tm.createClass({
         superClass: tm.bulletml.Bullet,
         
@@ -23,20 +22,7 @@ var game = game || {};
 
             attr = attr.$safe(game.param.ENEMY_DEFAULT_ATTR);
             this.fromJSON(attr);
-/*
-            this.width = attr.width;
-            this.height = attr.height;
-            this.areaWidth = (this.width > this.height) ? this.width : this.height;
-            this.hp = this.maxHp = attr.hp;
-//            this.sides = attr.sides;
-            this.danmaku = attr.danmaku;
-//            this.danmakuList = attr.danmakuList;
-            this.fieldOutCheck = attr.fieldOutCheck;
-            this.type = attr.type;
-//            this.target = attr.target;
-            this.isSyncRotation = attr.isSyncRotation;
-            this.addedAnimation = attr.addedAnimation;
-*/
+
             this._isHitTestEnable = true;
             this.type = attr.type;
             this.maxHp = this._lastHp = this.hp;
@@ -112,27 +98,28 @@ var game = game || {};
                 
                 var player = this.scene.player;
                 if(player.hitFlag){
-                    if(player.mode === "refrection"){
-                        var bounding = player.refrectionField.getBoundingCircle();
-                        if(tm.collision.testCircleCircle(this, bounding)){
-                            var v = Math.min(6, this.hp);
-                            player.power -= v;
-                            this.hp -= v;
-                            var vec = tm.geom.Vector2(player.x - this.x, player.y - this.y).normalize().mul(v);
-//                            player.x += vec.x;
-//                            player.y += vec.y;
-                            player.x = Math.clamp(player.x + vec.x, GAME_FIELD_LEFT + player.radius, GAME_FIELD_RIGHT - player.radius);
-                            player.y = Math.clamp(player.y + vec.y, GAME_FIELD_TOP + player.radius, GAME_FIELD_BOTTOM - player.radius);
-                            var e = tm.event.Event("quake");
-                            e.count = 1;
-                            this.scene.gameField.dispatchEvent(e);
-                        }
+                    switch(player.mode){
+                        case "refrection":
+                            var bounding = player.refrectionField.getBoundingCircle();
+                            if(tm.collision.testCircleCircle(this, bounding)){
+                                var v = Math.min(6, this.hp);
+                                player.power -= (v * 2);
+                                this.hp -= v;
+                                var vec = tm.geom.Vector2(player.x - this.x, player.y - this.y).normalize().mul(v);
+                                player.x = Math.clamp(player.x + vec.x, GAME_FIELD_LEFT + player.radius, GAME_FIELD_RIGHT - player.radius);
+                                player.y = Math.clamp(player.y + vec.y, GAME_FIELD_TOP + player.radius, GAME_FIELD_BOTTOM - player.radius);
+                                var e = tm.event.Event("quake");
+                                e.count = 1;
+                                this.scene.gameField.dispatchEvent(e);
+                            }
+                        break;
+                        default:
+                            if(this.isHitPlayer(player)){
+                                player.dispatchEvent(tm.event.Event("destroy"));
+                                return;
+                            }
+                        break;
                     }
-                    if(this.isHitPointRectHierarchy(player.x, player.y)){
-                        player.dispatchEvent(tm.event.Event("destroy"));
-                        return;
-                    }
-                
                 }
                 if(this.scene.app.frame & 1) this.children[0].setFrameIndex(this.frameIndex);
                 if(this._lastHp > this.hp){
@@ -143,7 +130,7 @@ var game = game || {};
         },
         preHitTest: function(player){
             if((this.width === this.heigth) || this.rotation === 0 || this.rotation === 180){
-                return this.isHitElemntRect(player);
+                return this.isHitElementRect(player);
             }
             var rect = tm.geom.Rect(
                 this.x - this.preHitTestArea * 0.5,
@@ -158,7 +145,7 @@ var game = game || {};
             if((this.width === this.height) && (this.rotation === 0 || this.rotation === 180)){
                 return this.isHitPointRect(player.x, player.y);
             }
-            return this.HitPointRectHierarchy(player.x, player.y);
+            return this.isHitPointRectHierarchy(player.x, player.y);
         }
 
     });
@@ -200,15 +187,7 @@ var game = game || {};
             this.superInit(runner);
             attr = attr.$safe(game.param.BULLET_DEFAULT_ATTR);
             this.fromJSON(attr);
-//            this.width = attr.width;
-//            this.height = attr.height;
-//            this.radius = this.width / 2;
-//            this.fieldOutCheck = true;
-//            this.isSyncRotation = attr.isSyncRotation;
-/*
-            var width = (this.width === 64) ? 32 : this.width;
-            var height = (this.height === 64) ? 32 : this.height;
-*/
+
             var graphic = tm.display.Sprite("circle", this.width, this.height);
             graphic.setFrameIndex(attr.frameIndex).setAlpha(0.9);
             graphic.addChildTo(this);

@@ -10,7 +10,7 @@ tm.main(function() {
     app.fps = GAME_FPS;
 
 //    app.enableStats();
-    app.background = "rgba( 55%, 55%, 70%, 1)";
+    app.background = "rgba( 50%, 50%, 60%, 1)";
 
     var loadingScene = tm.ui.LoadingScene({
         width: SCREEN_WIDTH,
