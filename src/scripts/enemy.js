@@ -36,17 +36,18 @@ var game = game || {};
         },
         ondestroy: function(){
             if(!this.parent) return;
-            this.scene.scoreLabel.score += this.maxHp * 10;
-            var player = this.scene.player;
+            var scene = this.scene;
+            scene.scoreLabel.score += this.maxHp * 10;
+            var player = scene.player;
             this.stopDanmaku();
             if(this.type === "boss"){
-                this.scene.fire(tm.event.Event("clearstage"));
+                scene.dispatchEvent(tm.event.Event("clearstage"));
                 return;
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
-            if(dist > 10000){  //距離100px ^ 2
-                var explode = game.EnemyExplosion(this.x, this.y, Math.min(9, ~~((this.radius + this.maxHp) / 12)));
-                explode.addChildTo(this.scene.enemyLayer);
+            if(dist > 10000 && scene.bulletLayer.children.length + scene.enemyLayer.children.length * 3 < 150){  //距離100px ^ 2
+                var explode = game.EnemyExplosion(this.x, this.y, ~~((this.radius + this.maxHp) / 10));
+                explode.addChildTo(this.scene.bulletLayer);
             }
             this.remove();
         },
@@ -56,7 +57,7 @@ var game = game || {};
             this.scene = this.getRoot().app.currentScene;
             if(this.type === "boss") this.hpGauge.addChildTo(this.scene);
             if(this.danmaku !== "") game.setDanmaku(this, this.scene.player, this.scene);
-            if(this._isHitTestEnable) this.scene.enemies.push(this);
+            //if(this._isHitTestEnable) this.scene.enemies.push(this);
             if(this.addedAnimation !== ""){
                 switch(this.addedAnimation){
                     case "zoom":
@@ -71,7 +72,7 @@ var game = game || {};
 
         onremoved: function(){
             if(this.type === "boss") this.hpGauge.remove();
-            this.scene.enemies.erase(this);
+            //this.scene.enemies.erase(this);
         },
 
         update: function(e){
@@ -103,7 +104,7 @@ var game = game || {};
                             var bounding = player.refrectionField.getBoundingCircle();
                             if(tm.collision.testCircleCircle(this, bounding)){
                                 var v = Math.min(6, this.hp);
-                                player.power -= (v * 2);
+                                player.power *= 0.5;
                                 this.hp -= v;
                                 var vec = tm.geom.Vector2(player.x - this.x, player.y - this.y).normalize().mul(v);
                                 player.x = Math.clamp(player.x + vec.x, GAME_FIELD_LEFT + player.radius, GAME_FIELD_RIGHT - player.radius);
@@ -121,7 +122,7 @@ var game = game || {};
                         break;
                     }
                 }
-                if(this.scene.app.frame & 1) this.children[0].setFrameIndex(this.frameIndex);
+                if(this.scene.app.frame & 4) this.children[0].setFrameIndex(this.frameIndex);
                 if(this._lastHp > this.hp){
                     this.children[0].setFrameIndex(this.frameIndex + 1);
                     this._lastHp = this.hp;
@@ -209,7 +210,7 @@ var game = game || {};
             }
             this.setPosition(this.runner.x, this.runner.y);
 
-            if(this.fieldOutCheck && game.gameFieldOut(this)){
+            if(this.fieldOutCheck && game.gameFieldOut(this) && this.parent){
                 this.remove();
                 return;
             }
@@ -287,6 +288,9 @@ var game = game || {};
             var scene = this.getRoot().app.currentScene;
             
             game.setDanmaku(this, scene.player, scene, {rank: this.rank});
+        },
+        ondestroy: function(){
+            if(this.parent) this.remove();
         }
     });
 

@@ -200,19 +200,18 @@ var game = game || {};
                 return;
             }
 
-            var enemies = app.currentScene.enemies;
+            //var enemies = app.currentScene.enemies;
+            var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
-                    if(!target.tweener.isPlaying){
-                        if(this.isHitEnemy(target)){
-                            target.hp -= this.damage;
-                            this.scaleX = 0.25;
-                            this.scaleY = 1.2;
-                            this.hitFlag = true;
-                            break;
-                        }
+                    if(this.isHitEnemy(target)){
+                        target.hp -= this.damage;
+                        this.scaleX = 0.25;
+                        this.scaleY = 1.2;
+                        this.hitFlag = true;
+                        break;
                     }
                 }
             }
@@ -226,6 +225,7 @@ var game = game || {};
                 this.width);
         },
         isHitEnemy: function(target){
+            if(target.tweener.isPlaying || !target.parent) return false;
             if((target.width === target.height) ||
                 (target.rotation === 0) ||
                 (target.rotation === 180)){
@@ -266,13 +266,14 @@ var game = game || {};
             }
             if(this.hitFlag) return;
             
-            var enemies = app.currentScene.enemies;
+            //var enemies = app.currentScene.enemies;
+            var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
  
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
-                    if(!target.tweener.isPlaying){
+                    if(!target.tweener.isPlaying && target.parent){
                         if(this.isHitElementRect(target)){
                             target.hp -= this.damage;
                             this.update = this.explode;
@@ -317,14 +318,15 @@ var game = game || {};
             }
         },
         explode: function(app){
-            var enemies = app.currentScene.enemies;
+            //var enemies = app.currentScene.enemies;
+            var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
             var bounding = tm.geom.Circle(this.x, this.y, this.radius * this.scaleX);
 
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
-                    if(!target.tweener.isPlaying){
+                    if(!target.tweener.isPlaying && target.parent){
                         if(tm.collision.testCircleCircle(bounding, target.getBoundingCircle())){
                             target.hp--;
                         }

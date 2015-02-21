@@ -14,7 +14,7 @@ var game = game || {};
              this.setAlign("left");
              this.setFontSize(32);
 //             this.setFontFamily();
-             this.x = 22;
+             this.x = 24;
              this.y = 48;
              
              this.score = 0;
@@ -135,6 +135,39 @@ var game = game || {};
         _render: function(){
             this.canvas.fillRect(0, 0, this.width, this.height);
             this.canvas.clear(GAME_FIELD_LEFT, GAME_FIELD_TOP, 608, 688);
+        }
+    });
+    
+    game.EnemyCounter = tm.createClass({
+        superClass: tm.display.Label,
+        
+        init: function(){
+            this.superInit("enemy:000/ 000");
+            this.setAlign("left");
+            this.setFontSize(32);
+            this.maxValue = 0;
+        },
+        update: function(app){
+            var v = this.parent.enemyLayer.children.length;
+            if(this.maxValue < v) this.maxValue = v;
+            this.text = "enemy:" + ("000" + v).substr(-3) + "/" + ("000" + this.maxValue).substr(-3);
+        }
+    });
+    
+    game.BulletCounter = tm.createClass({
+        superClass: tm.display.Label,
+        
+        init: function(){
+            this.superInit("bullet:0000/0000");
+            this.setAlign("left");
+            this.setFontSize(32);
+            this.maxValue = 0;
+            this.autoRender = false;
+        },
+        update: function(app){
+            var v = this.parent.bulletLayer.children.length;
+            if(this.maxValue < v) this.maxValue = v;
+            this.text = "bullet:" + ("0000" + v).substr(-4) + "/" + ("0000" + this.maxValue).substr(-4);
         }
     });
 })();

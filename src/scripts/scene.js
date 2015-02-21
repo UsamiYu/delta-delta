@@ -32,7 +32,7 @@ var game = game || {};
             }
             //敵描画レイヤー
             this.enemyLayer = tm.display.CanvasElement().addChildTo(this.gameField);
-            this.enemies = [];
+//            this.enemies = [];
 
             this.player = game.Player();
             this.player.addChildTo(this.gameField);
@@ -41,6 +41,8 @@ var game = game || {};
 
             //ゲーム描画領域より上に描画するもの
             var frame = game.GameFieldFrame().setPosition(319,479).addChildTo(this);
+            var ec = game.EnemyCounter().setPosition(24, 754).addChildTo(this);
+            var bc = game.BulletCounter().setPosition(24, 786).addChildTo(this);
 
             this.scoreLabel = game.ScoreLabel().addChildTo(this);
             
@@ -133,7 +135,7 @@ var game = game || {};
                 enemies[i].stopDanmaku();
                 game.destroyAnimation(enemies[i]);
             }
-            this.enemies.length = 0;
+            //this.enemies.length = 0;
             this.bulletLayer.removeChildren();
 
             this.stepTick();
