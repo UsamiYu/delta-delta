@@ -118,227 +118,6 @@ var game = game || {};
         }
 
         var pattern = {
-            "test1": function(obj){
-                zakoP.danmaku = "zako01";
-                boss.hp = 1500;
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 0, 180, "absolute", 4, boss, d.actionRef("boss"))
-                    ]),
-                    "top2": d.action([
-                        d.wait(210),
-                        d.repeat(99, [
-                            d.repeat(9, [
-                                f["offset"]("$loop.index * 72 + 32", 32, 180, "absolute", 4, middleR),
-                            ]),
-                            d.wait(210),
-                        ]),
-                    ]),
-                    "boss": d.action([
-                        act["change_speed"](0, 90),
-                        d.repeat(99, [
-                            d.changeDirection(d.direction(240, "absolute"), 1),
-                            act["change_speed"](8, 60),
-                            act["change_speed"](0, 1),
-                            f["normal"](120, "absolute", 12, zakoP, d.actionRef("zako")),
-                            d.repeat(3, [
-                                f["normal"](40, "sequence", 12, zakoP, d.actionRef("zako")),
-                            ]),
-                            d.actionRef("move"),
-                            act["change_direction"](300, "absolute", 1, 15),
-                            act["change_speed"](8, 60),
-                            act["change_speed"](0, 1, 60),
-                        ]),
-                    ]),
-                    "move": d.action([
-                        act["change_speed"](0, 8),
-                        act["change_direction"](90, "absolute", 1),
-                        act["change_speed"](2, 1, 211),
-                        act["change_speed"](0, 1),
-                    ]),
-                    "zako": d.action([
-                        d.actionRef("move"),
-                        act["change_direction"](180, "absolute", 1),
-                        act["change_speed"](4, 1)
-                    ])
-                };
-            },
-            "test2": function(obj){
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 0, 180, "absolute", 13, boss, d.actionRef("boss"))
-                    ]),
-                    "boss": d.action([
-                        d.repeat(99, [
-                            act["change_speed"](0, 60),
-                            d.changeDirection(d.direction(0, "absolute"), 1),
-                            d.changeSpeed(d.speed(4), 1),
-                            d.actionRef("shot", 2, 120, 120),
-                            d.wait(60),
-                            d.changeSpeed(d.speed(0), 1),
-                            d.actionRef("shot", 2, 180, 90),
-                            d.wait(120),
-                            d.repeat(2, [
-                                d.bindVar("dir", "($loop.index) ? 1 : -1"),
-                                d.repeat(10, [
-                                    f["normal"]("$dir * ($loop.index * 12 + 90)", "absolute", 3.75, middleBullet),
-                                    d.repeat(3, [
-                                        f["normal"]("$dir * 15", "sequence", "3.5 - $loop.index * 0.25", middleBullet),
-                                    ]),
-                                    d.wait(10)
-                                ]),
-                                d.wait(30)
-                            ]),
-                            d.wait(240),
-                            d.changeSpeed(d.speed(8), 1),
-                            act["change_direction"](180, "absolute", 1),
-                        ])
-                    ]),
-                    "shot": d.action([
-                        d.repeat("$1", [
-                            d.fire(
-                                d.direction("$loop.index * $2 + $3", "absolute"),
-                                d.speed(8),
-                                d.bullet(zakoT, d.action([
-                                    act["change_speed"](0, 30),
-                                    d.repeat(3, [
-                                        f["normal"]("$loop.index * 120", "absolute", 8, zakoT, d.actionRef("zako")),
-                                    ]),
-                                    d.vanish()
-                                ]))
-                            )
-                        ]),
-                    ]),
-                    "zako": d.action([
-                        act["change_speed"](0, 30),
-                        d.changeDirection(d.direction(90, "relative"), 1),
-                        act["change_speed"](Math.PI * 2 / 3, 1),
-                        d.repeat(60, [
-                            f["normal"](120, "relative", 12, barrier, d.action([ d.wait(13), d.vanish() ])),
-                            act["change_direction"](8, "relative", 8),
-                        ]),
-                        d.changeSpeed(d.speed(6), 30)
-                    ]),
-                };
-            },
-            "test3": function(obj){
-                dummy.danmaku = "whip01";
-                boss.danmaku = "boss9";
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](640, 180, 270, "absolute", 8, boss, d.actionRef("boss"))
-                    ]),
-                    "boss": d.action([
-                        act["change_speed"](0, 120),
-                        d.repeat(99, [
-                            d.repeat(3, [
-                                f["normal"](180, "relative", 8, dummy, d.action([
-                                    d.wait(40),
-                                    act["round_trip"](4, 80, 3, 80),
-                                ])),
-                                d.wait(20),
-                                act["round_trip"](4, 80, 1, 80),
-                                act["change_speed"](0, 1, 60),
-                            ]),
-                            act["round_trip"](10, 32, 5),
-                            act["change_speed"](0, 1, 80),
-                        ])
-                    ]),
-                };
-            },
-            "test4": function(){
-                boss.danmaku = "boss10";
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 0, 181, "absolute", 6, boss, d.actionRef("boss"))
-                    ]),
-                    "top2": d.action([
-                        d.wait(60),
-                        d.repeat(99, [
-                            d.repeat(3, [
-                                f["offset"]("$rand * 320 + 160", 32, 180, "absolute", 16, zakoP, d.action([
-                                    act["change_speed"](0, "$loop.index * 15 + 30"),
-                                    d.repeat(30, [
-                                        d.repeat(2, [
-                                            f["normal"](180, "sequence", 28, barrier, d.actionRef("barrier")),
-                                        ]),
-                                        d.wait(15),
-                                    ]),
-                                    d.vanish(),
-                                ])),
-                                d.wait(60),
-                            ]),
-                            d.wait(300),
-                        ])
-                    ]),
-                    "boss": d.action([
-                        act["change_speed"](0, 60),
-                        act["yura_yura"](1, 120),
-                    ]),
-                    "barrier": d.action([
-                        d.wait(1),
-                        act["change_speed"](0, 1),
-                        f["normal"](0, "relative", 26, barrier, d.actionRef("barrier")),
-                        d.wait(13),
-                        d.vanish(),
-                    ])
-                };
-            },
-            "test5": function(obj){
-                largeR.addedAnimation = "zoom";
-                largeR.hp = 250;
-                largeR.fieldOutCheck = false;
-                zakoP.hp = 300;
-                zakoP.isSyncRotation = false;
-                zakoP.fieldOutCheck = false;
-                zakoP.danmaku = "zako02";
-                boss.danmaku = "zako02";
-                largeR.danmaku = "zako03";
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 0, 180, "absolute", 4, boss, d.actionRef("boss")),
-                    ]),
-                    "boss": d.action([
-                        act["change_speed"](0, 60),
-                        d.repeat(2, [
-                            f["normal"]("$loop.index * 90 + 135", "absolute", 7, invisible, d.actionRef("set_largeR", 1)),
-                            f["normal"]("$loop.index * 210 + 75", "absolute", 8, invisible, d.actionRef("set_largeR", 2)),
-                            f["normal"]("$loop.index * 180 + 90", "absolute", 10, invisible, d.actionRef("set_largeR", 2)),
-                            f["normal"]("$loop.index * 40 + 160", "absolute", 8, invisible, d.actionRef("set_largeR", 1)),
-                        ]),
-                        f["normal"](180, "absolute", 11, invisible, d.actionRef("set_largeR")),
-                        d.repeat(2, [
-                            f["normal"]("$loop.index * 270 + 45", "absolute", 15, zakoP, d.actionRef("zakoP")),
-                            f["normal"]("$loop.index * 140 + 110", "absolute", 15, zakoP, d.actionRef("zakoP")),
-                            f["normal"]("$loop.index * 220 + 70", "absolute", 24, zakoP, d.actionRef("zakoP")),
-                        ]),
-                        d.actionRef("boss_move", 16),
-                    ]),
-                    "boss_move": d.action([
-                        d.wait("$1"),
-                        d.repeat(99, [
-                            act["triangle_loop"](2, "right", 240, 1, 60),
-                            act["triangle_loop"](2, "left", 240, 1, 60),
-                            d.wait(60),
-                        ]),
-                    ]),
-                    "set_largeR": d.action([
-                        d.repeat("$1", [
-                            d.wait(8),
-                            f["normal"](0, "relative", 0, largeR, d.actionRef("boss_move", "10 - $loop.index * 8")),
-                        ])
-                    ]),
-                    "zakoP": d.action([
-                        act["change_speed"](0, 15),
-                        d.actionRef("boss_move", 2),
-                    ])
-                };
-            },
             "test6": function(){
                 return {
                     "top": d.action([
@@ -362,7 +141,7 @@ var game = game || {};
                     ])
                 };
             },
-            "stage0_1": function(obj){
+            "stage0_01": function(obj){
                 boss.hp = 450;
                 return {
                     "top": d.action([
@@ -388,7 +167,7 @@ var game = game || {};
                     ])
                 }
             },
-            "stage0_2": function(obj){
+            "stage0_02": function(obj){
                 boss.hp = 1400;
                 return {
                     "top": d.action([
@@ -415,7 +194,7 @@ var game = game || {};
                     ])
                 };
             },
-            "stage0_3": function(obj){
+            "stage0_03": function(obj){
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -452,7 +231,7 @@ var game = game || {};
                     ])
                 };
             },
-            "stage1_1": function(obj){
+            "stage1_01": function(obj){
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -486,231 +265,7 @@ var game = game || {};
                     ])
                 };    
             },
-            "stage1_2": function(obj){
-                zakoR.addedAnimation = "drop";
-                boss.hp = 900;
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](640, 96, 270, "absolute", 12, boss, d.actionRef("boss")),
-                    ]),
-                    "boss": d.action([
-                        act["change_speed"](0, 100),
-                        d.repeat(99, [
-                            f["normal"](180, "absolute", 12, invisible, d.actionRef("bullet_point1", 1)),
-                            d.actionRef("move", 12),
-                            f["normal"](180, "absolute", 12, invisible, d.actionRef("bullet_point1", -1)),
-                            d.wait(15),
-                            d.actionRef("move", 12),
-                            d.wait(1),
-                            d.actionRef("move", 2),
-                            d.wait(1),
-                            d.actionRef("move", 2),
-                            d.wait(180)
-                        ])
-                    ]),
-                    "move": d.action([
-                        d.changeDirection(d.direction(180, "relative"), 1),
-                        d.changeSpeed(d.speed("$1"), 1),
-                        d.wait("552 / $1"),
-                        d.changeSpeed(d.speed(0), 1)
-                    ]),
-                    "bullet_point1": d.action([
-                        d.wait("($1 > 0) ? 2 : 6"),
-                        d.repeat(3, [
-                            d.wait(8),
-                            f["normal"]("-90 * $1", "relative", 12, invisible, d.actionRef("bullet_point2")),
-                        ]),
-                        d.vanish()
-                    ]),
-                    "bullet_point2": d.action([
-                        d.repeat(6, [
-                            f["normal"](0, "relative", 0, zakoR, d.action([
-                                d.wait(240),
-                                f["normal"]("~~($rand * 4) * 90", "absolute", 3, middleBullet),
-                                d.repeat(3, [
-                                    d.wait(120),
-                                    f["normal"](90, "sequence", 3, middleBullet),
-                                ]),
-                                d.changeSpeed(d.speed(4), 1)
-                            ])),
-                            d.wait(8)
-                        ])
-                    ])
-                };
-            },
-            "stage1_3": function(obj){
-                zakoR.hp = 8;
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 0, 180, "absolute", 6, boss, d.action([
-                            act["change_speed"](0, 90),
-                            d.repeat(99, [
-                                d.repeat(3, [
-                                    f["normal"](90, "sequence", 4, zakoR, d.actionRef("zako"))
-                                ]),
-                                d.wait(10),
-                                d.repeat(20, [
-                                    f["normal"](27, "sequence", "$loop.index * 0.25 + 2", middleBullet),
-                                    d.wait(1)
-                                ]),
-                                d.changeDirection(d.direction(90, "relative"), 1),
-                                act["change_speed"](4, 30),
-                                act["change_speed"](0, 30, 120),
-                            ])
-                        ])),
-                    ]),
-                    "top2": d.action([
-                        d.wait(120),
-                        d.repeat(99, [
-                            f["offset"]("Math.sin($loop.index) * 130 + 480", GAME_FIELD_TOP, 180, "absolute", 6, zakoT, d.action([
-                                d.wait(10),
-                                d.repeat(4, [
-                                    f["normal"]("$rand * 5 - 2", "aim", 2.5, longBullet),
-                                    d.wait(15)
-                                ])
-                            ])),
-                            d.wait("~~($rand * 210) + 30")
-                        ])
-                    ]),
-                    "zako": d.action([
-                        d.wait(12),
-                        act["change_speed"](0, 1, 3),
-                        d.bindVar("r", "$rand * 9"),
-                        f["normal"]("($r < 1) ? -90 : ($r < 2) ? 90 : 0", "relative", 4, zakoR, d.actionRef("zako")),
-                        d.wait(30),
-                        d.vanish()
-                    ])
-                };
-            },
-            "stage2_1": function(obj){
-                boss.hp = 2500;
-                boss.danmaku = "boss4";
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 0, 180, "absolute", 5, boss, d.actionRef("boss")),
-                    ]),
-                    "boss": d.action([
-                        act["change_speed"](0, 90, 120),
-                        d.repeat(99,[
-                            d.repeat(5, [
-                                f["normal"]("$loop.index * 30 + 60", "absolute", 4, largeBullet, d.actionRef("wing", 1, 0)),
-                                f["normal"]("-$loop.index * 30 - 60", "absolute", 4, largeBullet, d.actionRef("wing", -1, 0)),
-                                d.wait(30)
-                            ]),
-                            d.wait("~~(Math.cos($loop.index) * 360) + 390")
-                        ])
-                    ]),
-                    "wing": d.action([
-                        d.wait("15 + $2 * 15"),
-                        f["normal"]("$1 * 60", "relative", 2, largeBullet, d.actionRef("wing", "$1", "$2 + 1")),
-                        d.changeSpeed(d.speed(4), 150)
-                    ])
-                };
-            },
-            "stage2_2": function(obj){
-                boss.danmaku = "boss2";
-                boss.hp = 1800;
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 0, 180, "absolute", 5, boss, d.actionRef("bossmove")),
-                    ]),
-                    "top2": d.action([
-                        d.wait(90),
-                        d.repeat(999, [
-                            f["offset"]("$rand * 500 + 80", 0, 180, "absolute", 0, largeR, d.action([
-                                    act["change_speed"](3, 90, 60),
-                                    d.repeat(11, [
-                                        f["normal"]("$loop.index * 7 + 5", "relative", 3, middleBullet),
-                                        f["normal"]("-($loop.index * 7 + 5)", "relative", 3, middleBullet),
-                                        d.wait(5)
-                                    ])
-                                ])),
-                            d.wait("~~(Math.cos($loop.index) * 150) + 240")
-                        ])
-                    ]),
-                    "bossmove": d.action([
-                        act["change_speed"](0, 90),
-                        act["change_direction"](0, "absolute", 1),
-                        d.repeat(99, [
-                            act["circle_loop"](2, 120, 1, 1),
-                            act["change_speed"](0, 1, 60),
-                            act["circle_loop"](2, 120, -1, 1),
-                            act["change_speed"](0, 1, 60),
-                            act["change_direction"](180, "relative", 1, 60),
-                        ]),
-                    ])
-                };
-            },
-            "stage2_3": function(obj){
-                zakoP.danmaku = "single02";
-                return {
-                    "top": d.action([
-                        d.wait(60),
-                        f["offset"](320, 260, 180, "absolute", 0, boss, d.actionRef("boss")),
-                    ]),
-                    "boss": d.action([
-                        d.repeat(99, [
-                            f["normal"](210, "absolute", 8, zakoP, d.actionRef("inside_move")),
-                            d.repeat(8, [
-                                f["normal"](36, "sequence", 8, zakoP, d.actionRef("inside_move")),
-                            ]),
-                            f["normal"](210, "absolute", 8, zakoP, d.actionRef("outside_move")),
-                            d.repeat(24, [
-                                f["normal"](12, "sequence", 8, zakoP, d.actionRef("outside_move")),
-                            ]),
-                            d.wait(480),
-                        ])
-                    ]),
-                    "inside_move": d.action([
-                        d.wait(10),
-                        act["change_speed"](0, 1),
-                        d.changeDirection(d.direction(-90, "relative"), 1),
-                        act["circle_loop"](3, 80, -1, 3.5)
-                    ]),
-                    "outside_move": d.action([
-                        d.wait(30),
-                        act["change_speed"](0, 1),
-                        d.changeDirection(d.direction(90, "relative"), 1),
-                        act["circle_loop"](1, 240, 1, 1)
-                    ]),
-                };
-            },
-            "stage3_1": function(obj){
-                largeR.fieldOutCheck = zakoP.fieldOutCheck = false;
-                zakoP.isSyncRotation = false;
-                largeR.hp = zakoP.hp = 550;
-                boss.hp = 1200;
-                boss.danmaku = "boss3";
-                zakoP.danmaku = "whip01";
-                return {
-                    "top": d.action([
-                        d.wait(59),
-                        f["offset"](639, 128, 270, "absolute", 7, boss, d.actionRef("bossmove", 1)),
-                    ]),
-                    "top1": d.action([
-                        d.wait(60),
-                        f["offset"](597, 160, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
-                        f["offset"](569, 128, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
-                        f["offset"](540, 102, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
-                        f["offset"](585,  80, 270, "absolute", 7,  zakoP, d.actionRef("bossmove", 0)),
-                        f["offset"](681, 160, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
-                        f["offset"](710, 128, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
-                        f["offset"](739, 102, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
-                        f["offset"](693,  80, 270, "absolute", 7,  zakoP, d.actionRef("bossmove", 0)),
-                    ]),
-                    "bossmove": d.action([
-                        d.changeSpeed(d.speed(0), 90),
-                        d.wait("$1 + 90"),
-                        act["change_speed"](0, 60),
-                        act["yura_yura"](2.5, 45),
-                    ]),
-                };
-            },
-            "stage3_2": function(obj){
+            "stage1_02": function(obj){
                 boss.hp = 500;
                 return {
                     "top": d.action([
@@ -766,7 +321,203 @@ var game = game || {};
                     ])
                 }
             },
-            "stage3_3": function(obj){
+            "stage1_03": function(obj){
+                boss.danmaku = "boss2";
+                boss.hp = 1800;
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 5, boss, d.actionRef("bossmove")),
+                    ]),
+                    "top2": d.action([
+                        d.wait(90),
+                        d.repeat(999, [
+                            f["offset"]("$rand * 500 + 80", 0, 180, "absolute", 0, largeR, d.action([
+                                    act["change_speed"](3, 90, 60),
+                                    d.repeat(11, [
+                                        f["normal"]("$loop.index * 7 + 5", "relative", 3, middleBullet),
+                                        f["normal"]("-($loop.index * 7 + 5)", "relative", 3, middleBullet),
+                                        d.wait(5)
+                                    ])
+                                ])),
+                            d.wait("~~(Math.cos($loop.index) * 150) + 240")
+                        ])
+                    ]),
+                    "bossmove": d.action([
+                        act["change_speed"](0, 90),
+                        act["change_direction"](0, "absolute", 1),
+                        d.repeat(99, [
+                            act["circle_loop"](2, 120, 1, 1),
+                            act["change_speed"](0, 1, 60),
+                            act["circle_loop"](2, 120, -1, 1),
+                            act["change_speed"](0, 1, 60),
+                            act["change_direction"](180, "relative", 1, 60),
+                        ]),
+                    ])
+                };
+            },
+            "stage2_01": function(obj){
+                boss.hp = 2500;
+                boss.danmaku = "boss4";
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 5, boss, d.actionRef("boss")),
+                    ]),
+                    "boss": d.action([
+                        act["change_speed"](0, 90, 120),
+                        d.repeat(99,[
+                            d.repeat(5, [
+                                f["normal"]("$loop.index * 30 + 60", "absolute", 4, largeBullet, d.actionRef("wing", 1, 0)),
+                                f["normal"]("-$loop.index * 30 - 60", "absolute", 4, largeBullet, d.actionRef("wing", -1, 0)),
+                                d.wait(30)
+                            ]),
+                            d.wait("~~(Math.cos($loop.index) * 360) + 390")
+                        ])
+                    ]),
+                    "wing": d.action([
+                        d.wait("15 + $2 * 15"),
+                        f["normal"]("$1 * 60", "relative", 2, largeBullet, d.actionRef("wing", "$1", "$2 + 1")),
+                        d.changeSpeed(d.speed(4), 150)
+                    ])
+                };
+            },
+            "stage2_02": function(obj){
+                zakoP.danmaku = "single02";
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 260, 180, "absolute", 0, boss, d.actionRef("boss")),
+                    ]),
+                    "boss": d.action([
+                        d.repeat(99, [
+                            f["normal"](210, "absolute", 8, zakoP, d.actionRef("inside_move")),
+                            d.repeat(8, [
+                                f["normal"](36, "sequence", 8, zakoP, d.actionRef("inside_move")),
+                            ]),
+                            f["normal"](210, "absolute", 8, zakoP, d.actionRef("outside_move")),
+                            d.repeat(24, [
+                                f["normal"](12, "sequence", 8, zakoP, d.actionRef("outside_move")),
+                            ]),
+                            d.wait(480),
+                        ])
+                    ]),
+                    "inside_move": d.action([
+                        d.wait(10),
+                        act["change_speed"](0, 1),
+                        d.changeDirection(d.direction(-90, "relative"), 1),
+                        act["circle_loop"](3, 80, -1, 3.5)
+                    ]),
+                    "outside_move": d.action([
+                        d.wait(30),
+                        act["change_speed"](0, 1),
+                        d.changeDirection(d.direction(90, "relative"), 1),
+                        act["circle_loop"](1, 240, 1, 1)
+                    ]),
+                };
+            },
+            "stage2_03": function(obj){
+                zakoR.addedAnimation = "drop";
+                boss.hp = 900;
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](640, 96, 270, "absolute", 12, boss, d.actionRef("boss")),
+                    ]),
+                    "boss": d.action([
+                        act["change_speed"](0, 100),
+                        d.repeat(99, [
+                            f["normal"](180, "absolute", 12, invisible, d.actionRef("bullet_point1", 1)),
+                            d.actionRef("move", 12),
+                            f["normal"](180, "absolute", 12, invisible, d.actionRef("bullet_point1", -1)),
+                            d.wait(15),
+                            d.actionRef("move", 12),
+                            d.wait(1),
+                            d.actionRef("move", 2),
+                            d.wait(1),
+                            d.actionRef("move", 2),
+                            d.wait(180)
+                        ])
+                    ]),
+                    "move": d.action([
+                        d.changeDirection(d.direction(180, "relative"), 1),
+                        d.changeSpeed(d.speed("$1"), 1),
+                        d.wait("552 / $1"),
+                        d.changeSpeed(d.speed(0), 1)
+                    ]),
+                    "bullet_point1": d.action([
+                        d.wait("($1 > 0) ? 2 : 6"),
+                        d.repeat(3, [
+                            d.wait(8),
+                            f["normal"]("-90 * $1", "relative", 12, invisible, d.actionRef("bullet_point2")),
+                        ]),
+                        d.vanish()
+                    ]),
+                    "bullet_point2": d.action([
+                        d.repeat(6, [
+                            f["normal"](0, "relative", 0, zakoR, d.action([
+                                d.wait(240),
+                                f["normal"]("~~($rand * 4) * 90", "absolute", 3, middleBullet),
+                                d.repeat(3, [
+                                    d.wait(120),
+                                    f["normal"](90, "sequence", 3, middleBullet),
+                                ]),
+                                d.changeSpeed(d.speed(4), 1)
+                            ])),
+                            d.wait(8)
+                        ])
+                    ])
+                };
+            },
+            "stage3_01": function(obj){
+                largeR.fieldOutCheck = zakoP.fieldOutCheck = false;
+                zakoP.isSyncRotation = false;
+                largeR.hp = zakoP.hp = 550;
+                boss.hp = 1200;
+                boss.danmaku = "boss3";
+                zakoP.danmaku = "whip01";
+                return {
+                    "top": d.action([
+                        d.wait(59),
+                        f["offset"](639, 128, 270, "absolute", 7, boss, d.actionRef("bossmove", 1)),
+                    ]),
+                    "top1": d.action([
+                        d.wait(60),
+                        f["offset"](597, 160, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
+                        f["offset"](569, 128, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
+                        f["offset"](540, 102, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
+                        f["offset"](585,  80, 270, "absolute", 7,  zakoP, d.actionRef("bossmove", 0)),
+                        f["offset"](681, 160, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
+                        f["offset"](710, 128, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
+                        f["offset"](739, 102, 270, "absolute", 7, largeR, d.actionRef("bossmove", 0)),
+                        f["offset"](693,  80, 270, "absolute", 7,  zakoP, d.actionRef("bossmove", 0)),
+                    ]),
+                    "bossmove": d.action([
+                        d.changeSpeed(d.speed(0), 90),
+                        d.wait("$1 + 90"),
+                        act["change_speed"](0, 60),
+                        act["yura_yura"](2.5, 45),
+                    ]),
+                };
+            },
+            "stage3_02": function(obj){
+                boss.danmaku = "boss7";
+                boss.hp = 2500;
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 6, boss, d.actionRef("boss")),
+                    ]),
+                    "boss": d.action([
+                        act["change_speed"](0, 60),
+                        act["change_direction"](90, "absolute", 1),
+                        act["change_speed"](3, 1, 45),
+                        act["round_trip"](3, 90),
+                        d.changeSpeed(d.speed(0), 1)
+                    ])
+                };
+            },
+            "stage3_03": function(obj){
                 boss.hp = 1200;
                 boss.danmaku = "boss1_01";
                 middleR.hp = 90;
@@ -807,24 +558,20 @@ var game = game || {};
                     ])
                 };
             },
-            "stage4_1": function(obj){
-                boss.danmaku = "boss7";
-                boss.hp = 2500;
+            "stage4_01": function(obj){
+                boss.danmaku = "boss8";
+                boss.hp = 2200;
                 return {
                     "top": d.action([
                         d.wait(60),
-                        f["offset"](320, 0, 180, "absolute", 6, boss, d.actionRef("boss")),
-                    ]),
-                    "boss": d.action([
-                        act["change_speed"](0, 60),
-                        act["change_direction"](90, "absolute", 1),
-                        act["change_speed"](3, 1, 45),
-                        act["round_trip"](3, 90),
-                        d.changeSpeed(d.speed(0), 1)
+                        f["offset"](320, 0 ,180, "absolute", 6, boss, d.action([
+                            act["change_speed"](0, 60, 180),
+                            act["triangle_loop"](4, "right", 60, 99, 240)
+                        ]))
                     ])
                 };
             },
-            "stage4_2": function(obj){
+            "stage4_02": function(obj){
                 zakoR.hp = 120;
                 zakoR.danmaku = "single03";
                 boss.hp = 1800;
@@ -854,20 +601,52 @@ var game = game || {};
                     ]),
                 };
             },
-            "stage4_3": function(obj){
-                boss.danmaku = "boss8";
-                boss.hp = 2200;
+            "stage4_03": function(obj){
+                zakoR.hp = 8;
                 return {
                     "top": d.action([
                         d.wait(60),
-                        f["offset"](320, 0 ,180, "absolute", 6, boss, d.action([
-                            act["change_speed"](0, 60, 180),
-                            act["triangle_loop"](4, "right", 60, 99, 240)
-                        ]))
+                        f["offset"](320, 0, 180, "absolute", 6, boss, d.action([
+                            act["change_speed"](0, 90),
+                            d.repeat(99, [
+                                d.repeat(3, [
+                                    f["normal"](90, "sequence", 4, zakoR, d.actionRef("zako"))
+                                ]),
+                                d.wait(10),
+                                d.repeat(20, [
+                                    f["normal"](27, "sequence", "$loop.index * 0.25 + 2", middleBullet),
+                                    d.wait(1)
+                                ]),
+                                d.changeDirection(d.direction(90, "relative"), 1),
+                                act["change_speed"](4, 30),
+                                act["change_speed"](0, 30, 120),
+                            ])
+                        ])),
+                    ]),
+                    "top2": d.action([
+                        d.wait(120),
+                        d.repeat(99, [
+                            f["offset"]("Math.sin($loop.index) * 130 + 480", GAME_FIELD_TOP, 180, "absolute", 6, zakoT, d.action([
+                                d.wait(10),
+                                d.repeat(4, [
+                                    f["normal"]("$rand * 5 - 2", "aim", 2.5, longBullet),
+                                    d.wait(15)
+                                ])
+                            ])),
+                            d.wait("~~($rand * 210) + 30")
+                        ])
+                    ]),
+                    "zako": d.action([
+                        d.wait(12),
+                        act["change_speed"](0, 1, 3),
+                        d.bindVar("r", "$rand * 9"),
+                        f["normal"]("($r < 1) ? -90 : ($r < 2) ? 90 : 0", "relative", 4, zakoR, d.actionRef("zako")),
+                        d.wait(30),
+                        d.vanish()
                     ])
                 };
             },
-            "stage4_4": function(obj){
+            "stage4_04": function(obj){
                 boss.hp = 1500;
                 boss.danmaku = "boss6";
                 return {
@@ -896,6 +675,227 @@ var game = game || {};
                             f["normal"](0, "aim", 0, middleBullet, d.action([ d.changeSpeed(d.speed(4), 240) ]))
                         ])
                     ]),
+                };
+            },
+            "stage5_01": function(obj){
+                zakoP.danmaku = "zako01";
+                boss.hp = 1500;
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 4, boss, d.actionRef("boss"))
+                    ]),
+                    "top2": d.action([
+                        d.wait(210),
+                        d.repeat(99, [
+                            d.repeat(9, [
+                                f["offset"]("$loop.index * 72 + 32", 32, 180, "absolute", 4, middleR),
+                            ]),
+                            d.wait(210),
+                        ]),
+                    ]),
+                    "boss": d.action([
+                        act["change_speed"](0, 90),
+                        d.repeat(99, [
+                            d.changeDirection(d.direction(240, "absolute"), 1),
+                            act["change_speed"](8, 60),
+                            act["change_speed"](0, 1),
+                            f["normal"](120, "absolute", 12, zakoP, d.actionRef("zako")),
+                            d.repeat(3, [
+                                f["normal"](40, "sequence", 12, zakoP, d.actionRef("zako")),
+                            ]),
+                            d.actionRef("move"),
+                            act["change_direction"](300, "absolute", 1, 15),
+                            act["change_speed"](8, 60),
+                            act["change_speed"](0, 1, 60),
+                        ]),
+                    ]),
+                    "move": d.action([
+                        act["change_speed"](0, 8),
+                        act["change_direction"](90, "absolute", 1),
+                        act["change_speed"](2, 1, 211),
+                        act["change_speed"](0, 1),
+                    ]),
+                    "zako": d.action([
+                        d.actionRef("move"),
+                        act["change_direction"](180, "absolute", 1),
+                        act["change_speed"](4, 1)
+                    ])
+                };
+            },
+            "stage5_02": function(obj){
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 13, boss, d.actionRef("boss"))
+                    ]),
+                    "boss": d.action([
+                        d.repeat(99, [
+                            act["change_speed"](0, 60),
+                            d.changeDirection(d.direction(0, "absolute"), 1),
+                            d.changeSpeed(d.speed(4), 1),
+                            d.actionRef("shot", 2, 120, 120),
+                            d.wait(60),
+                            d.changeSpeed(d.speed(0), 1),
+                            d.actionRef("shot", 2, 180, 90),
+                            d.wait(120),
+                            d.repeat(4, [
+                                d.bindVar("dir", "($loop.index & 1) ? 1 : -1"),
+                                d.repeat(10, [
+                                    f["normal"]("$dir * ($loop.index * 12 + 90)", "absolute", 3.75, middleBullet),
+                                    d.repeat(3, [
+                                        f["normal"]("$dir * 15", "sequence", "3.5 - $loop.index * 0.25", middleBullet),
+                                    ]),
+                                    d.wait(10)
+                                ]),
+                                d.wait(45)
+                            ]),
+                            d.wait(120),
+                            d.changeSpeed(d.speed(8), 1),
+                            act["change_direction"](180, "absolute", 1),
+                        ])
+                    ]),
+                    "shot": d.action([
+                        d.repeat("$1", [
+                            d.fire(
+                                d.direction("$loop.index * $2 + $3", "absolute"),
+                                d.speed(8),
+                                d.bullet(zakoT, d.action([
+                                    act["change_speed"](0, 30),
+                                    d.repeat(3, [
+                                        f["normal"]("$loop.index * 120", "absolute", 8, zakoT, d.actionRef("zako")),
+                                    ]),
+                                    d.vanish()
+                                ]))
+                            )
+                        ]),
+                    ]),
+                    "zako": d.action([
+                        act["change_speed"](0, 30),
+                        d.changeDirection(d.direction(90, "relative"), 1),
+                        act["change_speed"](Math.PI * 2 / 3, 1),
+                        d.repeat(60, [
+                            f["normal"](120, "relative", 12, barrier, d.action([ d.wait(13), d.vanish() ])),
+                            act["change_direction"](8, "relative", 8),
+                        ]),
+                        d.changeSpeed(d.speed(6), 30)
+                    ]),
+                };
+            },
+            "stage5_03": function(obj){
+                dummy.danmaku = "whip01";
+                boss.danmaku = "boss9";
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](640, 180, 270, "absolute", 8, boss, d.actionRef("boss"))
+                    ]),
+                    "boss": d.action([
+                        act["change_speed"](0, 120),
+                        d.repeat(99, [
+                            d.repeat(3, [
+                                f["normal"](180, "relative", 8, dummy, d.action([
+                                    d.wait(40),
+                                    act["round_trip"](4, 80, 3, 80),
+                                ])),
+                                d.wait(20),
+                                act["round_trip"](4, 80, 1, 80),
+                                act["change_speed"](0, 1, 60),
+                            ]),
+                            act["round_trip"](10, 32, 5),
+                            act["change_speed"](0, 1, 80),
+                        ])
+                    ]),
+                };
+            },
+            "stage5_04": function(){
+                boss.danmaku = "boss10";
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 181, "absolute", 6, boss, d.actionRef("boss"))
+                    ]),
+                    "top2": d.action([
+                        d.wait(60),
+                        d.repeat(99, [
+                            d.repeat(3, [
+                                f["offset"]("$rand * 320 + 160", 32, 180, "absolute", 16, zakoP, d.action([
+                                    act["change_speed"](0, "$loop.index * 15 + 30"),
+                                    d.repeat(30, [
+                                        d.repeat(2, [
+                                            f["normal"](180, "sequence", 28, barrier, d.actionRef("barrier")),
+                                        ]),
+                                        d.wait(15),
+                                    ]),
+                                    d.vanish(),
+                                ])),
+                                d.wait(60),
+                            ]),
+                            d.wait(300),
+                        ])
+                    ]),
+                    "boss": d.action([
+                        act["change_speed"](0, 60),
+                        act["yura_yura"](1, 120),
+                    ]),
+                    "barrier": d.action([
+                        d.wait(1),
+                        act["change_speed"](0, 1),
+                        f["normal"](0, "relative", 26, barrier, d.actionRef("barrier")),
+                        d.wait(13),
+                        d.vanish(),
+                    ])
+                };
+            },
+            "stage5_05": function(obj){
+                largeR.addedAnimation = "zoom";
+                largeR.hp = 250;
+                largeR.fieldOutCheck = false;
+                zakoP.hp = 300;
+                zakoP.isSyncRotation = false;
+                zakoP.fieldOutCheck = false;
+                zakoP.danmaku = "zako02";
+                boss.danmaku = "zako02";
+                largeR.danmaku = "zako03";
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 4, boss, d.actionRef("boss")),
+                    ]),
+                    "boss": d.action([
+                        act["change_speed"](0, 60),
+                        d.repeat(2, [
+                            f["normal"]("$loop.index * 90 + 135", "absolute", 7, invisible, d.actionRef("set_largeR", 1)),
+                            f["normal"]("$loop.index * 210 + 75", "absolute", 8, invisible, d.actionRef("set_largeR", 2)),
+                            f["normal"]("$loop.index * 180 + 90", "absolute", 10, invisible, d.actionRef("set_largeR", 2)),
+                            f["normal"]("$loop.index * 40 + 160", "absolute", 8, invisible, d.actionRef("set_largeR", 1)),
+                        ]),
+                        f["normal"](180, "absolute", 11, invisible, d.actionRef("set_largeR")),
+                        d.repeat(2, [
+                            f["normal"]("$loop.index * 270 + 45", "absolute", 15, zakoP, d.actionRef("zakoP")),
+                            f["normal"]("$loop.index * 140 + 110", "absolute", 15, zakoP, d.actionRef("zakoP")),
+                            f["normal"]("$loop.index * 220 + 70", "absolute", 24, zakoP, d.actionRef("zakoP")),
+                        ]),
+                        d.actionRef("boss_move", 16),
+                    ]),
+                    "boss_move": d.action([
+                        d.wait("$1"),
+                        d.repeat(99, [
+                            act["triangle_loop"](2, "right", 240, 1, 60),
+                            act["triangle_loop"](2, "left", 240, 1, 60),
+                            d.wait(60),
+                        ]),
+                    ]),
+                    "set_largeR": d.action([
+                        d.repeat("$1", [
+                            d.wait(8),
+                            f["normal"](0, "relative", 0, largeR, d.actionRef("boss_move", "10 - $loop.index * 8")),
+                        ])
+                    ]),
+                    "zakoP": d.action([
+                        act["change_speed"](0, 15),
+                        d.actionRef("boss_move", 2),
+                    ])
                 };
             },
             "explode": function(obj){

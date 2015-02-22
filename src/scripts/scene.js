@@ -198,7 +198,7 @@ var game = game || {};
         
         init: function(){
             this.superInit();
-            var buttons = ["Test", "Tutrial", "Stage1", "Stage2", "Stage3", "Stage4"];
+            var buttons = ["Tutrial", "Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
                 var button = tm.ui.FlatButton({
