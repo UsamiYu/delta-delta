@@ -200,7 +200,6 @@ var game = game || {};
                 return;
             }
 
-            //var enemies = app.currentScene.enemies;
             var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
             if(l > 0){
@@ -248,7 +247,7 @@ var game = game || {};
             this.vx = vx;
             this.vy = vy;
             
-            this.damage = this.radius / 2;
+            this.damage = this.radius;
             
             this.count = (28 - this.radius) / 4;
 
@@ -266,7 +265,6 @@ var game = game || {};
             }
             if(this.hitFlag) return;
             
-            //var enemies = app.currentScene.enemies;
             var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
  
@@ -318,7 +316,6 @@ var game = game || {};
             }
         },
         explode: function(app){
-            //var enemies = app.currentScene.enemies;
             var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
             var bounding = tm.geom.Circle(this.x, this.y, this.radius * this.scaleX);

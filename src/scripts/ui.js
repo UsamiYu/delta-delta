@@ -138,17 +138,35 @@ var game = game || {};
         }
     });
     
+    game.EnemyInfomation = tm.createClass({
+        superClass: tm.display.RectangleShape,
+        
+        init: function(){
+            this.superInit({
+                width: 160,
+                height: 80,
+                fillStyle: "rgba( 0, 0, 0, 0.4)"
+            });
+            
+            var enemy = game.EnemyCounter().setPosition(-72, -24).addChildTo(this);
+            var bullet = game.BulletCounter().setPosition(-72, -8).addChildTo(this);
+            
+            this.scene = null;
+        },
+
+    });
+    
     game.EnemyCounter = tm.createClass({
         superClass: tm.display.Label,
         
         init: function(){
             this.superInit("enemy:000/ 000");
             this.setAlign("left");
-            this.setFontSize(32);
+            this.setFontSize(16);
             this.maxValue = 0;
         },
         update: function(app){
-            var v = this.parent.enemyLayer.children.length;
+            var v = app.currentScene.enemyLayer.children.length;
             if(this.maxValue < v) this.maxValue = v;
             this.text = "enemy:" + ("000" + v).substr(-3) + "/" + ("000" + this.maxValue).substr(-3);
         }
@@ -160,12 +178,12 @@ var game = game || {};
         init: function(){
             this.superInit("bullet:0000/0000");
             this.setAlign("left");
-            this.setFontSize(32);
+            this.setFontSize(16);
             this.maxValue = 0;
             this.autoRender = false;
         },
         update: function(app){
-            var v = this.parent.bulletLayer.children.length;
+            var v = app.currentScene.bulletLayer.children.length;
             if(this.maxValue < v) this.maxValue = v;
             this.text = "bullet:" + ("0000" + v).substr(-4) + "/" + ("0000" + this.maxValue).substr(-4);
         }

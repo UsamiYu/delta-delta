@@ -41,8 +41,7 @@ var game = game || {};
 
             //ゲーム描画領域より上に描画するもの
             var frame = game.GameFieldFrame().setPosition(319,479).addChildTo(this);
-            var ec = game.EnemyCounter().setPosition(24, 754).addChildTo(this);
-            var bc = game.BulletCounter().setPosition(24, 786).addChildTo(this);
+            var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
 
             this.scoreLabel = game.ScoreLabel().addChildTo(this);
             

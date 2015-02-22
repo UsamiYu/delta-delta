@@ -45,7 +45,7 @@ var game = game || {};
                 return;
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
-            if(dist > 10000 && scene.bulletLayer.children.length + scene.enemyLayer.children.length * 3 < 150){  //距離100px ^ 2
+            if(dist > 10000 && scene.bulletLayer.children.length < 130){  //距離100px ^ 2 && 画面内のbulletの数が130未満
                 var explode = game.EnemyExplosion(this.x, this.y, ~~((this.radius + this.maxHp) / 10));
                 explode.addChildTo(this.scene.bulletLayer);
             }
@@ -57,13 +57,15 @@ var game = game || {};
             this.scene = this.getRoot().app.currentScene;
             if(this.type === "boss") this.hpGauge.addChildTo(this.scene);
             if(this.danmaku !== "") game.setDanmaku(this, this.scene.player, this.scene);
-            //if(this._isHitTestEnable) this.scene.enemies.push(this);
             if(this.addedAnimation !== ""){
                 switch(this.addedAnimation){
-                    case "zoom":
+                    case "drop":
                         this.setScale(2.5);
                         game.TweenAnimation(this, "in", 200, {});
                     break;
+                    case "zoom":
+                        this.setScale(0.1);
+                        game.TweenAnimation(this, "in", 200, {});
                     default:
                     break;
                 };
@@ -72,7 +74,6 @@ var game = game || {};
 
         onremoved: function(){
             if(this.type === "boss") this.hpGauge.remove();
-            //this.scene.enemies.erase(this);
         },
 
         update: function(e){
@@ -88,8 +89,17 @@ var game = game || {};
                 return;
             }
 
+            if(this.scene.app.frame & 4) this.children[0].setFrameIndex(this.frameIndex);
+                if(this._lastHp > this.hp){
+                    this.children[0].setFrameIndex(this.frameIndex + 1);
+                    if(this._lastHp - this.hp > 5){
+                        var damage = (this._lastHp - this.hp - 4) * 0.7;
+                        this.hp += ~~damage;
+                    }
+                    this._lastHp = this.hp;
+                }
+                
             if(this.type === "boss") this.hpGauge.setHp(this.hp);
-
             if(this._isHitTestEnable){
                 if(this.hp < 1){
                     this._isHitTestEnable = false;
@@ -121,11 +131,6 @@ var game = game || {};
                             }
                         break;
                     }
-                }
-                if(this.scene.app.frame & 4) this.children[0].setFrameIndex(this.frameIndex);
-                if(this._lastHp > this.hp){
-                    this.children[0].setFrameIndex(this.frameIndex + 1);
-                    this._lastHp = this.hp;
                 }
             }
         },
