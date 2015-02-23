@@ -899,7 +899,8 @@ var game = game || {};
                 };
             },
             "explode": function(obj){
-                var way = (obj.rank < 2) ? 2 : obj.rank;
+                var way = (obj.rank < 2) ? 2 :
+                          (obj.rank > 6) ? obj.rank - (~~(obj.rank - 4) * 0.5) : obj.rank;
                 return {
                     "top": d.action([
                         f["normal"]("$rand * 160 + 10", "aim", 6, {}, act["change_speed"](2, 8)),

@@ -182,6 +182,7 @@ var game = game || {};
         init: function(x, y, damage){
             this.superInit("circle", 48, 24);
             this.setFrameIndex(2);
+            this.setAlpha(0.8);
 
             this.x = x;
             this.y = y;
@@ -241,8 +242,10 @@ var game = game || {};
         init: function(x, y, vx, vy, obj){
             this.superInit("circle", obj.width, obj.height);
             this.setFrameIndex(obj.children[0].frameIndex + 1);
-            this.x = x;
-            this.y = y;
+            this.setPosition(x, y);
+            this.setAlpha(0.8);
+            //this.x = x;
+            //this.y = y;
             
             this.vx = vx;
             this.vy = vy;
@@ -277,7 +280,7 @@ var game = game || {};
                             this.update = this.explode;
                             this.tweener
                                 .clear()
-                                .to({scaleX: 5.0, scaleY:5.0, alpha: 0.3}, 250)
+                                .to({scaleX: 5.0, scaleY:5.0, alpha: 0.5}, 200)
                                 .call(function(){ this.remove(); }.bind(this));
                             break;
                         }

@@ -195,7 +195,7 @@ var game = game || {};
             this.fromJSON(attr);
 
             var graphic = tm.display.Sprite("circle", this.width, this.height);
-            graphic.setFrameIndex(attr.frameIndex).setAlpha(0.9);
+            graphic.setFrameIndex(attr.frameIndex).setAlpha(0.7);
             graphic.addChildTo(this);
 
         },
