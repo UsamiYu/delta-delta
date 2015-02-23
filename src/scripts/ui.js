@@ -160,14 +160,14 @@ var game = game || {};
         init: function(){
             this.superInit("enemy : 000/ 000");
             this.setAlign("left");
-            this.setFontSize(16);
-            this.setFontFamily("Inconsolata");
+            this.setFontSize(14);
             this.maxValue = 0;
+            this.autoRender = false;
         },
         update: function(app){
             var v = app.currentScene.enemyLayer.children.length;
             if(this.maxValue < v) this.maxValue = v;
-            this.text = "enemy :" + ("0000" + v).substr(-4) + "/" + ("0000" + this.maxValue).substr(-4);
+            this.text = "enemy:" + ("0000" + v).substr(-4) + "/" + ("0000" + this.maxValue).substr(-4);
         }
     });
     
@@ -177,8 +177,7 @@ var game = game || {};
         init: function(){
             this.superInit("bullet:0000/0000");
             this.setAlign("left");
-            this.setFontSize(16);
-            this.setFontFamily("Inconsolata");
+            this.setFontSize(14);
             this.maxValue = 0;
             this.autoRender = false;
         },

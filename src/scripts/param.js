@@ -23,6 +23,7 @@ var GAME_FPS          = 60;
 var game = game || {};
 
 (function(){
+/*
     game.colorStyle = {
         RED   : {fillStyle: "hsl(  0, 100%, 95%)", strokeStyle: "hsl(  0, 100%, 75%)", index: 0 },
         ORANGE: {fillStyle: "hsl( 30, 100%, 95%)", strokeStyle: "hsl( 30, 100%, 75%)", index: 1 },
@@ -52,7 +53,7 @@ var game = game || {};
         },
         getColorIndex: function(name){
             return this.getColorStyle(name).index;
-/*
+
             return {
                 "red"   : this.RED.index,
                 "orange": this.ORANGE.index,
@@ -66,7 +67,7 @@ var game = game || {};
                 "gray"  : this.GRAY.index,
                 "white" : this.WHITE.index
             }[name];
-            */
+
         },
         getIndexOfColor: function(num){
             return this.getColorStyle([
@@ -83,7 +84,7 @@ var game = game || {};
                 "white"
             ][num]);
         },
-    };
+    }; */
     
     game.TweenAnimation = function(obj, type, time, param){
         param = param.$safe({
@@ -186,7 +187,7 @@ var game = game || {};
             ["stage3_01", "stage3_02", "stage3_03"],
             ["stage4_01", "stage4_02", "stage4_03", "stage4_04"],
             ["stage5_01", "stage5_02", "stage5_03", "stage5_04", "stage5_05"],
-            ["test1"]
+//            ["test1"]
         ];
         
         return list[num];

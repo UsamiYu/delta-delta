@@ -19,9 +19,10 @@ tm.main(function() {
             "circle"   : "./src/images/circleImage2.png",
             "triangle" : "./src/images/triangleImage.png",
             "rectangle": "./src/images/rectangleImage.png",
-            "polygon"  : "./src/images/polygonImage.png"
+            "polygon"  : "./src/images/polygonImage.png",
+            "title"    : "./src/images/title.png"
        },
-        nextScene: game.SelectScene,
+        nextScene: game.TitleScene,
     });
 
     app.replaceScene(loadingScene);

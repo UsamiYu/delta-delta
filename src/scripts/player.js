@@ -364,7 +364,7 @@ var game = game || {};
             canvas.lineWidth = 4;
             var ratio = this.getRatio();
             var startAngle = Math.degToRad(270);
-            canvas.setStrokeStyle(game.colorStyle.getColorStyle(this.color).strokeStyle);
+            canvas.setStrokeStyle((this.color === "blue") ? "hsl(240, 100%, 75%)" : "hsl(30, 100%, 75%)");
             canvas.strokeArc(0, 0, 34, startAngle, Math.PI * 2 * ratio + startAngle, false);
 
             canvas.restore();

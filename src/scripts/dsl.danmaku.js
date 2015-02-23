@@ -203,6 +203,7 @@ var game = game || {};
                 };
             },
             "stage0_03": function(obj){
+                boss.hp = 1000;
                 return {
                     "top": d.action([
                         d.wait(60),

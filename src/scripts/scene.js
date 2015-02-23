@@ -41,7 +41,8 @@ var game = game || {};
             
             //ゲーム描画領域より上に描画するもの
             var frame = game.GameFieldFrame().setPosition(320,480).addChildTo(this);
-            var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
+            //デバッグ情報用
+//            var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
 
             this.scoreLabel = game.ScoreLabel().setPosition(24, 56);
             if(num > 0) this.scoreLabel.addChildTo(this);
@@ -146,11 +147,83 @@ var game = game || {};
             alert(e.parm);
         },
         result: function(){
-            if(this.stage === 0) return;
-            var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 500);
-            var result = game.Result(this.age, this.missCount, bonus).addChildTo(this);
-            this.scoreLabel.score += bonus;
+            if(this.stage !== 0){
+                var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 500);
+                var result = game.Result(this.age, this.missCount, bonus).addChildTo(this);
+                this.scoreLabel.score += bonus;
+            }
+             var text = tm.display.TextShape({
+                 text: "Touch to Stage Select",
+                 fillStyle: "hsl(240, 100%, 95%)",
+                 strokeStyle: "hsl(240, 100%, 75%)",
+                 fontSize: 32,
+                 fontFamily: "Audiowide",
+            });
+            text.setPosition(320, 600);
+            
+            text.tweener
+                .wait(1000)
+                .fadeOut(1)
+                .wait(500)
+                .fadeIn(1)
+                .setLoop(true);
+            
+            this.tweener
+                .clear()
+                .wait(1500)
+                .call(function(){
+                    this.player.remove();
+                    text.addChildTo(this);
+                    this.ontouchstart = function(){};
+                    this.ontouchmove = function(){};
+                    this.ontouchend = function(){
+                        this.removeChildren();
+                        this.app.replaceScene(game.SelectScene());
+                    };
+                }.bind(this));
         } 
+    });
+    
+    game.TitleScene = tm.createClass({
+        superClass: tm.app.Scene,
+        
+        init: function(){
+            this.superInit();
+            
+            this.setInteractive(false);
+            game.BackGround().setPosition(320, 480).addChildTo(this);
+            
+            var title = tm.display.Sprite("title", 300, 120);
+            title.setAlpha(0).setPosition(320, 320).setScale(2).addChildTo(this);
+            
+            title.tweener
+                 .clear()
+                 .fadeIn(1500)
+                 .call(function(){ this.touchEnable() }.bind(this));
+        },
+        ontouchend: function(){
+            this.app.replaceScene(game.SelectScene());
+        },
+        touchEnable: function(){
+            this.setInteractive(true);
+            var param = {
+                fontSize: 32,
+                fontFamily: "Audiowide",
+                fillStyle: "hsl(240, 100%, 95%)",
+                strokeStyle: "hsl(240, 100%, 75%)",
+            };
+            
+            var title = tm.display.TextShape({text: "delta-delta"}.$safe(param)).setPosition(520, 420).addChildTo(this);
+            
+            var touch = tm.display.TextShape({text: "TOUCH START"}.$safe(param)).setPosition(320, 640).addChildTo(this);
+            touch.tweener
+                 .clear()
+                 .fadeIn(1)
+                 .wait(1000)
+                 .fadeOut(1)
+                 .wait(500)
+                 .setLoop(true);
+        }
     });
 
     game.SelectScene = tm.createClass({
@@ -161,7 +234,7 @@ var game = game || {};
             
             var bg = game.BackGround().setPosition(320, 480).addChildTo(this);
 
-            var buttons = ["Tutrial", "Stage1", "Stage2", "Stage3", "Stage4", "Stage5", "test"];
+            var buttons = ["Tutrial", "Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
                 var button = tm.ui.FlatButton({
