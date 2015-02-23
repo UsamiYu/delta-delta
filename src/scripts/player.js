@@ -182,7 +182,6 @@ var game = game || {};
         init: function(x, y, damage){
             this.superInit("circle", 48, 24);
             this.setFrameIndex(2);
-            this.setAlpha(0.8);
 
             this.x = x;
             this.y = y;
@@ -243,9 +242,6 @@ var game = game || {};
             this.superInit("circle", obj.width, obj.height);
             this.setFrameIndex(obj.children[0].frameIndex + 1);
             this.setPosition(x, y);
-            this.setAlpha(0.8);
-            //this.x = x;
-            //this.y = y;
             
             this.vx = vx;
             this.vy = vy;

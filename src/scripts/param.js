@@ -186,7 +186,7 @@ var game = game || {};
             ["stage3_01", "stage3_02", "stage3_03"],
             ["stage4_01", "stage4_02", "stage4_03", "stage4_04"],
             ["stage5_01", "stage5_02", "stage5_03", "stage5_04", "stage5_05"],
-            []
+            ["test1"]
         ];
         
         return list[num];

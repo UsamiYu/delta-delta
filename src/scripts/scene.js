@@ -13,6 +13,7 @@ var game = game || {};
         
         init: function(num){
             this.superInit();
+            this.background = game.BackGround().setPosition(320, 480).addChildTo(this);
             //ゲーム描画領域(シーン描画領域とは異なる)
             this.gameField = tm.display.CanvasElement().addChildTo(this);
             this.gameField.onquake = function(e){
@@ -30,20 +31,20 @@ var game = game || {};
                         }
                     }.bind(this), ~~(1000 / GAME_FPS));
             }
+            //弾描画レイヤー
+            this.bulletLayer = tm.display.CanvasElement().addChildTo(this.gameField);
             //敵描画レイヤー
             this.enemyLayer = tm.display.CanvasElement().addChildTo(this.gameField);
-//            this.enemies = [];
 
             this.player = game.Player();
             this.player.addChildTo(this.gameField);
-            //弾描画レイヤー
-            this.bulletLayer = tm.display.CanvasElement().addChildTo(this.gameField);
-
+            
             //ゲーム描画領域より上に描画するもの
-            var frame = game.GameFieldFrame().setPosition(319,479).addChildTo(this);
+            var frame = game.GameFieldFrame().setPosition(320,480).addChildTo(this);
             var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
 
-            this.scoreLabel = game.ScoreLabel().addChildTo(this);
+            this.scoreLabel = game.ScoreLabel().setPosition(24, 56);
+            if(num > 0) this.scoreLabel.addChildTo(this);
             
             this.button = game.ModeChangeButton().setPosition(64, 654).setAlpha(0.3).addChildTo(this);
             
@@ -58,7 +59,7 @@ var game = game || {};
             durationTime: GAME_FPS / 4, //250ms
         },
         age: 0,
-        timeBounus: 0,
+        timeBonus: 0,
         missCount: 0,
         danmaku: "",
         phase: 0,
@@ -73,7 +74,7 @@ var game = game || {};
 
             this.stopDanmaku();
             game.setDanmaku(this, this.player, this);
-            this.timeBounus += 60 * GAME_FPS;
+            this.timeBonus += 60 * GAME_FPS;
             this.phase++;
 
             game.EffectiveText("PHASE " + ("00" + this.phase + "/").substr(-3) + ("00" + this.danmakuList.length).substr(-2))
@@ -134,7 +135,6 @@ var game = game || {};
                 enemies[i].stopDanmaku();
                 game.destroyAnimation(enemies[i]);
             }
-            //this.enemies.length = 0;
             this.bulletLayer.removeChildren();
 
             this.stepTick();
@@ -146,51 +146,11 @@ var game = game || {};
             alert(e.parm);
         },
         result: function(){
-            var color = game.colorStyle.getColorStyle("blue");
-            var param = color.$extend({
-                width     : 640,
-                height    : 48,
-                fontSize  : 48,
-//                fontFamily: "font",
-                text      : "RESULT"});
-            var result = tm.display.TextShape(param)
-                .setPosition(320, 140)
-                .addChildTo(this);
-                
-            var t = this.age / GAME_FPS;
-            var ms = ~~((t - ~~(t)) * 100);
-            var mm = Math.floor(t / 60);
-            var ss = Math.floor(t) - mm * 60;
-            param.text = "CLEAR TIME     {0}:{1}.{2}".format(
-                ("00" + mm).substr(-2),
-                ("00" + ss).substr(-2),
-                ("00" + ms).substr(-2)
-            );
-            param.fontSize = 32;
-//            param.fontFamily = "font";
-            var time = tm.display.TextShape(param)
-                .setPosition(320, 260)
-                .addChildTo(this);
-            
-            var tb = (this.timeBounus - this.age) * 1000;
-            tb = (tb < 1) ? 0 : tb;
-/*            param.text = "TIME BOUNUS    {0}".format(("00000000" + tb).substr(-8));
-            var timeBounus = tm.display.TextShape(640, 48, param)
-                .setPosition(320, 320)
-                .addChildTo(this);
-*/
-            param.text = "MISS                {0}".format(("   " + this.missCount).substr(-3));
-            var miss = tm.display.TextShape(param)
-                .setPosition(320, 360)
-                .addChildTo(this);
-            
-            var score = ~~(tb / (this.missCount + 1) / 10) * 10;
-            this.scoreLabel.score += score;
-            param.text = "TOTAL BOUNUS {0}".format(("0000000000" + score).substr(-10));
-            var score = tm.display.TextShape(param)
-                .setPosition(320, 500)
-                .addChildTo(this);
-        }
+            if(this.stage === 0) return;
+            var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 500);
+            var result = game.Result(this.age, this.missCount, bonus).addChildTo(this);
+            this.scoreLabel.score += bonus;
+        } 
     });
 
     game.SelectScene = tm.createClass({
@@ -198,7 +158,10 @@ var game = game || {};
         
         init: function(){
             this.superInit();
-            var buttons = ["Tutrial", "Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
+            
+            var bg = game.BackGround().setPosition(320, 480).addChildTo(this);
+
+            var buttons = ["Tutrial", "Stage1", "Stage2", "Stage3", "Stage4", "Stage5", "test"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
                 var button = tm.ui.FlatButton({

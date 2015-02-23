@@ -118,6 +118,14 @@ var game = game || {};
         }
 
         var pattern = {
+            "test1": function(){
+                boss.hp = 250;
+                return {
+                    "top": d.action([
+                        f["offset"](320, 160, 0, "absolute", 0, boss)
+                    ])
+                };
+            },
             "test6": function(){
                 return {
                     "top": d.action([
