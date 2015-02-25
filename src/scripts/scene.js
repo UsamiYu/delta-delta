@@ -41,6 +41,9 @@ var game = game || {};
             
             //ゲーム描画領域より上に描画するもの
             var frame = game.GameFieldFrame().setPosition(320,480).addChildTo(this);
+            var titleSprite = tm.display.Sprite("title", 300, 120).setPosition(320, 840).addChildTo(this);
+            var title = tm.display.TextShape({text: "delta-delta Ver. 0.1"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
+                .setPosition(420, 930).addChildTo(this);
             //デバッグ情報用
 //            var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
 
@@ -123,10 +126,10 @@ var game = game || {};
             }
 
             if(player.getParent() === this.gameField){
-                player.vx = p.dx;
-                player.vy = p.dy;
-                //player.vx = Math.min(Math.max(-player.radius, p.dx), player.radius);
-                //player.vy = Math.min(Math.max(-player.radius, p.dy), player.radius);
+                //player.vx = p.dx;
+                //player.vy = p.dy;
+                player.vx = Math.min(Math.max(-player.radius, p.dx), player.radius);
+                player.vy = Math.min(Math.max(-player.radius, p.dy), player.radius);
             }
         },
         
@@ -204,23 +207,31 @@ var game = game || {};
                  .call(function(){ this.touchEnable() }.bind(this));
 
         },
-        ontouchend: function(){
-            this.app.replaceScene(game.SelectScene());
+        onpointingend: function(){
+            this.children[this.children.length - 1].remove();
+            
+            var tutrial = game.TextButton({fontSize: 48, text: "Tutrial"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
+                .setPosition(320, 520).addChildTo(this);
+            tutrial.onpointingend = function(){
+                if(this.parent) this.parent.app.replaceScene(game.ShootingScene(0));
+            };
+            var normal = game.TextButton({fontSize: 48, text: "Normal Mode"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
+                .setPosition(320, 600).addChildTo(this);
+            normal.onpointingend = function(){
+                if(this.parent) this.parent.app.replaceScene(game.SelectScene());
+            };
+            var config = game.TextButton({fontSize: 48, text: "Config"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
+                .setPosition(320, 760).addChildTo(this);
         },
         touchEnable: function(){
             this.setInteractive(true);
-            var param = {
-                fontSize: 32,
-                fontFamily: game.FONT,
-                fillStyle: "hsl(240, 100%, 95%)",
-                strokeStyle: "hsl(240, 100%, 75%)",
-            };
+            var param = game.param.DEFAULT_TEXT_SHAPE;
             
             var title = tm.display.TextShape({text: "delta-delta"}.$safe(param)).setPosition(520, 420).addChildTo(this);
             
             var version = game.VersionInfomation().setPosition(320, 944).addChildTo(this);
             
-            var touch = tm.display.TextShape({text: "Touch Start"}.$safe(param)).setPosition(320, 640).addChildTo(this);
+            var touch = tm.display.TextShape({fontSize: 48, text: "Touch Screen"}.$safe(param)).setPosition(320, 640).addChildTo(this);
             touch.tweener
                  .clear()
                  .fadeIn(1)
@@ -238,27 +249,24 @@ var game = game || {};
             this.superInit();
             
             var bg = game.BackGround().setPosition(320, 480).addChildTo(this);
+            
+            var select = tm.display.TextShape({fontSize: 80, text: "Stage Select"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
+                .setPosition(320, 80).addChildTo(this);
 
-            var buttons = ["Tutrial", "Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
+            var buttons = ["Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
-                var button = tm.display.TextShape({
-                    width : 320,
-                    height: 80,
+                var button = game.TextButton({
                     fontFamily: game.FONT,
                     fontSize: 64,
                     fillStyle: "hsl(240, 100%, 95%)",
                     strokeStyle: "hsl(240, 100%, 75%)",
                     text  : buttons[i]
-                }).setPosition(320, i * 120 + 180).addChildTo(this);
-                button.num = i;
+                }).setPosition(320, i * 120 + 240).addChildTo(this);
+                button.num = i + 1;
                 button.setInteractive(true);
-                button.onpointingstart = function(){
-                    this.setScale(0.9);
-                }
                 button.onpointingend = function(){
-                    this.setScale(1.0);
-                    this.parent.app.replaceScene(game.ShootingScene(this.num));
+                    if(this.parent) this.parent.app.replaceScene(game.ShootingScene(this.num));
                 }
             }
         },

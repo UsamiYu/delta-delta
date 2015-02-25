@@ -118,6 +118,19 @@ var game = game || {};
         }
     });
     
+    game.TextButton = tm.createClass({
+        superClass: tm.display.TextShape,
+        
+        init: function(param){
+            this.superInit(param);
+            this.boundingType = "rect";
+            this.setInteractive(true);
+        },
+        onpointingstart: function(){
+            this.setScale(0.9);
+        },
+    });
+    
     game.GameFieldFrame = tm.createClass({
         superClass: tm.display.Shape,
         

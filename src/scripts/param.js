@@ -23,6 +23,7 @@ var GAME_FPS          = 60;
 var game = game || {};
 
 (function(){
+
     game.FONT = "'Audiowide', 'HiraKakuProN-W3'";
 
     game.TweenAnimation = function(obj, type, time, param){
@@ -82,6 +83,12 @@ var game = game || {};
             color         : "red",
             frameIndex    : 0,
             isSyncRotation: false
+        },
+        DEFAULT_TEXT_SHAPE: {
+            fontSize: 32,
+            fontFamily: game.FONT,
+            fillStyle: "hsl(240, 100%, 95%)",
+            strokeStyle: "hsl(240, 100%, 75%)",
         },
     };
 
