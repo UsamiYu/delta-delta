@@ -31,10 +31,10 @@ var game = game || {};
                         }
                     }.bind(this), ~~(1000 / GAME_FPS));
             }
-            //弾描画レイヤー
-            this.bulletLayer = tm.display.CanvasElement().addChildTo(this.gameField);
             //敵描画レイヤー
             this.enemyLayer = tm.display.CanvasElement().addChildTo(this.gameField);
+            //弾描画レイヤー
+            this.bulletLayer = tm.display.CanvasElement().addChildTo(this.gameField);
 
             this.player = game.Player();
             this.player.addChildTo(this.gameField);
@@ -123,8 +123,10 @@ var game = game || {};
             }
 
             if(player.getParent() === this.gameField){
-                player.vx = Math.min(Math.max(-player.radius, p.dx), player.radius);
-                player.vy = Math.min(Math.max(-player.radius, p.dy), player.radius);
+                player.vx = p.dx;
+                player.vy = p.dy;
+                //player.vx = Math.min(Math.max(-player.radius, p.dx), player.radius);
+                //player.vy = Math.min(Math.max(-player.radius, p.dy), player.radius);
             }
         },
         
@@ -148,7 +150,7 @@ var game = game || {};
         },
         result: function(){
             if(this.stage !== 0){
-                var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 500);
+                var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 250);
                 var result = game.Result(this.age, this.missCount, bonus).addChildTo(this);
                 this.scoreLabel.score += bonus;
             }
@@ -157,7 +159,7 @@ var game = game || {};
                  fillStyle: "hsl(240, 100%, 95%)",
                  strokeStyle: "hsl(240, 100%, 75%)",
                  fontSize: 32,
-                 fontFamily: "Audiowide",
+                 fontFamily: game.FONT,
             });
             text.setPosition(320, 600);
             
@@ -200,6 +202,7 @@ var game = game || {};
                  .clear()
                  .fadeIn(1500)
                  .call(function(){ this.touchEnable() }.bind(this));
+
         },
         ontouchend: function(){
             this.app.replaceScene(game.SelectScene());
@@ -208,14 +211,16 @@ var game = game || {};
             this.setInteractive(true);
             var param = {
                 fontSize: 32,
-                fontFamily: "Audiowide",
+                fontFamily: game.FONT,
                 fillStyle: "hsl(240, 100%, 95%)",
                 strokeStyle: "hsl(240, 100%, 75%)",
             };
             
             var title = tm.display.TextShape({text: "delta-delta"}.$safe(param)).setPosition(520, 420).addChildTo(this);
             
-            var touch = tm.display.TextShape({text: "TOUCH START"}.$safe(param)).setPosition(320, 640).addChildTo(this);
+            var version = game.VersionInfomation().setPosition(320, 944).addChildTo(this);
+            
+            var touch = tm.display.TextShape({text: "Touch Start"}.$safe(param)).setPosition(320, 640).addChildTo(this);
             touch.tweener
                  .clear()
                  .fadeIn(1)
@@ -237,13 +242,22 @@ var game = game || {};
             var buttons = ["Tutrial", "Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
-                var button = tm.ui.FlatButton({
-                    width : 240,
-                    height: 120,
+                var button = tm.display.TextShape({
+                    width : 320,
+                    height: 80,
+                    fontFamily: game.FONT,
+                    fontSize: 64,
+                    fillStyle: "hsl(240, 100%, 95%)",
+                    strokeStyle: "hsl(240, 100%, 75%)",
                     text  : buttons[i]
-                }).setPosition((i & 1) * 280 + 180, ~~(i / 2) * 150 + 120).addChildTo(this);
+                }).setPosition(320, i * 120 + 180).addChildTo(this);
                 button.num = i;
+                button.setInteractive(true);
+                button.onpointingstart = function(){
+                    this.setScale(0.9);
+                }
                 button.onpointingend = function(){
+                    this.setScale(1.0);
                     this.parent.app.replaceScene(game.ShootingScene(this.num));
                 }
             }

@@ -30,7 +30,7 @@ var game = game || {};
             this.scene = "";
 
             var image = tm.display.Sprite(this.image, this.width, this.height);
-            image.setFrameIndex(this.frameIndex).setAlpha(0.85).addChildTo(this);
+            image.setFrameIndex(this.frameIndex).setAlpha(0.9).addChildTo(this);
             if(this.type === "boss") this.hpGauge = game.EnemyHpGauge(0, 0, this.maxHp);
 
         },
@@ -89,7 +89,7 @@ var game = game || {};
                 return;
             }
 
-            if(this.scene.app.frame & 4) this.children[0].setFrameIndex(this.frameIndex).setAlpha(0.85);
+            if(this.scene.app.frame & 4) this.children[0].setFrameIndex(this.frameIndex).setAlpha(0.9);
                 if(this._lastHp > this.hp){
                     this.children[0].setFrameIndex(this.frameIndex + 1).setAlpha(1);
                     if(this._lastHp - this.hp > 5){
@@ -195,7 +195,7 @@ var game = game || {};
             this.fromJSON(attr);
 
             var graphic = tm.display.Sprite("circle", this.width, this.height);
-            graphic.setFrameIndex(attr.frameIndex);
+            graphic.setFrameIndex(attr.frameIndex).setAlpha(0.75);
             graphic.addChildTo(this);
 
         },

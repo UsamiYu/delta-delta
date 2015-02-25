@@ -13,7 +13,7 @@ var game = game || {};
              this.superInit("SCORE:000000000");
              this.setAlign("left");
              this.setFontSize(32);
-             this.setFontFamily("Audiowide");             
+             this.setFontFamily(game.FONT);             
              this.setAlpha(0.5);
              this.score = 0;
              this.v = 600 / GAME_FPS; //スコア係数
@@ -69,7 +69,7 @@ var game = game || {};
 
             var textShape = tm.display.TextShape({
                 fontSize: 32,
-                fontFamily: "Audiowide",
+                fontFamily: game.FONT,
                 fillStyle: "hsl(240, 100%, 95%)",
                 strokeStyle: "hsl(240, 100%, 75%)",
                 text: this.text[count]
@@ -265,9 +265,23 @@ var game = game || {};
             label.setAlign(align)
                  .setFontSize(fontSize)
                  .setAlpha(0.7)
-                 .setFontFamily("Audiowide")
+                 .setFontFamily(game.FONT)
                  .setPosition(x, y)
                  .addChildTo(this);
         }
+    });
+    
+    game.VersionInfomation = tm.createClass({
+        superClass: tm.display.TextShape,
+        
+        init: function(){
+            this.superInit({
+                fontSize: 32,
+                fontFamily: game.FONT,
+                fillStyle: "hsl(240, 100%, 95%)",
+                strokeStyle: "hsl(240, 100%, 75%)",
+                text: "Ver. 0.1"
+            });
+        },
     });
 })();

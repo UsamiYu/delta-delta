@@ -825,7 +825,7 @@ var game = game || {};
                         f["offset"](320, 0, 181, "absolute", 6, boss, d.actionRef("boss"))
                     ]),
                     "top2": d.action([
-                        d.wait(60),
+                        d.wait(120),
                         d.repeat(99, [
                             d.repeat(3, [
                                 f["offset"]("$rand * 320 + 160", 32, 180, "absolute", 16, zakoP, d.action([
@@ -859,13 +859,15 @@ var game = game || {};
             "stage5_05": function(obj){
                 largeR.addedAnimation = "zoom";
                 largeR.hp = 250;
-                largeR.fieldOutCheck = false;
+                largeR.fieldOutCheck = zakoP.fieldOutCheck = false;
                 zakoP.hp = 300;
                 zakoP.isSyncRotation = false;
-                zakoP.fieldOutCheck = false;
                 zakoP.danmaku = "zako02";
-                boss.danmaku = "zako02";
-                largeR.danmaku = "zako03";
+                middleR.danmaku = "boss3";
+                middleR.hp = 800;
+                boss.danmaku = "boss11";
+                boss.hp = 2700;
+                //largeR.danmaku = "zako03";
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -873,37 +875,68 @@ var game = game || {};
                     ]),
                     "boss": d.action([
                         act["change_speed"](0, 60),
-                        d.repeat(2, [
-                            f["normal"]("$loop.index * 90 + 135", "absolute", 7, invisible, d.actionRef("set_largeR", 1)),
-                            f["normal"]("$loop.index * 210 + 75", "absolute", 8, invisible, d.actionRef("set_largeR", 2)),
-                            f["normal"]("$loop.index * 180 + 90", "absolute", 10, invisible, d.actionRef("set_largeR", 2)),
-                            f["normal"]("$loop.index * 40 + 160", "absolute", 8, invisible, d.actionRef("set_largeR", 1)),
-                        ]),
-                        f["normal"](180, "absolute", 11, invisible, d.actionRef("set_largeR")),
-                        d.repeat(2, [
-                            f["normal"]("$loop.index * 270 + 45", "absolute", 15, zakoP, d.actionRef("zakoP")),
-                            f["normal"]("$loop.index * 140 + 110", "absolute", 15, zakoP, d.actionRef("zakoP")),
-                            f["normal"]("$loop.index * 220 + 70", "absolute", 24, zakoP, d.actionRef("zakoP")),
-                        ]),
-                        d.actionRef("boss_move", 16),
+                        d.repeat(99, [
+                            d.repeat(2, [
+                                f["normal"]("$loop.index * 90 + 135", "absolute", 7, invisible, d.actionRef("set_largeR", 1)),
+                                f["normal"]("$loop.index * 210 + 75", "absolute", 8, invisible, d.actionRef("set_largeR", 2)),
+                                f["normal"]("$loop.index * 180 + 90", "absolute", 10, invisible, d.actionRef("set_largeR", 2)),
+                                f["normal"]("$loop.index * 40 + 160", "absolute", 8, invisible, d.actionRef("set_largeR", 1)),
+                            ]),
+                            f["normal"](180, "absolute", 11, invisible, d.actionRef("set_largeR")),
+                            d.repeat(2, [
+                                f["normal"]("$loop.index * 270 + 45", "absolute", 15, zakoP, d.actionRef("zakoP")),
+                                f["normal"]("$loop.index * 140 + 110", "absolute", 15, zakoP, d.actionRef("zakoP")),
+                                f["normal"]("$loop.index * 220 + 70", "absolute", 24, zakoP, d.actionRef("zakoP")),
+                            ]),
+                            d.actionRef("boss_move", 16),
+                            d.wait(240),
+                            d.repeat(4, [
+                                f["normal"]("$loop.index * 90 + 45", "absolute", 8, invisible, d.actionRef("set_middleR")),
+                                f["normal"](0, "sequence", 12, invisible, d.actionRef("set_largeR")),
+                                f["normal"]("$loop.index * 90", "absolute", 8, zakoP, d.actionRef("zakoP")),
+                            ]),
+                            d.actionRef("boss_move", 16),
+                            d.wait(240),
+                        ])
                     ]),
                     "boss_move": d.action([
                         d.wait("$1"),
-                        d.repeat(99, [
+                        //d.repeat(99, [
                             act["triangle_loop"](2, "right", 240, 1, 60),
                             act["triangle_loop"](2, "left", 240, 1, 60),
                             d.wait(60),
-                        ]),
+                        //]),
                     ]),
                     "set_largeR": d.action([
                         d.repeat("$1", [
                             d.wait(8),
-                            f["normal"](0, "relative", 0, largeR, d.actionRef("boss_move", "10 - $loop.index * 8")),
+                            f["normal"](0, "relative", 0, largeR,
+                                d.action([
+                                    d.actionRef("boss_move", "10 - $loop.index * 8"),
+                                    act["change_direction"]("~~($rand * 4) *90", "absolute", 1),
+                                    act["change_speed"](6, 90, 240),
+                                    d.vanish()
+                                ])
+                            )
                         ])
+                    ]),
+                    "set_middleR": d.action([
+                        d.wait(8),
+                        f["normal"](0, "relative", 0, middleR,
+                            d.action([
+                                d.actionRef("boss_move", 8),
+                                act["change_direction"]("~~($rand * 2) *90 + 90", "absolute", 1),
+                                act["change_speed"](5, 90, 240),
+                                d.vanish()
+                            ])
+                        )
                     ]),
                     "zakoP": d.action([
                         act["change_speed"](0, 15),
                         d.actionRef("boss_move", 2),
+                        act["change_direction"]("~~($rand * 2) *90 + 135", "absolute", 1),
+                        act["change_speed"](5, 90, 240),
+                        d.vanish()
                     ])
                 };
             },
@@ -1246,6 +1279,27 @@ var game = game || {};
                     ]),
                 };
             },
+            "boss11": function(){
+                middleR.hp = 200;
+                middleR.danmaku = "boss3";
+                return {
+                    "top": d.action([
+                        d.wait(120),
+                        d.repeat(99, [
+                            f["normal"](90, "sequence", 2.5, largeBullet),
+                            d.repeat(2, [
+                                f["normal"](30, "sequence", 2.5, largeBullet),
+                            ]),
+                            d.wait(30),
+                            d.repeat(5, [
+                                f["normal"](30, "sequence", 4, zakoT),
+                                d.wait(5),
+                            ]),
+                            d.wait("~~(Math.cos($loop.index) * 120) + 150"),
+                        ]),
+                    ]),
+                };
+            },
             "zako01": function(obj){
                 return {
                     "top": d.action([
@@ -1260,7 +1314,7 @@ var game = game || {};
             "zako02": function(obj){
                 return {
                     "top": d.action([
-                        d.wait(90),
+                        d.wait(60),
                         d.repeat(99, [
                             d.repeat(6, [
                                 d.repeat(2, [
@@ -1273,11 +1327,11 @@ var game = game || {};
                                 d.wait(90),
                             ]),
                             d.actionRef("whip", 2),
-                            d.wait(60),
+                            d.wait(120),
                         ])
                     ]),
                     "top2": d.action([
-                        d.wait(90),
+                        d.wait(60),
                         d.repeat(99, [
                             d.repeat(4, [
                                 d.repeat(3, [
@@ -1289,42 +1343,25 @@ var game = game || {};
                                 ]),
                                 d.wait(135),
                             ]),
+                            d.wait(60),
                             d.actionRef("whip", -2),
                             d.wait(60),
                         ])
                     ]),
-                    "top3": d.action([
-                        d.wait(120),
-                        d.repeat(99, [
-                            f["normal"]("$rand * 90 + 90", "sequence", 2.5, largeBullet),
-                            d.wait("~~(Math.cos($loop.index) * 120) + 150"),
-                        ])
-                    ]),
                     "whip": d.action([
-                        d.wait(120),
-                        d.repeat(4, [
+                        d.bindVar("r", "$rand * 4 + 2"),
+                        d.wait("120 - $r * 2"),
+                        d.repeat("$r", [
                             f["normal"]("$1", "aim", 4, middleBullet),
                             d.repeat(2, [
                                 d.wait(1),
                                 f["normal"](0, "sequence", "$loop.index * 0.5 + 4.5", middleBullet),
                             ]),
-                            d.wait(118),
+                            d.wait("600 / $r"),
                         ])
                     ]),
                 };
             },
-            "zako03": function(){
-                return {
-                    "top": d.action([
-                        d.wait(150),
-                        f["normal"](0, "absolute", 6, zakoT),
-                        d.repeat(999, [
-                            f["normal"](180, "sequence", 6, zakoT),
-                            d.wait("~~(Math.cos($loop.index) * 60) + 120"),
-                        ])
-                    ])
-                };
-            }
         }
 
         return new bulletml.Root(pattern[name](param));
