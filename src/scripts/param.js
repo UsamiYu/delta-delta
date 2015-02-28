@@ -24,7 +24,7 @@ var game = game || {};
 
 (function(){
 
-//    game.FONT = "'Audiowide', 'HiraKakuProN-W3'";
+    game.FONT = "'Audiowide', 'HiraKakuProN-W3'";
 
     game.param = {
         ENEMY_DEFAULT_ATTR: {
@@ -50,7 +50,7 @@ var game = game || {};
         },
         DEFAULT_TEXT_SHAPE: {
             fontSize   : 32,
-            fontFamily : "font",
+            fontFamily : game.FONT,
             fillStyle  : "hsl(240, 100%, 95%)",
             strokeStyle: "hsl(240, 100%, 75%)",
         },

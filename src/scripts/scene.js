@@ -188,7 +188,7 @@ var game = game || {};
                  fillStyle: "hsl(240, 100%, 95%)",
                  strokeStyle: "hsl(240, 100%, 75%)",
                  fontSize: 32,
-                 fontFamily: "font",
+                 fontFamily: game.FONT,
             });
             text.setPosition(320, 600);
             
@@ -409,7 +409,7 @@ var game = game || {};
                 .setPosition(320, 480).addChildTo(this);
             var moveRatioLabel = tm.display.Label(config.moveRatio).setPosition(320, 520).addChildTo(this);
             moveRatioLabel.fontColor = offStyle;
-            moveRatioLabel.fontFamily = "font";
+            moveRatioLabel.fontFamily = game.FONT;
             moveRatioLabel.update = function(){ this.text = ~~(config.moveRatio * 100) + "%"; }
             
             for(var i = 0;i < 20;i++){
@@ -485,7 +485,7 @@ var game = game || {};
                     .setPosition(160, i * 80 + 300).addChildTo(this);
 
                 var label = tm.display.Label((!high[i]) ? "0" : high[i])
-                    .setFontFamily("font")
+                    .setFontFamily(game.FONT)
                     .setFontSize(48)
                     .setAlign("right")
                     .setPosition(580, i * 80 + 300)

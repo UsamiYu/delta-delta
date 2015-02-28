@@ -21,7 +21,6 @@ tm.main(function() {
             "rectangle": "./src/images/rectangleImage.png",
             "polygon"  : "./src/images/polygonImage.png",
             "title"    : "./src/images/title.png",
-            "font"     : "./font/Audiowide/Audiowide-Regular.ttf"
        },
         nextScene: game.TitleScene,
     });

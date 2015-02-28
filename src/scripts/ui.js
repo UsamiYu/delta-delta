@@ -13,14 +13,9 @@ var game = game || {};
             this.superInit("SCORE");
             this.setAlign("left");
             this.setFontSize(48);
-            this.setFontFamily("font");
+            this.setFontFamily(game.FONT);
             this.setAlpha(0.5);
-             //this.score = 0;
-             //this.v = 600 / GAME_FPS; //スコア係数
          },
-         //update: function(){
-         //    this.text = "SCORE:" + ("000000000" + ~~(this.score)).substr(-9);
-         //},
     });
     
     game.HighScore = tm.createClass({
@@ -30,7 +25,7 @@ var game = game || {};
             this.superInit("HIGH-SCORE");
             this.setAlign("left");
             this.setFontSize(48);
-            this.setFontFamily("font");
+            this.setFontFamily(game.FONT);
             this.setAlpha(0.5);
         },
     });
@@ -42,7 +37,7 @@ var game = game || {};
             this.superInit("0");
             this.setAlign("right");
             this.setFontSize(48);
-            this.setFontFamily("font");             
+            this.setFontFamily(game.FONT);             
             this.setAlpha(0.5);
             this.score = 0;
             this.v = 600 / GAME_FPS; //スコア係数
@@ -59,7 +54,7 @@ var game = game || {};
             this.superInit(score);
             this.setAlign("right");
             this.setFontSize(48);
-            this.setFontFamily("font");
+            this.setFontFamily(game.FONT);
             this.setAlpha(0.5);
             this.score = parseInt(score);
             this.v = 600 / GAME_FPS; //スコア係数
@@ -121,7 +116,7 @@ var game = game || {};
 
             var textShape = tm.display.TextShape({
                 fontSize: 32,
-                fontFamily: "font",
+                fontFamily: game.FONT,
                 fillStyle: "hsl(240, 100%, 95%)",
                 strokeStyle: "hsl(240, 100%, 75%)",
                 text: this.text[count]
@@ -333,7 +328,7 @@ var game = game || {};
             label.setAlign(align)
                  .setFontSize(fontSize)
                  .setAlpha(0.7)
-                 .setFontFamily("font")
+                 .setFontFamily(game.FONT)
                  .setPosition(x, y)
                  .addChildTo(this);
         }
