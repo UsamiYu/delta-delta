@@ -34,7 +34,7 @@ var game = game || {};
                 y: y || 4,
                 bgColor: "red",
                 color: "lime",
-                animationTime: 1000,
+                animationFlag: false,
                 borderWidth: 2,
             });
 
@@ -122,12 +122,10 @@ var game = game || {};
         superClass: tm.display.TextShape,
         
         init: function(param){
+            param = param.$safe(game.param.DEFAULT_TEXT_SHAPE);
             this.superInit(param);
             this.boundingType = "rect";
             this.setInteractive(true);
-        },
-        onpointingstart: function(){
-            this.setScale(0.9);
         },
     });
     
@@ -206,6 +204,11 @@ var game = game || {};
         
         init: function(){
             this.superInit();
+
+            if(!game.config.enableBackGround){
+                this.tweener.wait(1).call(function(){ this.remove(); }.bind(this));
+                return;
+            }
             
             this.back = game.BackGroundImage().setScale(2).setAlpha(0.5).addChildTo(this);
             this.back.tweener
@@ -283,18 +286,5 @@ var game = game || {};
                  .addChildTo(this);
         }
     });
-    
-    game.VersionInfomation = tm.createClass({
-        superClass: tm.display.TextShape,
-        
-        init: function(){
-            this.superInit({
-                fontSize: 32,
-                fontFamily: game.FONT,
-                fillStyle: "hsl(240, 100%, 95%)",
-                strokeStyle: "hsl(240, 100%, 75%)",
-                text: "Ver. 0.1"
-            });
-        },
-    });
+
 })();

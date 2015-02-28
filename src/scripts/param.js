@@ -26,6 +26,53 @@ var game = game || {};
 
     game.FONT = "'Audiowide', 'HiraKakuProN-W3'";
 
+    game.param = {
+        ENEMY_DEFAULT_ATTR: {
+            width         : 48,
+            height        : 48,
+            hp            : 2000,
+            image         : "",
+            frameIndex    : 0,
+            boundingType  : "circle",
+            type          : "enemy",
+            danmaku       : "",
+            fieldOutCheck : true,
+            addedAnimation: "",
+            isSyncRotation: false,
+            target        : "player",
+        },
+        BULLET_DEFAULT_ATTR: {
+            width         : 24,
+            height        : 24,
+            color         : "red",
+            frameIndex    : 0,
+            isSyncRotation: false
+        },
+        DEFAULT_TEXT_SHAPE: {
+            fontSize   : 32,
+            fontFamily : game.FONT,
+            fillStyle  : "hsl(240, 100%, 95%)",
+            strokeStyle: "hsl(240, 100%, 75%)",
+        },
+    };
+    
+    game.config = {
+        enableDoubleTap : true, // true or false
+        modeChangeButton: "right", // "left" or "right" or "none"
+        enableBackGround: true, // true or false
+        enableEnemyInfo : false, // true or false
+        moveRatio       : 1.0,
+    };
+
+    game.GameFieldOut = function(elm){
+        if(elm.top    > GAME_FIELD_BOTTOM ||
+           elm.bottom < GAME_FIELD_TOP ||
+           elm.left   > GAME_FIELD_RIGHT ||
+           elm.right  < GAME_FIELD_LEFT) return true;
+           
+        return false;
+    }
+
     game.TweenAnimation = function(obj, type, time, param){
         param = param.$safe({
             scaleX  : 1.0,
@@ -62,45 +109,6 @@ var game = game || {};
         };
     };
 
-    game.param = {
-        ENEMY_DEFAULT_ATTR: {
-            width         : 48,
-            height        : 48,
-            hp            : 2000,
-            image         : "",
-            frameIndex    : 0,
-            boundingType  : "circle",
-            type          : "enemy",
-            danmaku       : "",
-            fieldOutCheck : true,
-            addedAnimation: "",
-            isSyncRotation: false,
-            target        : "player",
-        },
-        BULLET_DEFAULT_ATTR: {
-            width         : 24,
-            height        : 24,
-            color         : "red",
-            frameIndex    : 0,
-            isSyncRotation: false
-        },
-        DEFAULT_TEXT_SHAPE: {
-            fontSize: 32,
-            fontFamily: game.FONT,
-            fillStyle: "hsl(240, 100%, 95%)",
-            strokeStyle: "hsl(240, 100%, 75%)",
-        },
-    };
-
-    game.gameFieldOut = function(elm){
-        if(elm.top    > GAME_FIELD_BOTTOM ||
-           elm.bottom < GAME_FIELD_TOP ||
-           elm.left   > GAME_FIELD_RIGHT ||
-           elm.right  < GAME_FIELD_LEFT) return true;
-           
-        return false;
-    }
-    
     game.setDanmaku = function(elm, target, scene, param){
 
         var config = {

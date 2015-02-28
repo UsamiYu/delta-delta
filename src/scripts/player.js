@@ -190,12 +190,12 @@ var game = game || {};
             this.vy = -this.speed;
             this.damage = damage;
         },
-        speed: 40,
+        speed: 24,
         boundingtype: "rect",
         hitFlag: false,
 
         update: function(app){
-            if(this.hitFlag || game.gameFieldOut(this)){
+            if(this.hitFlag || game.GameFieldOut(this)){
                 this.remove();
                 return;
             }
@@ -225,6 +225,7 @@ var game = game || {};
         },
         isHitEnemy: function(target){
             if(target.tweener.isPlaying || !target.parent) return false;
+            if(this.x - 48 > target.x || this.x + 48 < target.x || this.y + 96 < target.y) return false;
             if((target.width === target.height) ||
                 (target.rotation === 0) ||
                 (target.rotation === 180)){
@@ -258,7 +259,7 @@ var game = game || {};
         hitFlag: false,
         
         update: function(app){
-            if(game.gameFieldOut(this)){
+            if(game.GameFieldOut(this)){
                 this.remove();
                 return;
             }

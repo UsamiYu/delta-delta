@@ -84,7 +84,7 @@ var game = game || {};
             }
             this.setPosition(this.runner.x, this.runner.y);
 
-            if(this.fieldOutCheck && game.gameFieldOut(this) && this.parent){
+            if(this.fieldOutCheck && game.GameFieldOut(this) && this.parent){
                 this.remove();
                 return;
             }
@@ -215,7 +215,7 @@ var game = game || {};
             }
             this.setPosition(this.runner.x, this.runner.y);
 
-            if(this.fieldOutCheck && game.gameFieldOut(this) && this.parent){
+            if(this.fieldOutCheck && game.GameFieldOut(this) && this.parent){
                 this.remove();
                 return;
             }

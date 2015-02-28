@@ -241,6 +241,7 @@ var game = game || {};
                 };
             },
             "stage1_01": function(obj){
+                boss.hp = 1800;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -332,7 +333,7 @@ var game = game || {};
             },
             "stage1_03": function(obj){
                 boss.danmaku = "boss2";
-                boss.hp = 1800;
+                boss.hp = 1600;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -366,7 +367,7 @@ var game = game || {};
                 };
             },
             "stage2_01": function(obj){
-                boss.hp = 2500;
+                boss.hp = 2300;
                 boss.danmaku = "boss4";
                 return {
                     "top": d.action([
@@ -529,7 +530,7 @@ var game = game || {};
             "stage3_03": function(obj){
                 boss.hp = 1200;
                 boss.danmaku = "boss1_01";
-                middleR.hp = 90;
+                middleR.hp = 75;
                 middleR.danmaku = "single01";
                 return {
                     "top0": d.action([
@@ -864,9 +865,9 @@ var game = game || {};
                 zakoP.isSyncRotation = false;
                 zakoP.danmaku = "zako02";
                 middleR.danmaku = "boss3";
-                middleR.hp = 800;
+                middleR.hp = 500;
                 boss.danmaku = "boss11";
-                boss.hp = 2700;
+                boss.hp = 2400;
                 //largeR.danmaku = "zako03";
                 return {
                     "top": d.action([
@@ -890,10 +891,12 @@ var game = game || {};
                             ]),
                             d.actionRef("boss_move", 16),
                             d.wait(240),
-                            d.repeat(4, [
-                                f["normal"]("$loop.index * 90 + 45", "absolute", 8, invisible, d.actionRef("set_middleR")),
-                                f["normal"](0, "sequence", 12, invisible, d.actionRef("set_largeR")),
-                                f["normal"]("$loop.index * 90", "absolute", 8, zakoP, d.actionRef("zakoP")),
+                            d.repeat(3, [
+                                f["normal"]("$loop.index * 120 + 60", "absolute", 8, invisible, d.actionRef("set_middleR")),
+                                f["normal"]("$loop.index * 120", "absolute", 8, zakoP, d.actionRef("zakoP")),
+                            ]),
+                            d.repeat(2, [
+                                f["normal"]("$loop.index * 240 + 60", "absolute", 12, invisible, d.actionRef("set_largeR")),
                             ]),
                             d.actionRef("boss_move", 16),
                             d.wait(240),
