@@ -13,6 +13,9 @@ var game = game || {};
         
         init: function(num){
             this.superInit();
+            
+            this.stage = num || 0;
+
             this.background = game.BackGround().setPosition(320, 480).addChildTo(this);
             //ゲーム描画領域(シーン描画領域とは異なる)
             this.gameField = tm.display.CanvasElement().addChildTo(this);
@@ -41,7 +44,7 @@ var game = game || {};
             //ゲーム描画領域より上に描画するもの
             var frame = game.GameFieldFrame().setPosition(320,480).addChildTo(this);
             var titleSprite = tm.display.Sprite("title", 300, 120).setPosition(320, 840).addChildTo(this);
-            var title = tm.display.TextShape({fontSize: 24, text: "delta-delta Ver. 0.1"}.$safe(game.param.DEFAULT_TEXT_SHAPE));
+            var title = tm.display.TextShape({fontSize: 24, text: "delta-delta Ver." + game.data.version}.$safe(game.param.DEFAULT_TEXT_SHAPE));
             title.autoRender = false;
             title.setPosition(480, 930).addChildTo(this);
                 
@@ -49,9 +52,18 @@ var game = game || {};
             if(game.config.enableEnemyInfo){
                 var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
             }
-
-            this.scoreLabel = game.ScoreLabel().setPosition(24, 56);
-            if(num > 0) this.scoreLabel.addChildTo(this);
+            
+            this.scoreLabel = game.ScoreLabel().setPosition(616, 104);
+            this.highScore = game.HighScoreLabel(game.data.highScore[this.stage - 1])
+                .setPosition(616, 56);
+            var score = game.Score().setPosition(24, 104);
+            var highScore = game.HighScore().setPosition(24, 56);
+            if(num > 0){
+                score.addChildTo(this);
+                highScore.addChildTo(this);
+                this.scoreLabel.addChildTo(this);
+                this.highScore.addChildTo(this);
+            }
             
             if(game.config.modeChangeButton !== "none"){
                 this.button = game.ModeChangeButton()
@@ -60,7 +72,6 @@ var game = game || {};
                     .addChildTo(this);
             }
             
-            this.stage = num || 0;
             this.danmakuList = game.danmakuList(this.stage);
             this.stepTick();
         },
@@ -140,8 +151,6 @@ var game = game || {};
             }
 
             if(player.getParent() === this.gameField){
-                //player.vx = p.dx;
-                //player.vy = p.dy;
                 player.vx = Math.min(Math.max(-player.radius, p.dx * game.config.moveRatio), player.radius);
                 player.vy = Math.min(Math.max(-player.radius, p.dy * game.config.moveRatio), player.radius);
             }
@@ -170,13 +179,16 @@ var game = game || {};
                 var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 250);
                 var result = game.Result(this.age, this.missCount, bonus).addChildTo(this);
                 this.scoreLabel.score += bonus;
+                if(this.highScore.score < this.scoreLabel.score) this.highScore.score = this.scoreLabel.score;
+                game.data.highScore[this.stage - 1] = this.highScore.score;
+                game.saveData(game.data);
             }
              var text = tm.display.TextShape({
-                 text: "Touch to Stage Select",
+                 text: "Touch to Title",
                  fillStyle: "hsl(240, 100%, 95%)",
                  strokeStyle: "hsl(240, 100%, 75%)",
                  fontSize: 32,
-                 fontFamily: game.FONT,
+                 fontFamily: "font",
             });
             text.setPosition(320, 600);
             
@@ -197,7 +209,7 @@ var game = game || {};
                     this.ontouchmove = function(){};
                     this.ontouchend = function(){
                         this.removeChildren();
-                        this.app.replaceScene(game.SelectScene());
+                        this.app.replaceScene(game.TitleScene());
                     };
                 }.bind(this));
         } 
@@ -208,6 +220,10 @@ var game = game || {};
         
         init: function(){
             this.superInit();
+            
+            game.data = game.data.$extend(game.loadData());
+            if(game.data.version < game.DEFAULT_DATA.version) game.data.version = game.DEFAULT_DATA.version;
+            game.config = game.data.config;
             
             this.setInteractive(false);
             game.BackGround().setPosition(320, 480).addChildTo(this);
@@ -225,31 +241,34 @@ var game = game || {};
             this.children[this.children.length - 1].remove();
             var param = game.param.DEFAULT_TEXT_SHAPE;
 
-            var tutrial = game.TextButton({fontSize: 48, text: "Tutrial"}.$safe(param))
+            var tutrial = game.TextButton({fontSize: 48, text: "Tutrial"})
                 .setPosition(320, 520).addChildTo(this);
             tutrial.onpointingend = function(){
-                console.log("tutrial");
-                if(this.parent) this.parent.app.replaceScene(game.ShootingScene(0));
+                this.parent.app.replaceScene(game.ShootingScene(0));
             };
-            var normal = game.TextButton({fontSize: 48, text: "Normal Mode"}.$safe(param))
+            var normal = game.TextButton({fontSize: 48, text: "Normal Mode"})
                 .setPosition(320, 600).addChildTo(this);
             normal.onpointingend = function(){
-                console.log("normal");
-                if(this.parent) this.parent.app.replaceScene(game.SelectScene());
+                this.parent.app.replaceScene(game.SelectScene());
             };
-            var config = game.TextButton({fontSize: 48, text: "Config"}.$safe(param))
+            var config = game.TextButton({fontSize: 48, text: "Config"})
                 .setPosition(320, 760).addChildTo(this);
             config.onpointingend = function(){
-                console.log("config");
-                if(this.parent) this.parent.app.pushScene(game.ConfigScene());
+                this.parent.app.pushScene(game.ConfigScene());
             };
+            var record = game.TextButton({fontSize: 48, text: "Record"})
+                .setPosition(320, 840).addChildTo(this);
+            record.onpointingend = function(){
+                this.parent.app.pushScene(game.RecordScene());
+            };
+            
             this.onpointingend = function(){};
         },
         touchEnable: function(){
             this.setInteractive(true);
             var param = game.param.DEFAULT_TEXT_SHAPE;
             
-            var title = tm.display.TextShape({fontSize: 24, text: "delta-delta Ver.0.1"}.$safe(param)).setPosition(480, 420).addChildTo(this);
+            var title = tm.display.TextShape({fontSize: 24, text: "delta-delta Ver." + game.data.version}.$safe(param)).setPosition(480, 420).addChildTo(this);
             var touch = tm.display.TextShape({fontSize: 48, text: "Touch Screen"}.$safe(param)).setPosition(320, 640).addChildTo(this);
             touch.tweener
                  .clear()
@@ -267,19 +286,27 @@ var game = game || {};
         init: function(){
             this.superInit();
             
-//            var param = game.param.DEFAULT_TEXT_SHAPE;
+            var param = game.param.DEFAULT_TEXT_SHAPE;
             
             var bg = game.BackGround().setPosition(320, 480).addChildTo(this);
             
-            var select = tm.display.TextShape({fontSize: 80, text: "Stage Select"})
-                .setPosition(320, 80).addChildTo(this);
+            var backButton = game.TextButton({
+                text: "<",
+                fontSize: 64,
+            }).setPosition(48, 48).addChildTo(this);
+            backButton.onpointingend = function(){
+                this.parent.app.replaceScene(game.TitleScene());
+            };
+            
+            var select = tm.display.TextShape({fontSize: 64, text: "Stage Select"}.$safe(param))
+                .setPosition(320, 140).addChildTo(this);
 
             var buttons = ["Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
                 var button = game.TextButton({
-                    fontSize: 64, text: buttons[i]})
-                .setPosition(320, i * 120 + 240).addChildTo(this);
+                    fontSize: 48, text: buttons[i]})
+                .setPosition(320, i * 100 + 280).addChildTo(this);
                 button.num = i + 1;
                 button.setInteractive(true);
                 button.onpointingend = function(){
@@ -304,11 +331,12 @@ var game = game || {};
             var config = game.config;
             var param = game.param.DEFAULT_TEXT_SHAPE;
             var onStyle = "hsl(240, 100%, 95%)";
-            var offStyle = "rgba(100%, 100%, 100%, 0.5)";
+            var offStyle = "rgb(50%, 50%, 50%)";
             
-            var backButton = game.TextButton({fontSize: 64, text: "<"}.$safe(param))
+            var backButton = game.TextButton({fontSize: 64, text: "<"})
                 .setPosition(48, 48).addChildTo(this);
             backButton.onpointingend = function(){
+                game.saveData(game.data);
                 this.parent.app.popScene();
             };
             
@@ -321,22 +349,24 @@ var game = game || {};
             var doubleTapOn = game.TextButton({
                 fontSize: 48,
                 text: "O N",
-                fillStyle: (config.enableDoubleTap) ? onStyle : offStyle
-            }).setPosition(200, 240).addChildTo(this);
+                fillStyle: offStyle
+            }).setPosition(440, 260).addChildTo(this);
+            doubleTapOn.update = function(){
+                this.setFillStyle((config.enableDoubleTap) ? onStyle : offStyle);
+            };
             doubleTapOn.onpointingend = function(){
                 config.enableDoubleTap = true;
-                this.setFillStyle(onStyle);
-                doubleTapOff.setFillStyle(offStyle);
             };
             var doubleTapOff = game.TextButton({
                 fontSize: 48,
                 text: "OFF",
-                fillStyle: (config.enableDoubleTap) ? offStyle : onStyle
-            }).setPosition(440, 240).addChildTo(this);
+                fillStyle: offStyle
+            }).setPosition(200, 260).addChildTo(this);
+            doubleTapOff.update = function(){
+                this.setFillStyle((!config.enableDoubleTap) ? onStyle : offStyle);
+            };
             doubleTapOff.onpointingend = function(){
                 config.enableDoubleTap = false;
-                this.setFillStyle(onStyle);
-                doubleTapOn.setFillStyle(offStyle);
             };
             
             var changeButtonPosition = tm.display.TextShape({text: "ModeChangeButton Position"}.$safe(param))
@@ -344,42 +374,42 @@ var game = game || {};
             var leftButton = game.TextButton({
                 fontSize: 48,
                 text: "Left",
-                fillStyle: (config.modeChangeButton === "left") ? onStyle : offStyle
-                }).setPosition(120, 380).addChildTo(this);
+                fillStyle: offStyle
+                }).setPosition(320, 400).addChildTo(this);
+            leftButton.update = function(){
+                this.setFillStyle((config.modeChangeButton === "left") ? onStyle : offStyle);
+            };
             leftButton.onpointingend = function(){
                 config.modeChangeButton = "left";
-                this.setFillStyle(onStyle);
-                rightButton.setFillStyle(offStyle);
-                noneButton.setFillStyle(offStyle); 
             };
             var rightButton = game.TextButton({
                 fontSize: 48,
                 text: "Right",
-                fillStyle: (config.modeChangeButton === "right") ? onStyle : offStyle
-            }).setPosition(320, 380).addChildTo(this);
+                fillStyle: offStyle
+            }).setPosition(520, 400).addChildTo(this);
+            rightButton.update = function(){
+                this.setFillStyle((config.modeChangeButton === "right") ? onStyle : offStyle);
+            };
             rightButton.onpointingend = function(){
                 config.modeChangeButton = "right";
-                this.setFillStyle(onStyle);
-                leftButton.setFillStyle(offStyle);
-                noneButton.setFillStyle(offStyle);
             };
             var noneButton = game.TextButton({
                 fontSize: 48,
                 text: "None",
-                fillStyle: (config.modeChangeButton === "none") ? onStyle : offStyle
-                }).setPosition(520, 380).addChildTo(this);
+                fillStyle: offStyle
+                }).setPosition(120, 400).addChildTo(this);
+            noneButton.update = function(){
+                this.setFillStyle((config.modeChangeButton === "none") ? onStyle : offStyle);
+            };
             noneButton.onpointingend = function(){
                 config.modeChangeButton = "none";
-                this.setFillStyle(onStyle);
-                leftButton.setFillStyle(offStyle);
-                rightButton.setFillStyle(offStyle);
             };
             
             var moveRatio = tm.display.TextShape({text:"Move Ratio"}.$safe(param))
                 .setPosition(320, 480).addChildTo(this);
             var moveRatioLabel = tm.display.Label(config.moveRatio).setPosition(320, 520).addChildTo(this);
             moveRatioLabel.fontColor = offStyle;
-            moveRatioLabel.fontFamily = game.FONT;
+            moveRatioLabel.fontFamily = "font";
             moveRatioLabel.update = function(){ this.text = ~~(config.moveRatio * 100) + "%"; }
             
             for(var i = 0;i < 20;i++){
@@ -387,7 +417,7 @@ var game = game || {};
                 buttons[i] = tm.display.RectangleShape({
                     width: 24,
                     height: 48,
-                    fillStyle: (i < 10 * config.moveRatio) ? onStyle : offStyle,
+                    fillStyle: offStyle,
                     strokeStyle: "hsl(240, 100%, 75%)",
                     lineWidth: 1
                 }).setInteractive(true).setPosition(i * 30 + 40, 560).addChildTo(this);
@@ -399,7 +429,99 @@ var game = game || {};
                     this.setFillStyle((config.moveRatio < this.id * 0.05 + 0.55) ? offStyle : onStyle);
                 };
             }
+            
+            var resetConfig = game.TextButton({fontSize: 48, text: "Reset Config"})
+                .setPosition(320, 680).addChildTo(this);
+            resetConfig.onpointingend = function(){
+                var scene = tm.app.Scene();
+                tm.display.RectangleShape({
+                    width: 640,
+                    height: 960,
+                    fillStyle: "rgba(0, 0, 0, 0.8)",
+                    strokeStyle: "rgb(0, 0, 0)"
+                }).setPosition(320, 480).addChildTo(scene);
+                var text = tm.display.TextShape({text: "Reset Config?"}.$safe(param))
+                    .setPosition(320, 300).addChildTo(scene);
+                var noButton = game.TextButton({fontSize: 48, text: "N o"})
+                    .setPosition(200, 360).addChildTo(scene);
+                noButton.onpointingend = function(){ this.parent.app.popScene(); };
+                var yesButton = game.TextButton({fontSize: 48, text: "Yes"})
+                    .setPosition(420, 360).addChildTo(scene);
+                yesButton.onpointingend = function(){
+                    config = {}.$extend(game.DEFAULT_CONFIG);
+                    this.parent.app.popScene();
+                };
+                this.parent.app.pushScene(scene);
+            };
         }
+    });
+    
+    game.RecordScene = tm.createClass({
+        superClass: tm.app.Scene,
+        
+        init: function(){
+            this.superInit();
+            tm.display.RectangleShape({
+                width: 640,
+                height: 960,
+                fillStyle: "rgba(0, 0, 0, 0.8)",
+                strokeStyle: "rgb(0, 0, 0)"
+            }).setPosition(320, 480).addChildTo(this);
+
+            var high = game.data.highScore;
+            var param = game.param.DEFAULT_TEXT_SHAPE;
+            
+            var backButton = game.TextButton({fontSize: 64, text: "<"})
+                .setPosition(48, 48).addChildTo(this);
+            backButton.onpointingend = function(){
+                this.parent.app.popScene();
+            };
+
+            tm.display.TextShape({text: "High-Score", fontSize: 64}.$safe(param))
+                .setPosition(320, 140).addChildTo(this);
+                
+            for(var i = 0;i < high.length;i++){
+                tm.display.TextShape({text: "Stage" + (i + 1), fontSize: 48}.$safe(param))
+                    .setPosition(160, i * 80 + 300).addChildTo(this);
+
+                var label = tm.display.Label((!high[i]) ? "0" : high[i])
+                    .setFontFamily("font")
+                    .setFontSize(48)
+                    .setAlign("right")
+                    .setPosition(580, i * 80 + 300)
+                    .setAlpha(0.5)
+                    .addChildTo(this);
+                label.id = i;
+                label.update = function(){
+                    this.text = (!game.data.highScore[this.id]) ? "0" : game.data.highScore[this.id];
+                }
+            }
+            
+            var resetButton = game.TextButton({fontSize: 48, text: "Reset High-Score"})
+                .setPosition(320, 820).addChildTo(this);
+            resetButton.onpointingend = function(){
+                var scene = tm.app.Scene();
+                tm.display.RectangleShape({
+                    width: 640,
+                    height: 960,
+                    fillStyle: "rgba(0, 0, 0, 0.8)",
+                    strokeStyle: "rgb(0, 0, 0)"
+                }).setPosition(320, 480).addChildTo(scene);
+                var text = tm.display.TextShape({text: "Reset High-Score?"}.$safe(param))
+                    .setPosition(320, 300).addChildTo(scene);
+                var noButton = game.TextButton({fontSize: 48, text: "N o"})
+                    .setPosition(200, 360).addChildTo(scene);
+                noButton.onpointingend = function(){ this.parent.app.popScene(); };
+                var yesButton = game.TextButton({fontSize: 48, text: "Yes"})
+                    .setPosition(420, 360).addChildTo(scene);
+                yesButton.onpointingend = function(){
+                    game.data.highScore = game.DEFAULT_DATA.highScore.clone();
+                    game.saveData(game.data);
+                    this.parent.app.popScene();
+                };
+                this.parent.app.pushScene(scene);
+            };
+        },
     });
 
 })();

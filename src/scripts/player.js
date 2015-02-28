@@ -25,7 +25,7 @@ var game = game || {};
             this.initStatus();
         },
         
-        maxSpeed: 8,
+        maxSpeed: 6,
         speed: 0,
         keyX: 0,
         keyY: 0,
@@ -137,7 +137,7 @@ var game = game || {};
                         .call(500, function(){ this.setFrameIndex(3); }.bind(this), 250);
                     var effect = tm.display.Sprite("circle", 32, 32);
                     effect.setFrameIndex(8).setAlpha(0.5).addChildTo(this);
-                    game.TweenAnimation(effect, "out", 250, {scaleX: 50.0, scaleY: 50.0, alpha: 0.1});
+                    game.TweenAnimation(effect, "out", 200, {scaleX: 25.0, scaleY: 25.0, alpha: 0.1});
                 break;
                 case "refrection":
                     this.refrectionField.dispatchEvent(tm.event.Event("changemode"));
@@ -190,7 +190,7 @@ var game = game || {};
             this.vy = -this.speed;
             this.damage = damage;
         },
-        speed: 24,
+        speed: 32,
         boundingtype: "rect",
         hitFlag: false,
 

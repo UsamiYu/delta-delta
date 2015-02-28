@@ -24,7 +24,7 @@ var game = game || {};
 
 (function(){
 
-    game.FONT = "'Audiowide', 'HiraKakuProN-W3'";
+//    game.FONT = "'Audiowide', 'HiraKakuProN-W3'";
 
     game.param = {
         ENEMY_DEFAULT_ATTR: {
@@ -50,18 +50,39 @@ var game = game || {};
         },
         DEFAULT_TEXT_SHAPE: {
             fontSize   : 32,
-            fontFamily : game.FONT,
+            fontFamily : "font",
             fillStyle  : "hsl(240, 100%, 95%)",
             strokeStyle: "hsl(240, 100%, 75%)",
         },
     };
     
-    game.config = {
+    game.DEFAULT_CONFIG = {
         enableDoubleTap : true, // true or false
         modeChangeButton: "right", // "left" or "right" or "none"
         enableBackGround: true, // true or false
         enableEnemyInfo : false, // true or false
         moveRatio       : 1.0,
+    };
+    
+    game.DEFAULT_DATA = {
+        title: "delta-delta",
+        version: "0.2",
+        config: game.DEFAULT_CONFIG,
+        highScore: [0, 0, 0, 0, 0]
+    };
+    
+    game.data = {};
+
+    game.saveData = function(obj){
+        obj = obj || {};
+        localStorage.setItem("gameData", JSON.stringify(obj));
+    };
+    
+    game.loadData = function(){
+        if(!localStorage.getItem("gameData")){
+            game.saveData(game.DEFAULT_DATA);
+        }
+        return JSON.parse(localStorage.getItem("gameData"));
     };
 
     game.GameFieldOut = function(elm){
