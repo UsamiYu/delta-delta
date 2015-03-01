@@ -177,7 +177,7 @@ var game = game || {};
         result: function(){
             if(this.stage !== 0){
                 var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 250);
-                var result = game.Result(this.age, this.missCount, bonus).addChildTo(this);
+                var result = game.Result(this.stage, this.age, this.missCount, bonus).addChildTo(this);
                 this.scoreLabel.score += bonus;
                 if(this.highScore.score < this.scoreLabel.score) this.highScore.score = this.scoreLabel.score;
                 game.data.highScore[this.stage - 1] = this.highScore.score;
@@ -190,7 +190,7 @@ var game = game || {};
                  fontSize: 32,
                  fontFamily: game.FONT,
             });
-            text.setPosition(320, 600);
+            text.setPosition(320, 680);
             
             text.tweener
                 .wait(1000)
@@ -431,7 +431,7 @@ var game = game || {};
             }
             
             var resetConfig = game.TextButton({fontSize: 48, text: "Reset Config"})
-                .setPosition(320, 680).addChildTo(this);
+                .setPosition(320, 820).addChildTo(this);
             resetConfig.onpointingend = function(){
                 var scene = tm.app.Scene();
                 tm.display.RectangleShape({
@@ -477,18 +477,18 @@ var game = game || {};
                 this.parent.app.popScene();
             };
 
-            tm.display.TextShape({text: "High-Score", fontSize: 64}.$safe(param))
+            tm.display.TextShape({text: "High-Score Record", fontSize: 48}.$safe(param))
                 .setPosition(320, 140).addChildTo(this);
                 
             for(var i = 0;i < high.length;i++){
                 tm.display.TextShape({text: "Stage" + (i + 1), fontSize: 48}.$safe(param))
-                    .setPosition(160, i * 80 + 300).addChildTo(this);
+                    .setPosition(160, i * 80 + 280).addChildTo(this);
 
                 var label = tm.display.Label((!high[i]) ? "0" : high[i])
-                    .setFontFamily(game.FONT)
-                    .setFontSize(48)
+                    .setFontFamily(game.NUMBER_FONT)
+                    .setFontSize(64)
                     .setAlign("right")
-                    .setPosition(580, i * 80 + 300)
+                    .setPosition(580, i * 80 + 280)
                     .setAlpha(0.5)
                     .addChildTo(this);
                 label.id = i;

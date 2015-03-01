@@ -11,6 +11,3 @@ tmlib.jsで制作しています。
 
 This software is released under the MIT License, see LICENSE.txt.
 
-
-fontフォルダ配下のフォント"Audiowide"はSIL Open Font Licenseにて公開されております。OFL.txtをご覧ください。
-

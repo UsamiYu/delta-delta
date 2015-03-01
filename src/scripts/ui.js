@@ -10,7 +10,7 @@ var game = game || {};
         superClass: tm.display.Label,
          
         init: function(){
-            this.superInit("SCORE");
+            this.superInit("Score");
             this.setAlign("left");
             this.setFontSize(48);
             this.setFontFamily(game.FONT);
@@ -22,7 +22,7 @@ var game = game || {};
         superClass: tm.display.Label,
          
         init: function(){
-            this.superInit("HIGH-SCORE");
+            this.superInit("High-Score");
             this.setAlign("left");
             this.setFontSize(48);
             this.setFontFamily(game.FONT);
@@ -36,8 +36,8 @@ var game = game || {};
         init: function(){
             this.superInit("0");
             this.setAlign("right");
-            this.setFontSize(48);
-            this.setFontFamily(game.FONT);             
+            this.setFontSize(64);
+            this.setFontFamily(game.NUMBER_FONT);             
             this.setAlpha(0.5);
             this.score = 0;
             this.v = 600 / GAME_FPS; //スコア係数
@@ -53,8 +53,8 @@ var game = game || {};
         init: function(score){
             this.superInit(score);
             this.setAlign("right");
-            this.setFontSize(48);
-            this.setFontFamily(game.FONT);
+            this.setFontSize(64);
+            this.setFontFamily(game.NUMBER_FONT);
             this.setAlpha(0.5);
             this.score = parseInt(score);
             this.v = 600 / GAME_FPS; //スコア係数
@@ -295,7 +295,7 @@ var game = game || {};
     game.Result = tm.createClass({
         superClass: tm.display.CanvasElement,
         
-        init: function(age, miss, bonus){
+        init: function(stage, age, miss, bonus){
             this.superInit();
 
             var t = age / GAME_FPS;
@@ -303,32 +303,35 @@ var game = game || {};
             var mm = Math.floor(t / 60);
             var ss = Math.floor(t) - mm * 60;
             
-            this.addLabel("RESULT", "center", 48, 320, 160);
+            this.addLabel("Stage " + stage + " Clear", "center", game.FONT, 48, 320, 190);
             
-            this.addLabel("TIME", "left", 32, 120, 280);
+            this.addLabel("Result", "center", game.FONT, 48, 320, 280);
+            
+            this.addLabel("Time", "left", game.FONT, 48, 120, 360);
 
             
             this.addLabel(
                 ("00" + mm).substr(-2) + ":" + ("00" + ss).substr(-2) + "." + ("00" + ms).substr(-2),
                 "right",
-                32,
+                game.NUMBER_FONT,
+                48,
                 520,
-                280);
+                360);
 
-            this.addLabel("MISS", "left", 32, 120, 340);
+            this.addLabel("Miss", "left", game.FONT, 48, 120, 440);
             
-            this.addLabel(miss + "", "right", 32, 520, 340);
+            this.addLabel(miss + "", "right", game.NUMBER_FONT, 48, 520, 440);
             
-            this.addLabel("BONUS", "left", 32, 120, 480);
+            this.addLabel("Bonus", "left", game.FONT, 48, 120, 540);
             
-            this.addLabel(bonus + "", "right", 32, 520, 480);
+            this.addLabel(bonus + "", "right", game.NUMBER_FONT, 48, 520, 540);
         },
-        addLabel: function(text, align, fontSize, x, y){
+        addLabel: function(text, align, font, fontSize, x, y){
             var label = tm.display.Label(text);
             label.setAlign(align)
                  .setFontSize(fontSize)
                  .setAlpha(0.7)
-                 .setFontFamily(game.FONT)
+                 .setFontFamily(font)
                  .setPosition(x, y)
                  .addChildTo(this);
         }

@@ -24,7 +24,8 @@ var game = game || {};
 
 (function(){
 
-    game.FONT = "'Audiowide', 'HiraKakuProN-W3'";
+    game.FONT = "'Audiowide', 'HiraKakuProN-W3', 'monospace'";
+    game.NUMBER_FONT = "'Inconsolata', 'monospace'";
 
     game.param = {
         ENEMY_DEFAULT_ATTR: {
