@@ -242,6 +242,7 @@ var game = game || {};
             },
             "stage1_01": function(obj){
                 boss.hp = 1800;
+                zakoT.hp = 9;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -268,15 +269,15 @@ var game = game || {};
                         ])
                     ]),
                     "zakomove": d.action([
-                        d.wait(30),
-                        act["change_direction"](0, "aim", 5),
-                        act["change_speed"](5, 15),
-                        act["change_direction"](0, "aim", 10)
+                        act["change_speed"](6, 240, 30),
+                        d.repeat(2, [
+                            act["change_direction"](0, "aim", 45),
+                        ])
                     ])
                 };    
             },
             "stage1_02": function(obj){
-                boss.hp = 500;
+                boss.hp = 600;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -317,10 +318,10 @@ var game = game || {};
                         d.wait(15),
                         d.changeDirection(d.direction(180, "aim"), 1),
                         d.changeSpeed(d.speed(2), 1),
-                        d.repeat(12, [
+                        d.repeat(15, [
                             f["normal"]("$rand * 120 + 120", "relative", 9, longBullet, d.actionRef("change_speed" , 2, 60)),
                             f["normal"]("$rand * 120 + 120", "relative", 8, middleBullet, d.actionRef("change_speed", 2, 45)),
-                            f["normal"]("$rand * 120 + 120", "relative", 7, largeBullet, d.actionRef("change_speed", 2, 30)),
+                            f["normal"]("$rand * 120 + 120", "relative", 7, {}, d.actionRef("change_speed", 2, 30)),
                             d.wait(2)
                         ]),
                     ]),

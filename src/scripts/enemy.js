@@ -55,7 +55,10 @@ var game = game || {};
         onadded: function(){
             this.visible = true;
             this.scene = this.getRoot().app.currentScene;
-            if(this.type === "boss") this.hpGauge.addChildTo(this.scene);
+            if(this.type === "boss"){
+                this.hpGauge.addChildTo(this.scene);
+                this.scene.timeBonus += this.maxHp;
+            }
             if(this.danmaku !== "") game.setDanmaku(this, this.scene.player, this.scene);
             if(this.addedAnimation !== ""){
                 switch(this.addedAnimation){

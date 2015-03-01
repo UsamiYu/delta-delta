@@ -10,26 +10,36 @@ tmlib.jsで制作しています。
 
 http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨)
 
+
 このソフトウェアはMIT Licenseにて公開しております。LICENSE.txtをご覧ください。
 
 This software is released under the MIT License, see LICENSE.txt.
+
+
+fontsディレクトリ内のフォントファイルの利用については、各フォルダのtxtファイルをご覧ください。
+
+   * Audiowide
+    * OFL.txt
+
+   *Inconsolata
+    * OFL.txt
 
 
 ## 操作方法
 
   * タッチデバイス
   
-    スライド：自機移動
-    ダブルタップor「C」マークをタッチ : モード切り替え
+    * スライド：自機移動
+    * ダブルタップor「C」マークをタッチ : モード切り替え
 
   * PC
   
-    マウスドラッグ : 自機移動
-    Zキー : モード切り替え
+    * マウスドラッグ : 自機移動
+    * Zキー : モード切り替え
 
-    【非推奨操作】
-    カーソルキー : 自機移動
-    Xキー : 低速移動
+  * 【非推奨操作】
+    * カーソルキー : 自機移動
+    * Xキー : 低速移動
 
 
 ## 目的
