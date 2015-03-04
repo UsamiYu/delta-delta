@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "utf-8" />
+    <title>delta-delta Manual</title>
+    <script type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type = "text/javascript" src = "lib/marked.js"></script>
+</head>
+
+<body>
+    <div id = "content"></div>
+    <script>
+        var content = $("#content");
+
+        $(document).ready(function(){
+            $.ajax({
+                url: "./README.MD"
+            }).success(function(data){
+                content.append(marked(data));
+            }).error(function(data){
+                content.append("faild to load.");
+            });
+        });
+    </script>
+</body>
+</html>

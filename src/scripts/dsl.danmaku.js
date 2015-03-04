@@ -832,11 +832,11 @@ var game = game || {};
                             d.repeat(3, [
                                 f["offset"]("$rand * 320 + 160", 32, 180, "absolute", 16, zakoP, d.action([
                                     act["change_speed"](0, "$loop.index * 15 + 30"),
-                                    d.repeat(30, [
+                                    d.repeat(10, [
                                         d.repeat(2, [
                                             f["normal"](180, "sequence", 28, barrier, d.actionRef("barrier")),
                                         ]),
-                                        d.wait(15),
+                                        d.wait(30),
                                     ]),
                                     d.vanish(),
                                 ])),
@@ -853,7 +853,7 @@ var game = game || {};
                         d.wait(1),
                         act["change_speed"](0, 1),
                         f["normal"](0, "relative", 26, barrier, d.actionRef("barrier")),
-                        d.wait(13),
+                        d.wait(27),
                         d.vanish(),
                     ])
                 };
@@ -949,9 +949,12 @@ var game = game || {};
                           (obj.rank > 6) ? obj.rank - (~~(obj.rank - 4) * 0.5) : obj.rank;
                 return {
                     "top": d.action([
-                        f["normal"]("$rand * 160 + 10", "aim", 6, {}, act["change_speed"](2, 8)),
+                        d.bindVar("r", "$rand * 140 + 30"),
+                        f["normal"]("$r", "aim", 6, {}, act["change_speed"](2, 8)),
                         d.repeat(way - 1, [
-                            f["normal"]("$rand * 160 + 10", "sequence", 6, {}, act["change_speed"](2, "$loop.index * 2 + 9")),
+                            f["normal"]("$r", "sequence", 6, {},
+                                act["change_speed"](2, "$loop.index * 2 + 10")
+                            ),
                         ]),
                         d.notify("destroy"),
                     ])
