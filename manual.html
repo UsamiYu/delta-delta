@@ -25,15 +25,14 @@
 </head>
 
 <body>
-<p><button>close</button></p>
+<p><button>Back</button></p>
     <div id = "content"></div>
     <script>
         var content = $("#content");
         var button = $("button");
 
         button.click(function(){
-            window.close();
-            return false;
+            history.back();
         });
 
         $(document).ready(function(){
