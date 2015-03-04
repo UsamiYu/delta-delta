@@ -53,6 +53,7 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 <img src="./src/images/screenshot3.png" />
 
 
+   モードチェンジボタン（もしくはダブルタップ）操作で、モードを切り替えることが出来ます。
    ショットモードからリフレクションモードに切り替えるためには、エネルギーが50%以上必要です。
    リフレクションモード中にショットモードへ切り替えはいつでも行うことが出来ます。
 
@@ -82,11 +83,11 @@ This software is released under the MIT License, see LICENSE.txt.
 
 libディレクトリ以下のスクリプトファイルは、各ページにてご確認ください。
 
-    * bulletml.min.js
-     * https://github.com/daishihmr/bulletml.js
+   * bulletml.min.js
+    * https://github.com/daishihmr/bulletml.js
 
-    * marked.js
-     * https://github.com/chjj/marked
+   * marked.js
+    * https://github.com/chjj/marked
 
 
 fontsディレクトリ以下のフォントファイルの利用については、各フォルダのtxtファイルをご覧ください。
