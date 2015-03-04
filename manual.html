@@ -10,18 +10,31 @@
     <script type = "text/javascript" src = "lib/marked.js"></script>
 
     <style>
-        p.color{
-            color: #E5E5FF
-            background-color: #101010
+        body {
+            color: #E5E5FF;
+            text-shadow: 1px 1px 2px #9999FF;
+            shadow-offset: 1;
+            background-color: #202020;
+        }
+        button {
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
-    <p class = "color">
+<p><button>close</button></p>
     <div id = "content"></div>
     <script>
         var content = $("#content");
+        var button = $("button");
+
+        button.click(function(){
+            window.close();
+            return false;
+        });
 
         $(document).ready(function(){
             $.ajax({
@@ -32,7 +45,7 @@
                 content.append("faild to load.");
             });
         });
+
     </script>
-    </p>
 </body>
 </html>

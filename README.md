@@ -1,10 +1,14 @@
 # delta-delta
 ## tmlib.js game shooting
 
+
+## 紹介
+
 『弾幕、どんとこい！』
 
 Δ・Δ（デルタ・デルタ）はタッチデバイスで遊ぶことを想定した『簡単爽快シューティング』です。
-tmlib.jsで制作しています。
+
+tmlib.js（https://github.com/phi-jp/tmlib.js）で制作しています。
 
 <img src="./src/images/screenshot1.png" />
 
@@ -26,11 +30,14 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
   * （非推奨） 
     * カーソルキー : 自機移動
     * Xキー : 低速移動
-
+    
 
 ## 目的
 
    敵の弾や本体に当たらずに、コア（六角形のオブジェクト）を出来るだけ早く破壊してください。
+   
+   
+    <img src="./src/images/screenshot2.png" />
 
 
 ## ショットモードとリフレクションモードについて
@@ -42,6 +49,10 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 ## モード切り替えについて
 
+   
+    <img src="./src/images/screenshot3.png" />
+
+
    ショットモードからリフレクションモードに切り替えるためには、エネルギーが50%以上必要です。
    リフレクションモード中にショットモードへ切り替えはいつでも行うことが出来ます。
 
@@ -52,7 +63,16 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    ショットモード時に敵弾が自機の近くにある場合、通常より多くエネルギーが増加します。
    リフレクションモード時にエネルギーが0になると、リフレクションモードから自動的にショットモードに戻ります。
 
+## オブジェクトについて
 
+
+    <img src="./src/images/screenshot4.png" />
+
+
+   オブジェクトを破壊すると、弾をばら撒きます。これを利用して、弾をたくさん反射させましょう。
+   ただし、オブジェクトがバリアに激突すると、エネルギーが大幅に減少します。
+   
+   
 ## ライセンスについて
 
 srcディレクトリ以下のスクリプトファイルはMIT Licenseにて公開しております。LICENSE.txtをご覧ください。

@@ -550,7 +550,5 @@ var game = game || {};
         onno: function(){
             this.app.popScene();
         },
-
     });
-
 })();

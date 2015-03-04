@@ -151,7 +151,7 @@ var game = game || {};
             var text = tm.display.TextShape({
                 text: "C",
                 fontSize: 48,
-//                fontFamily: "Inconsolata",
+                fontFamily: game.NUMBER_FONT,
             }).addChildTo(this);
         },
         onpointingstart: function(){
