@@ -14,7 +14,7 @@
 
         $(document).ready(function(){
             $.ajax({
-                url: "./README.MD"
+                url: "./README.md"
             }).success(function(data){
                 content.append(marked(data));
             }).error(function(data){
