@@ -8,14 +8,11 @@
 
 Δ・Δ（デルタ・デルタ）はタッチデバイスで遊ぶことを想定した『簡単爽快シューティング』です。
 
-tmlib.js（ https://github.com/phi-jp/tmlib.js ）で制作しています。
+[tmlib.js](https://github.com/phi-jp/tmlib.js)で制作しています。
 
 <img src="./src/images/screenshot1.png" />
 
 http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨)
-
-
-====
 
 
 ## 操作方法
@@ -33,9 +30,6 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
   * （非推奨） 
     * カーソルキー : 自機移動
     * Xキー : 低速移動
-    
-
-====
 
 
 ## 目的
@@ -46,17 +40,14 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 <img src="./src/images/screenshot2.png" />
 
 
-====
-
 
 ## ショットモードとリフレクションモードについて
 
    初期状態はショットモードで、自動的にショットが発射されます。
+   
    モードを切り替えてリフレクションモードになると、敵の弾を跳ね返すバリアが生成されます。
+   
    跳ね返した弾は敵にダメージを与えることが出来ます。
-
-
-====
 
 
 ## モード切り替えについて
@@ -66,21 +57,20 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 
    モードチェンジボタン（もしくはダブルタップ）操作で、モードを切り替えることが出来ます。
+   
    ショットモードからリフレクションモードに切り替えるためには、エネルギーが50%以上必要です。
+   
    リフレクションモード中にショットモードへ切り替えはいつでも行うことが出来ます。
-
-
-====
 
 
 ## エネルギーについて
 
+
    エネルギーはショットモード時は少しずつ増加して、リフレクションモード時は少しずつ減少します。
+   
    ショットモード時に敵弾が自機の近くにある場合、通常より多くエネルギーが増加します。
+   
    リフレクションモード時にエネルギーが0になると、リフレクションモードから自動的にショットモードに戻ります。
-
-
-====
 
 
 ## オブジェクトについて
@@ -90,20 +80,15 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 
    オブジェクトを破壊すると、弾をばら撒きます。これを利用して、弾をたくさん反射させましょう。
-   ただし、オブジェクトがバリアに激突すると、エネルギーが大幅に減少します。
    
-
-====
+   ただし、オブジェクトがバリアに激突すると、エネルギーが大幅に減少します。
 
 
 ## 感謝
 
-   * phi様          （tmlib.js: https://github.com/phi-jp/tmlib.js ）
-   * daishihmr様    （bulletml.js: https://github.com/daishihmr/bulletml.js ）
-   * chjj様         （marked.js: https://github.com/chjj/marked ）
-
-
-====
+   * phi様          [tmlib.js](https://github.com/phi-jp/tmlib.js)
+   * daishihmr様    [bulletml.js](https://github.com/daishihmr/bulletml.js)
+   * chjj様         [marked.js](https://github.com/chjj/marked)
 
 
 ## ライセンスについて
