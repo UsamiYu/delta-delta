@@ -1,5 +1,5 @@
 # delta-delta
-## tmlib.js game shooting
+### tmlib.js game shooting
 
 
 ## 紹介
@@ -8,7 +8,7 @@
 
 Δ・Δ（デルタ・デルタ）はタッチデバイスで遊ぶことを想定した『簡単爽快シューティング』です。
 
-tmlib.js（https://github.com/phi-jp/tmlib.js）で制作しています。
+tmlib.js（ https://github.com/phi-jp/tmlib.js ）で制作しています。
 
 <img src="./src/images/screenshot1.png" />
 
@@ -73,6 +73,13 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    オブジェクトを破壊すると、弾をばら撒きます。これを利用して、弾をたくさん反射させましょう。
    ただし、オブジェクトがバリアに激突すると、エネルギーが大幅に減少します。
    
+
+## 感謝
+
+   * phi様          （tmlib.js: https://github.com/phi-jp/tmlib.js ）
+   * daishihmr様    （bulletml.js: https://github.com/daishihmr/bulletml.js ）
+   * chjj様         （marked.js: https://github.com/chjj/marked ）
+
    
 ## ライセンスについて
 
