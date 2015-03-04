@@ -16,6 +16,13 @@ tm.main(function() {
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         assets: {
+<<<<<<< HEAD
+=======
+/*            "circle"   : "./src/images/circleImage2.png",
+            "triangle" : "./src/images/triangleImage.png",
+            "rectangle": "./src/images/rectangleImage.png",
+            "polygon"  : "./src/images/polygonImage.png", */
+>>>>>>> master
             "title"    : "./src/images/title.png",
             "image"    : "./src/images/spritesheet.png",
        },

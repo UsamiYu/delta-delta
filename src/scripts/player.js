@@ -9,8 +9,8 @@ var game = game || {};
         superClass: tm.display.Sprite,
 
         init: function(){
-            this.superInit("triangle", 64, 64);
-            this.setFrameIndex(5);
+            this.superInit("image", 64, 64);
+            this.setFrameIndex(22);
 
             this._isDestroy = false;
             this._onShot = false;
@@ -133,18 +133,18 @@ var game = game || {};
                     this.setOnShot(false);
                     this.mode = "refrection";
                     this.timeline.clear()
-                        .call(  0, function(){ this.setFrameIndex(4); }.bind(this), 250)
-                        .call(500, function(){ this.setFrameIndex(3); }.bind(this), 250);
-                    var effect = tm.display.Sprite("circle", 32, 32);
-                    effect.setFrameIndex(8).setAlpha(0.5).addChildTo(this);
-                    game.TweenAnimation(effect, "out", 200, {scaleX: 25.0, scaleY: 25.0, alpha: 0.1});
+                        .call(  0, function(){ this.setFrameIndex(21); }.bind(this), 250)
+                        .call(500, function(){ this.setFrameIndex(20); }.bind(this), 250);
+                    var effect = tm.display.Sprite("image", 64, 64);
+                    effect.setFrameIndex(10).setAlpha(0.5).addChildTo(this);
+                    game.TweenAnimation(effect, "out", 200, {scaleX: 12.0, scaleY: 12.0, alpha: 0.1});
                 break;
                 case "refrection":
                     this.refrectionField.dispatchEvent(tm.event.Event("changemode"));
                     this.mode = "shot";
                     this.timeline.clear()
-                        .call(  0, function(){ this.setFrameIndex(4); }.bind(this), 250)
-                        .call(500, function(){ this.setFrameIndex(5); this.setOnShot(true); }.bind(this), 250);
+                        .call(  0, function(){ this.setFrameIndex(21); }.bind(this), 250)
+                        .call(500, function(){ this.setFrameIndex(22); this.setOnShot(true); }.bind(this), 250);
                 break;
                 default:
                 break;
@@ -163,8 +163,8 @@ var game = game || {};
         superClass: tm.display.Sprite,
         
         init: function(){
-            this.superInit("circle", 32, 32);
-            this.setFrameIndex(8);
+            this.superInit("image", 32, 32);
+            this.setFrameIndex(20);
             this.setAlpha(0.5);
         },
         onchangemode: function(){
@@ -180,7 +180,7 @@ var game = game || {};
         superClass: tm.display.Sprite,
         
         init: function(x, y, damage){
-            this.superInit("circle", 48, 24);
+            this.superInit("image", 48, 24);
             this.setFrameIndex(2);
 
             this.x = x;
@@ -240,7 +240,7 @@ var game = game || {};
         superClass: tm.display.Sprite,
         
         init: function(x, y, vx, vy, obj){
-            this.superInit("circle", obj.width, obj.height);
+            this.superInit("image", obj.width, obj.height);
             this.setFrameIndex(obj.children[0].frameIndex + 1);
             this.setPosition(x, y);
             

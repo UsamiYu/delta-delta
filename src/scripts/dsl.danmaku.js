@@ -17,17 +17,18 @@ var game = game || {};
         param = {rank: 0}.$extend(param);
         var zakoT = {
             type: "enemy",
-            image: "triangle",
+            //image: "triangle",
+            frameIndex: 5,
             hp: 12,
             isSyncRotation: true,
         };
 
         var missile = {
             type: "enemy",
-            image: "triangle",
+            //image: "triangle",
             width: 48,
             height: 24,
-            frameIndex: 2,
+            frameIndex: 3,
             boundingType: "rect",
             hp: 3,
             isSyncRotation: true,
@@ -35,61 +36,63 @@ var game = game || {};
 
         var zakoR = {
             type: "enemy",
-            image: "rectangle",
+            //image: "rectangle",
+            frameIndex: 16,
             boundingType: "rect",
             hp: 15
         };
 
         var barrier = {
             type: "enemy",
-            image: "rectangle",
-            frameIndex: 2,
+            //image: "rectangle",
+            frameIndex: 17,
             boundingType: "rect",
             hp: 100,
         };
 
         var middleR = {
             type: "enemy",
-            image: "rectangle",
+            //image: "rectangle",
             width: 64,
             height: 64,
-            frameIndex: 4,
+            frameIndex: 17,
             boundingType: "rect",
             hp: 36,
         };
 
         var largeR = {
             type: "enemy",
-            image: "rectangle",
+            //image: "rectangle",
             width: 64,
             height: 96,
-            frameIndex: 6,
+            frameIndex: 7,
             boundingtype: "rect",
             hp: 45,
         };
 
         var zakoP = {
             type: "enemy",
-            image: "polygon",
+            //image: "polygon",
+            frameIndex: 7,
             hp: 18,
             isSyncRotation: true,
         };
 
         var boss = {
             type: "boss",
-            image: "polygon",
+            //image: "polygon",
             width: 96,
             height: 96,
-            frameIndex: 1,
+            frameIndex: 10,
             hp: 2000
         };
         
         var dummy = {
             type: "enemy",
-            image: "polygon",
+            //image: "polygon",
             width: 96,
             height: 96,
-            frameIndex: 1,
+            frameIndex: 10,
             hp: 100
         };
 
@@ -103,13 +106,13 @@ var game = game || {};
         var middleBullet = {
             width     : 32,
             height    : 32,
-            frameIndex: 6,
+            frameIndex: 18,
         };
         
         var largeBullet = {
             width     : 64,
             height    : 64,
-            frameIndex: 3,
+            frameIndex: 9,
         };
         
         var invisible = {

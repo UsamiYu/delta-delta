@@ -44,7 +44,10 @@ var game = game || {};
             //ゲーム描画領域より上に描画するもの
             var frame = game.GameFieldFrame().setPosition(320,480).addChildTo(this);
             var titleSprite = tm.display.Sprite("title", 300, 120).setPosition(320, 840).addChildTo(this);
-            var title = tm.display.TextShape({fontSize: 24, text: "delta-delta Ver." + game.data.version}.$safe(game.param.DEFAULT_TEXT_SHAPE));
+            var title = tm.display.TextShape({
+                fontSize: 24,
+                text: "delta-delta Ver." + game.data.version
+            }.$safe(game.param.DEFAULT_TEXT_SHAPE));
             title.autoRender = false;
             title.setPosition(480, 930).addChildTo(this);
                 
@@ -162,7 +165,7 @@ var game = game || {};
             for(var i = 0, l = enemies.length;i < l;i++){
                 enemies[i]._isHitTestEnable = false;
                 enemies[i].stopDanmaku();
-                game.destroyAnimation(enemies[i]);
+                game.TweenAnimation(enemies[i], "out", 250, {scaleX: 8.0, scaleY: 0.0});
             }
             this.bulletLayer.removeChildren();
 
@@ -261,7 +264,7 @@ var game = game || {};
                 .setPosition(320, 860).addChildTo(this);
             manual.onpointingend = function(){
                 this.setScale(1);
-                window.open("manual.html", "_blank");
+                window.location.href = "./manual.html";
             };
                 
             
