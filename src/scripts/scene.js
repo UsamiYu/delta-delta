@@ -257,6 +257,13 @@ var game = game || {};
                 this.setScale(1);
                 this.parent.app.pushScene(game.ConfigScene());
             };
+            var manual = game.TextButton({fontSize: 64, text: "Manual"})
+                .setPosition(320, 860).addChildTo(this);
+            manual.onpointingend = function(){
+                this.setScale(1);
+                window.open("manual.html", "_blank");
+            };
+                
             
             this.onpointingend = function(){};
         },

@@ -1,5 +1,5 @@
 # delta-delta
-##tmlib.js game shooting
+## tmlib.js game shooting
 
 『弾幕、どんとこい！』
 
@@ -9,20 +9,6 @@ tmlib.jsで制作しています。
 <img src="./src/images/screenshot1.png" />
 
 http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨)
-
-
-このソフトウェアはMIT Licenseにて公開しております。LICENSE.txtをご覧ください。
-
-This software is released under the MIT License, see LICENSE.txt.
-
-
-fontsディレクトリ内のフォントファイルの利用については、各フォルダのtxtファイルをご覧ください。
-
-   * Audiowide
-    * OFL.txt
-
-   *Inconsolata
-    * OFL.txt
 
 
 ## 操作方法
@@ -35,16 +21,16 @@ fontsディレクトリ内のフォントファイルの利用については、
   * PC
   
     * マウスドラッグ : 自機移動
-    * Zキー : モード切り替え
+    * ダブルクリック or Zキー : モード切り替え
 
-  * 【非推奨操作】
+  * （非推奨） 
     * カーソルキー : 自機移動
     * Xキー : 低速移動
 
 
 ## 目的
 
-   コア（六角形のオブジェクト）を出来るだけ早く破壊してください。
+   敵の弾や本体に当たらずに、コア（六角形のオブジェクト）を出来るだけ早く破壊してください。
 
 
 ## ショットモードとリフレクションモードについて
@@ -54,7 +40,7 @@ fontsディレクトリ内のフォントファイルの利用については、
    跳ね返した弾は敵にダメージを与えることが出来ます。
 
 
-## モードを切り替えについて
+## モード切り替えについて
 
    ショットモードからリフレクションモードに切り替えるためには、エネルギーが50%以上必要です。
    リフレクションモード中にショットモードへ切り替えはいつでも行うことが出来ます。
@@ -65,3 +51,29 @@ fontsディレクトリ内のフォントファイルの利用については、
    エネルギーはショットモード時は少しずつ増加して、リフレクションモード時は少しずつ減少します。
    ショットモード時に敵弾が自機の近くにある場合、通常より多くエネルギーが増加します。
    リフレクションモード時にエネルギーが0になると、リフレクションモードから自動的にショットモードに戻ります。
+
+
+## ライセンスについて
+
+srcディレクトリ以下のスクリプトファイルはMIT Licenseにて公開しております。LICENSE.txtをご覧ください。
+
+This software is released under the MIT License, see LICENSE.txt.
+
+
+libディレクトリ以下のスクリプトファイルは、各ページにてご確認ください。
+
+    * bulletml.min.js
+     * https://github.com/daishihmr/bulletml.js
+
+    * marked.js
+     * https://github.com/chjj/marked
+
+
+fontsディレクトリ以下のフォントファイルの利用については、各フォルダのtxtファイルをご覧ください。
+
+   * Audiowide
+    * OFL.txt
+
+   *Inconsolata
+    * OFL.txt
+
