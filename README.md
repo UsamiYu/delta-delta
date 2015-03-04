@@ -37,7 +37,7 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    敵の弾や本体に当たらずに、コア（六角形のオブジェクト）を出来るだけ早く破壊してください。
    
    
-    <img src="./src/images/screenshot2.png" />
+<img src="./src/images/screenshot2.png" />
 
 
 ## ショットモードとリフレクションモードについて
@@ -50,7 +50,7 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 ## モード切り替えについて
 
    
-    <img src="./src/images/screenshot3.png" />
+<img src="./src/images/screenshot3.png" />
 
 
    ショットモードからリフレクションモードに切り替えるためには、エネルギーが50%以上必要です。
@@ -66,7 +66,7 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 ## オブジェクトについて
 
 
-    <img src="./src/images/screenshot4.png" />
+<img src="./src/images/screenshot4.png" />
 
 
    オブジェクトを破壊すると、弾をばら撒きます。これを利用して、弾をたくさん反射させましょう。
