@@ -16,11 +16,12 @@ tm.main(function() {
         width: SCREEN_WIDTH,
         height: SCREEN_HEIGHT,
         assets: {
-            "circle"   : "./src/images/circleImage2.png",
+/*            "circle"   : "./src/images/circleImage2.png",
             "triangle" : "./src/images/triangleImage.png",
             "rectangle": "./src/images/rectangleImage.png",
-            "polygon"  : "./src/images/polygonImage.png",
+            "polygon"  : "./src/images/polygonImage.png", */
             "title"    : "./src/images/title.png",
+            "image"    : "./src/images/spritesheet.png",
        },
         nextScene: game.TitleScene,
     });

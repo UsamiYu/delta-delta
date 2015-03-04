@@ -165,7 +165,7 @@ var game = game || {};
             for(var i = 0, l = enemies.length;i < l;i++){
                 enemies[i]._isHitTestEnable = false;
                 enemies[i].stopDanmaku();
-                game.destroyAnimation(enemies[i]);
+                game.TweenAnimation(enemies[i], "out", 250, {scaleX: 8.0, scaleY: 0.0});
             }
             this.bulletLayer.removeChildren();
 

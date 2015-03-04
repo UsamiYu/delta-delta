@@ -143,8 +143,8 @@ var game = game || {};
         superClass: tm.display.Sprite,
         
         init: function(){
-            this.superInit("polygon", 96, 96);
-            this.setFrameIndex(2);
+            this.superInit("image", 96, 96);
+            this.setFrameIndex(11);
             
             this.setInteractive(true);
             this.boundingType = "circle";

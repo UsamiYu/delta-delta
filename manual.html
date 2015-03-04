@@ -13,7 +13,6 @@
         body {
             color: #E5E5FF;
             text-shadow: 1px 1px 2px #9999FF;
-            shadow-offset: 1;
             background-color: #202020;
         }
         button {
@@ -22,12 +21,23 @@
             cursor: pointer;
         }
         a {
+            color: #E5E5FF;
             text-shadow: none
+        }
+        a:visited {
+            color: #9999ff;
+        }
+        img {
+            max-width: 480px;
+            min-width: 240px;
+            width: 90%;
+            height: auto;
         }
     </style>
 </head>
 
 <body>
+
 <p><button>Back</button></p>
     <div id = "content"></div>
     <script>
