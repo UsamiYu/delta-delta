@@ -34,7 +34,7 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 ## 目的
 
-   敵の弾や本体に当たらずに、コア（六角形のオブジェクト）を出来るだけ早く破壊してください。
+   弾（bullet）や敵（Object）に当たらずに、コア（core）を出来るだけ早く破壊してください。
    
    
 <img src="./src/images/screenshot2.png" />
@@ -76,7 +76,7 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    
 ## ライセンスについて
 
-srcディレクトリ以下のスクリプトファイルはMIT Licenseにて公開しております。LICENSE.txtをご覧ください。
+src/scriptsディレクトリ以下のスクリプトファイルはMIT Licenseにて公開しております。LICENSE.txtをご覧ください。
 
 This software is released under the MIT License, see LICENSE.txt.
 
