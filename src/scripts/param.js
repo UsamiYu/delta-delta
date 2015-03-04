@@ -32,7 +32,6 @@ var game = game || {};
             width         : 48,
             height        : 48,
             hp            : 2000,
-            image         : "",
             frameIndex    : 0,
             boundingType  : "circle",
             type          : "enemy",

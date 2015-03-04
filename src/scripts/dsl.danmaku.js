@@ -17,7 +17,6 @@ var game = game || {};
         param = {rank: 0}.$extend(param);
         var zakoT = {
             type: "enemy",
-            //image: "triangle",
             frameIndex: 5,
             hp: 12,
             isSyncRotation: true,
@@ -25,7 +24,6 @@ var game = game || {};
 
         var missile = {
             type: "enemy",
-            //image: "triangle",
             width: 48,
             height: 24,
             frameIndex: 3,
@@ -36,7 +34,6 @@ var game = game || {};
 
         var zakoR = {
             type: "enemy",
-            //image: "rectangle",
             frameIndex: 16,
             boundingType: "rect",
             hp: 15
@@ -44,7 +41,6 @@ var game = game || {};
 
         var barrier = {
             type: "enemy",
-            //image: "rectangle",
             frameIndex: 17,
             boundingType: "rect",
             hp: 100,
@@ -52,17 +48,15 @@ var game = game || {};
 
         var middleR = {
             type: "enemy",
-            //image: "rectangle",
             width: 64,
             height: 64,
-            frameIndex: 17,
+            frameIndex: 18,
             boundingType: "rect",
             hp: 36,
         };
 
         var largeR = {
             type: "enemy",
-            //image: "rectangle",
             width: 64,
             height: 96,
             frameIndex: 7,
@@ -72,7 +66,6 @@ var game = game || {};
 
         var zakoP = {
             type: "enemy",
-            //image: "polygon",
             frameIndex: 7,
             hp: 18,
             isSyncRotation: true,
@@ -80,7 +73,6 @@ var game = game || {};
 
         var boss = {
             type: "boss",
-            //image: "polygon",
             width: 96,
             height: 96,
             frameIndex: 10,
@@ -89,7 +81,6 @@ var game = game || {};
         
         var dummy = {
             type: "enemy",
-            //image: "polygon",
             width: 96,
             height: 96,
             frameIndex: 10,
@@ -952,7 +943,7 @@ var game = game || {};
                           (obj.rank > 6) ? obj.rank - (~~(obj.rank - 4) * 0.5) : obj.rank;
                 return {
                     "top": d.action([
-                        d.bindVar("r", "$rand * 140 + 30"),
+                        d.bindVar("r", "$rand * 100 + 40"),
                         f["normal"]("$r", "aim", 6, {}, act["change_speed"](2, 8)),
                         d.repeat(way - 1, [
                             f["normal"]("$r", "sequence", 6, {},
