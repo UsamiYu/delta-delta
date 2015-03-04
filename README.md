@@ -15,6 +15,8 @@
 http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨)
 
 
+
+
 ## 操作方法
 
   * タッチデバイス
@@ -32,12 +34,15 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
     * Xキー : 低速移動
 
 
+
+
 ## 目的
 
    弾（bullet）や敵（Object）に当たらずに、コア（core）を出来るだけ早く破壊してください。
    
    
 <img src="./src/images/screenshot2.png" />
+
 
 
 
@@ -48,6 +53,8 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    モードを切り替えてリフレクションモードになると、敵の弾を跳ね返すバリアが生成されます。
    
    跳ね返した弾は敵にダメージを与えることが出来ます。
+
+
 
 
 ## モード切り替えについて
@@ -63,6 +70,8 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    リフレクションモード中にショットモードへ切り替えはいつでも行うことが出来ます。
 
 
+
+
 ## エネルギーについて
 
 
@@ -71,6 +80,8 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    ショットモード時に敵弾が自機の近くにある場合、通常より多くエネルギーが増加します。
    
    リフレクションモード時にエネルギーが0になると、リフレクションモードから自動的にショットモードに戻ります。
+
+
 
 
 ## オブジェクトについて
@@ -84,6 +95,8 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    ただし、オブジェクトがバリアに激突すると、エネルギーが大幅に減少します。
 
 
+
+
 ## 感謝
 
    * phi様          [tmlib.js](https://github.com/phi-jp/tmlib.js)
@@ -91,7 +104,10 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
    * chjj様         [marked.js](https://github.com/chjj/marked)
 
 
+
+
 ## ライセンスについて
+
 
 src/scriptsディレクトリ以下のスクリプトファイルはMIT Licenseにて公開しております。LICENSE.txtをご覧ください。
 
