@@ -165,6 +165,29 @@ var game = game || {};
         }
     });
     
+    game.PauseButton = tm.createClass({
+        superClass: tm.display.Shape,
+        
+        init: function(){
+            this.superInit({width: 64, height: 64, fillStyle: "white"});
+            
+            this.autoRender = false;
+            this.render();
+            this.setInteractive(true);
+        },
+        _render: function(){
+            this.canvas.fillRect(5, 2, 24, 60);
+            this.canvas.fillRect(35, 2, 24, 60);
+        },
+        onpointingstart: function(){
+            this.setScale(0.9);
+        },
+        onpointingend: function(){
+            this.setScale(1);
+            this.parent.app.pushScene(game.PauseScene());
+        }
+    });
+    
     game.TextButton = tm.createClass({
         superClass: tm.display.TextShape,
         

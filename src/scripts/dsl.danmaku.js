@@ -34,7 +34,7 @@ var game = game || {};
 
         var zakoR = {
             type: "enemy",
-            frameIndex: 16,
+            frameIndex: 15,
             boundingType: "rect",
             hp: 15
         };
@@ -944,7 +944,7 @@ var game = game || {};
                 return {
                     "top": d.action([
                         d.bindVar("r", "$rand * 100 + 40"),
-                        f["normal"]("$r", "aim", 6, {}, act["change_speed"](2, 8)),
+                        f["normal"]("$rand * 300 + 30", "aim", 6, {}, act["change_speed"](2, 8)),
                         d.repeat(way - 1, [
                             f["normal"]("$r", "sequence", 6, {},
                                 act["change_speed"](2, "$loop.index * 2 + 10")

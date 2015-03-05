@@ -49,7 +49,7 @@ var game = game || {};
             isSyncRotation: false
         },
         DEFAULT_TEXT_SHAPE: {
-            fontSize   : 32,
+            fontSize   : 64,
             fontFamily : game.FONT,
             fillStyle  : "hsl(240, 100%, 95%)",
             strokeStyle: "hsl(240, 100%, 75%)",
@@ -60,7 +60,6 @@ var game = game || {};
         enableDoubleTap : true, // true or false
         modeChangeButton: "right", // "left" or "right" or "none"
         enableBackGround: true, // true or false
-        enableEnemyInfo : false, // true or false
         moveRatio       : 1.0,
     };
     

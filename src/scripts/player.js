@@ -111,7 +111,7 @@ var game = game || {};
             this.y = 720 - this.radius;
             this.setScale(10);
             
-            game.TweenAnimation(this, "in", 200, { scaleX: 1.0, scaleY: 1.0});
+            game.TweenAnimation(this, "in", 200, {scaleX: 1.0, scaleY: 1.0});
             this.tweener
                 .call(function(){
                     this.hitFlagCount = GAME_FPS;
@@ -208,15 +208,16 @@ var game = game || {};
                     if(this.isHitEnemy(target)){
                         target.hp -= this.damage;
                         this.scaleX = 0.25;
-                        this.scaleY = 1.2;
+                        this.scaleY = 1.4;
                         this.hitFlag = true;
-                        break;
+                        return;
                     }
                 }
             }
             this.y += this.vy;
         },
         getBoundingRect: function(){
+            //Spriteを９０度傾けているので、widthとheightを逆に適応
             return tm.geom.Rect(
                 this.x - this.height * this.originX,
                 this.y - this.width  * this.originY,
@@ -318,14 +319,16 @@ var game = game || {};
         explode: function(app){
             var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
-            var bounding = tm.geom.Circle(this.x, this.y, this.radius * this.scaleX);
-
+            //var bounding = tm.geom.Circle(this.x, this.y, this.radius * this.scaleX);
+            var r = this.radius * this.scaleX;
+            var bounding = tm.geom.Rect(this.x - r, this.y - r, this.width * this.scaleX, this.height * this.scaleY);
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
                     if(!target.tweener.isPlaying && target.parent){
-                        if(tm.collision.testCircleCircle(bounding, target.getBoundingCircle())){
-                            target.hp--;
+                        //if(tm.collision.testCircleCircle(bounding, target.getBoundingCircle())){
+                        if(tm.collision.testRectRect(bounding, target.getBoundingRect())){
+                            target.hp -= 1;
                         }
                     }
                 }

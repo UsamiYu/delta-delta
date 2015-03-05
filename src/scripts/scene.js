@@ -52,9 +52,7 @@ var game = game || {};
             title.setPosition(480, 930).addChildTo(this);
                 
             //デバッグ情報用
-            if(game.config.enableEnemyInfo){
-                var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
-            }
+            var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
             
             this.scoreLabel = game.ScoreLabel().setPosition(616, 104);
             this.highScore = game.HighScoreLabel(game.data.highScore[this.stage - 1])
@@ -71,6 +69,10 @@ var game = game || {};
             if(game.config.modeChangeButton !== "none"){
                 this.button = game.ModeChangeButton()
                     .setPosition((game.config.modeChangeButton === "left") ? 64 : 576, 654)
+                    .setAlpha(0.3)
+                    .addChildTo(this);
+                var pause = game.PauseButton()
+                    .setPosition((game.config.modeChangeButton === "left") ? 64 : 576, 168)
                     .setAlpha(0.3)
                     .addChildTo(this);
             }
@@ -158,7 +160,7 @@ var game = game || {};
                 player.vy = Math.min(Math.max(-player.radius, p.dy * game.config.moveRatio), player.radius);
             }
         },
-        
+
         onclearstage: function(){
             this.stopDanmaku();
             var enemies = this.enemyLayer.children;
@@ -275,7 +277,7 @@ var game = game || {};
             var param = game.param.DEFAULT_TEXT_SHAPE;
             
             var title = tm.display.TextShape({fontSize: 24, text: "delta-delta Ver." + game.data.version}.$safe(param)).setPosition(480, 380).addChildTo(this);
-            var touch = tm.display.TextShape({fontSize: 48, text: "Touch Screen"}.$safe(param)).setPosition(320, 640).addChildTo(this);
+            var touch = tm.display.TextShape({text: "Touch Screen"}.$safe(param)).setPosition(320, 640).addChildTo(this);
             touch.tweener
                  .clear()
                  .fadeIn(1)
@@ -310,8 +312,7 @@ var game = game || {};
             var buttons = ["Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
             
             for(var i = 0,l = buttons.length;i < l;i++){
-                var button = game.TextButton({
-                    fontSize: 64, text: buttons[i]})
+                var button = game.TextButton({text: buttons[i]})
                 .setPosition(320, i * 100 + 280).addChildTo(this);
                 button.num = i + 1;
                 button.setInteractive(true);
@@ -346,14 +347,13 @@ var game = game || {};
                 this.parent.app.popScene();
             };
             
-            var configLabel = tm.display.TextShape({fontSize: 64, text: "Config"}.$safe(param))
+            var configLabel = tm.display.TextShape({text: "Config"}.$safe(param))
                 .setPosition(320, 100).addChildTo(this);
             
-            var doubleTapLabel = tm.display.TextShape({text: "DoubleTap ModeChange"}.$safe(param))
+            var doubleTapLabel = tm.display.TextShape({fontSize: 32, text: "DoubleTap ModeChange"}.$safe(param))
                 .setPosition(320, 200).addChildTo(this);
                 
             var doubleTapOn = game.TextButton({
-                fontSize: 64,
                 text: "O N",
                 fillStyle: offStyle
             }).setPosition(440, 260).addChildTo(this);
@@ -365,7 +365,6 @@ var game = game || {};
                 config.enableDoubleTap = true;
             };
             var doubleTapOff = game.TextButton({
-                fontSize: 64,
                 text: "OFF",
                 fillStyle: offStyle
             }).setPosition(200, 260).addChildTo(this);
@@ -377,10 +376,9 @@ var game = game || {};
                 config.enableDoubleTap = false;
             };
             
-            var changeButtonPosition = tm.display.TextShape({text: "ModeChangeButton Position"}.$safe(param))
+            var changeButtonPosition = tm.display.TextShape({fontSize: 32, text: "Button Position"}.$safe(param))
                 .setPosition(320, 340).addChildTo(this);
             var leftButton = game.TextButton({
-                fontSize: 64,
                 text: "Left",
                 fillStyle: offStyle
                 }).setPosition(320, 400).addChildTo(this);
@@ -392,7 +390,6 @@ var game = game || {};
                 config.modeChangeButton = "left";
             };
             var rightButton = game.TextButton({
-                fontSize: 64,
                 text: "Right",
                 fillStyle: offStyle
             }).setPosition(520, 400).addChildTo(this);
@@ -404,7 +401,6 @@ var game = game || {};
                 config.modeChangeButton = "right";
             };
             var noneButton = game.TextButton({
-                fontSize: 64,
                 text: "None",
                 fillStyle: offStyle
                 }).setPosition(120, 400).addChildTo(this);
@@ -416,7 +412,7 @@ var game = game || {};
                 config.modeChangeButton = "none";
             };
             
-            var moveRatio = tm.display.TextShape({text:"Move Ratio"}.$safe(param))
+            var moveRatio = tm.display.TextShape({fontSize: 32, text:"Move Ratio"}.$safe(param))
                 .setPosition(320, 480).addChildTo(this);
             var moveRatioLabel = tm.display.Label(config.moveRatio).setPosition(320, 520).addChildTo(this);
             moveRatioLabel.fontColor = offStyle;
@@ -441,14 +437,14 @@ var game = game || {};
                 };
             }
             
-            var record = game.TextButton({fontSize: 64, text: "Record"})
+            var record = game.TextButton({text: "Record"})
                 .setPosition(320, 740).addChildTo(this);
             record.onpointingend = function(){
                 this.setScale(1);
                 this.parent.app.pushScene(game.RecordScene());
             };
             
-            var resetConfig = game.TextButton({fontSize: 64, text: "Reset Config"})
+            var resetConfig = game.TextButton({text: "Reset Config"})
                 .setPosition(320, 840).addChildTo(this);
             resetConfig.onpointingend = function(){
                 this.setScale(1);
@@ -534,15 +530,15 @@ var game = game || {};
                 strokeStyle: "rgb(0, 0, 0)"
             }).setPosition(320, 480).addChildTo(this);
 
-            tm.display.TextShape({text: text}.$safe(game.param.DEFAULT_TEXT_SHAPE))
+            tm.display.TextShape({fontSize: 32, text: text}.$safe(game.param.DEFAULT_TEXT_SHAPE))
                 .setPosition(320, 300).addChildTo(this);
 
-            var noButton = game.TextButton({fontSize: 64, text: "N o"})
+            var noButton = game.TextButton({text: "N o"})
                 .setPosition(200, 380).addChildTo(this);
             noButton.onpointingend = function(){
                 this.parent.dispatchEvent(tm.event.Event("no"));
             };
-            var yesButton = game.TextButton({fontSize: 64, text: "Yes"})
+            var yesButton = game.TextButton({text: "Yes"})
                 .setPosition(420, 380).addChildTo(this);
             yesButton.onpointingend = function(){
                 this.parent.dispatchEvent(tm.event.Event("yes"));
@@ -553,5 +549,39 @@ var game = game || {};
         onno: function(){
             this.app.popScene();
         },
+    });
+    
+    game.PauseScene = tm.createClass({
+        superClass: tm.app.Scene,
+        
+        init: function(){
+            this.superInit();
+            
+            tm.display.RectangleShape({
+                width: 640,
+                height: 960,
+                fillStyle: "rgba(0, 0, 0, 0.8)",
+                strokeStyle: "rgb(0, 0, 0)"
+            }).setPosition(320, 480).addChildTo(this);
+            
+            tm.display.TextShape({text: "Pause"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
+                .setPosition(320, 300).addChildTo(this);
+            
+            var exit = game.TextButton({fontSize: 48, text: "GiveUp"})
+                .setPosition(180, 420).addChildTo(this);
+            exit.onpointingend = function(){
+                this.setScale(1);
+                var app = this.parent.app;
+                app.popScene();
+                app.replaceScene(game.TitleScene());
+            }
+            
+            var cont = game.TextButton({fontSize: 48, text: "Continue"})
+                .setPosition(460, 420).addChildTo(this);
+            cont.onpointingend = function(){
+                this.setScale(1);
+                this.parent.app.popScene();
+            }
+        }
     });
 })();

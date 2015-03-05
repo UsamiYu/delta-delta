@@ -27,7 +27,7 @@ var game = game || {};
             }
         },
         ondestroy: function(){
-            if(!this.parent) return;
+            if(!this.parent){ return; }
             var scene = this.scene;
             scene.scoreLabel.score += this.maxHp * 10;
             var player = scene.player;
@@ -37,7 +37,7 @@ var game = game || {};
                 return;
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
-            //距離100px ^ 2 && 画面内のbulletの数が130未満の場合、弾を発生させない。
+            //プレイヤーとの距離100px ^ 2 && 画面内のbulletの数が130未満の場合、弾を発生させない。
             if(dist > 10000 && scene.bulletLayer.children.length < 130){
                 var explode = game.EnemyExplosion(this.x, this.y, ~~((this.radius + this.maxHp) / 10));
                 explode.addChildTo(this.scene.bulletLayer);
@@ -46,7 +46,6 @@ var game = game || {};
         },
 
         onadded: function(){
-            this.visible = true;
             this.scene = this.getRoot().app.currentScene;
             if(this.type === "boss"){
                 this.hpGauge.addChildTo(this.scene);
@@ -71,7 +70,7 @@ var game = game || {};
         },
 
         onremoved: function(){
-            if(this.type === "boss") this.hpGauge.remove();
+            if(this.type === "boss"){ this.hpGauge.remove(); }
         },
 
         update: function(e){
@@ -86,8 +85,7 @@ var game = game || {};
                 this.remove();
                 return;
             }
-
-            if(this.scene.app.frame & 4){
+            if(this.scene.app.frame % 4 === 0){
                 this.children[0].setFrameIndex(this.frameIndex);
             }
             if(this._lastHp > this.hp){
@@ -126,8 +124,8 @@ var game = game || {};
                         var e = tm.event.Event("quake");
                         e.count = 1;
                         this.scene.gameField.dispatchEvent(e);
-                        return;
                     }
+                    return;
                 }
                 if(this.isHitPlayer(player)){
                     player.dispatchEvent(tm.event.Event("destroy"));
@@ -146,8 +144,10 @@ var game = game || {};
             return tm.collision.testRectRect(rect, player.getBoundingRect());
         },
         isHitPlayer: function(player){
-            if(!this.preHitTest(player)) return false;
-            if(this.boundingType === "circle") return this.isHitPointCircle(player.x, player.y);
+            if(!this.preHitTest(player)){ return false; }
+            if(this.boundingType === "circle"){
+                return this.isHitPointCircle(player.x, player.y);
+            }
             if((this.width === this.height) && (this.rotation === 0 || this.rotation === 180)){
                 return this.isHitPointRect(player.x, player.y);
             }
