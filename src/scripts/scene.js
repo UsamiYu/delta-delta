@@ -93,8 +93,8 @@ var game = game || {};
         phase: 0,
 
         stepTick: function(){
-            this.danmaku = this.danmakuList[this.phase];
-            if(this.danmakuList.length <= this.phase){
+            this.danmaku = (this.stage < 6) ? this.danmakuList[this.phase] : this.danmakuList.random();
+            if(this.stage < 6 && this.danmakuList.length <= this.phase){
                 this.result();
                 return;
             }
@@ -104,8 +104,12 @@ var game = game || {};
             game.setDanmaku(this, this.player, this, {rank: this.phase});
             this.timeBonus += 60 * GAME_FPS;
             this.phase++;
-
-            game.EffectiveText("PHASE " + ("00" + this.phase + "/").substr(-3) + ("00" + this.danmakuList.length).substr(-2))
+            
+            var text = "Phase " + ("00" + this.phase).substr(-2);
+            if(this.stage < 6){
+                text += "/" + ("00" + this.danmakuList.length).substr(-2);
+            }
+            game.EffectiveText(text)
                    .setPosition(320, 240)
                    .addChildTo(this);
         },
@@ -246,23 +250,29 @@ var game = game || {};
             this.children[this.children.length - 1].remove();
             var param = game.param.DEFAULT_TEXT_SHAPE;
 
-            var tutrial = game.TextButton({fontSize: 64, text: "Tutrial"})
+            var tutrial = game.TextButton({text: "Tutrial"})
                 .setPosition(320, 460).addChildTo(this);
             tutrial.onpointingend = function(){
                 this.parent.app.replaceScene(game.ShootingScene(0));
             };
-            var normal = game.TextButton({fontSize: 64, text: "Normal Mode"})
+            var normal = game.TextButton({text: "Normal Mode"})
                 .setPosition(320, 560).addChildTo(this);
             normal.onpointingend = function(){
                 this.parent.app.replaceScene(game.SelectScene());
             };
-            var config = game.TextButton({fontSize: 64, text: "Config"})
+            var time = game.TextButton({text: "60sec Mode"})
+                .setPosition(320, 660).addChildTo(this);
+            time.onpointingend = function(){
+                this.setScale(1);
+                this.parent.app.replaceScene(game.ShootingScene(6));
+            };
+            var config = game.TextButton({text: "Config"})
                 .setPosition(320, 760).addChildTo(this);
             config.onpointingend = function(){
                 this.setScale(1);
                 this.parent.app.pushScene(game.ConfigScene());
             };
-            var manual = game.TextButton({fontSize: 64, text: "Manual"})
+            var manual = game.TextButton({text: "Manual"})
                 .setPosition(320, 860).addChildTo(this);
             manual.onpointingend = function(){
                 this.setScale(1);

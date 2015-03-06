@@ -272,7 +272,7 @@ var game = game || {};
                 };    
             },
             "stage1_02": function(obj){
-                boss.hp = 600 + obj.rank * 100;
+                boss.hp = 600 + obj.rank * 50;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -867,7 +867,6 @@ var game = game || {};
                 middleR.hp = 500;
                 boss.danmaku = "boss11";
                 boss.hp = 2400;
-                //largeR.danmaku = "zako03";
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -903,11 +902,9 @@ var game = game || {};
                     ]),
                     "boss_move": d.action([
                         d.wait("$1"),
-                        //d.repeat(99, [
                             act["triangle_loop"](2, "right", 240, 1, 60),
                             act["triangle_loop"](2, "left", 240, 1, 60),
                             d.wait(60),
-                        //]),
                     ]),
                     "set_largeR": d.action([
                         d.repeat("$1", [
@@ -941,6 +938,35 @@ var game = game || {};
                         d.vanish()
                     ])
                 };
+            },
+            "ta01": function(obj){
+                boss.hp = 600 + obj.rank * 50;
+                boss.danmaku = ["boss10", "whip02"].random();
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 8, boss, d.action([
+                            act["change_speed"](0, 60),
+                            act["yura_yura"](1.0 + obj.rank * 0.1, 80 - obj.rank)
+                        ]))
+                    ])
+                }
+            },
+            "ta02": function(obj){
+            boss.hp = 600 + obj.rank * 50;
+                boss.danmaku = ["boss10", "boss12"].random();
+                return {
+                    "top": d.action([
+                        d.wait(60),
+                        f["offset"](320, 0, 180, "absolute", 5, boss, d.action([
+                            act["change_speed"](0, 60),
+                            d.repeat(99, [
+                                act["triangle_loop"](1.5 + obj.rank * 0.2, "left", 120, 1, 60 + obj.rank),
+                                act["triangle_loop"](1.5 + obj.rank * 0.2, "right", 120, 1, 60 + obj.rank),
+                            ])
+                        ]))
+                    ])
+                }
             },
             "explode": function(obj){
                 var way = (obj.rank < 2) ? 2 :
@@ -1004,6 +1030,47 @@ var game = game || {};
                                     f["normal"](0, "sequence", "3.5 + $loop.index * 0.5", middleBullet),
                                 ]),
                                 d.wait(60)
+                            ]),
+                        ])
+                    ])
+                };
+            },
+            "whip02": function(obj){
+                console.log(obj.rank);
+                return {
+                    "top": d.action([
+                        d.bindVar("spd", obj.rank * 0.1 + 3),
+                        d.repeat(99, [
+                            d.wait("($loop.index & 2) ? 180 : 90"),
+                            d.repeat(Math.min(7 + ~~(obj.rank / 2), 10), [
+                                f["offset"](48, -48, "$loop.index * 15 +60", "absolute", "$spd", longBullet),
+                                d.repeat(Math.min(3 + ~~(obj.rank * 0.3), 6), [
+                                    f["offset"](48, -48, 12, "sequence", "$spd + $loop.index * 0.25 + 0.25", longBullet),
+                                ]),
+                                d.wait(Math.max(10, 15 - ~~(obj.rank * 0.5))),
+                            ])
+                        ])
+                    ]),
+                    "top2": d.action([
+                        d.bindVar("spd", obj.rank * 0.1 + 3),
+                        d.repeat(99, [
+                            d.wait("($loop.index & 2) ? 180 : 90"),
+                            d.repeat(Math.min(7 + ~~(obj.rank / 2), 10), [
+                                f["offset"](-48, -48, "-$loop.index * 15 + 300", "absolute", "$spd", longBullet),
+                                d.repeat(Math.min(3 + ~~(obj.rank * 0.3), 6), [
+                                    f["offset"](-48, -48, -12, "sequence", "$spd + $loop.index * 0.25 + 0.25", longBullet),
+                                ]),
+                                d.wait(Math.max(10, 15 - ~~(obj.rank * 0.5))),
+                            ])
+                        ])
+                    ]),
+                    "top3": d.action([
+                        d.repeat(99, [
+                            d.wait(Math.max(15, 240 - obj.rank * 10)),
+                            f["normal"]("$rand * 5 - 2", "aim", 3, middleBullet),
+                            d.repeat(4, [
+                                d.wait(Math.max(1, ~~(5 - obj.rank * 0.2))),
+                                f["normal"](0, "sequence", "3.5 + $loop.index * 0.5", middleBullet),
                             ]),
                         ])
                     ])
@@ -1252,11 +1319,11 @@ var game = game || {};
                      ])
                  };
             },
-            "boss10": function(){
+            "boss10": function(obj){
                 return {
                     "top": d.action([
                         d.repeat(99, [
-                            d.wait(180),
+                            d.wait(Math.max(30, 210 - obj.rank * 10)),
                             d.repeat("($loop.index & 1) ? 3 : 5", [
                                 d.repeat(4, [
                                     d.bindVar("dir", "$rand * 220 + 70"),
@@ -1277,7 +1344,7 @@ var game = game || {};
                                 d.repeat(14, [
                                     f["normal"](24, "sequence", 3, middleBullet)
                                 ]),
-                                d.wait(30)
+                                d.wait(Math.max(5, 45 - obj.rank * 5))
                             ]),
                             d.wait(180),
                         ])
@@ -1304,6 +1371,54 @@ var game = game || {};
                         ]),
                     ]),
                 };
+            },
+            "boss12": function(obj){
+                return {
+                    "top": d.action([
+                        d.repeat(99, [
+                            d.wait(90 - obj.rank),
+                            d.repeat(4 + obj.rank, [
+                                d.repeat(3, [
+                                    f["normal"](125, "sequence", 3 + obj.rank * 0.1, longBullet),
+                                ]),
+                                d.wait(Math.max(4, ~~(10 - obj.rank * 0.2))),
+                            ])
+                        ])
+                    ]),
+                    "top2": d.action([
+                        d.repeat(99, [
+                            d.wait(90 - obj.rank),
+                            d.repeat(4 + obj.rank, [
+                                d.repeat(3, [
+                                    f["normal"](115, "sequence", 3 + obj.rank * 0.1, longBullet),
+                                ]),
+                                d.wait(Math.max(4, ~~(10 - obj.rank * 0.2))),
+                            ])
+                        ])
+                    ]),
+                    "top3": d.action([
+                        d.repeat(99, [
+                            d.wait(180 - obj.rank),
+                            d.repeat(2 + obj.rank, [
+                                d.repeat(3, [
+                                    f["normal"](125, "sequence", 4 + obj.rank * 0.1, missile),
+                                ]),
+                                d.wait(Math.max(5, ~~(15 - obj.rank * 0.2))),
+                            ])
+                        ])
+                    ]),
+                    "top4": d.action([
+                        d.repeat(99, [
+                            d.wait(180 - obj.rank),
+                            d.repeat(2 + obj.rank, [
+                                d.repeat(3, [
+                                    f["normal"](115, "sequence", 4 + obj.rank * 0.1, missile),
+                                ]),
+                                d.wait(Math.max(5, ~~(15 - obj.rank * 0.2))),
+                            ])
+                        ])
+                    ]),
+                }
             },
             "zako01": function(obj){
                 return {

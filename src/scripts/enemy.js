@@ -19,7 +19,6 @@ var game = game || {};
             this.preHitTestArea = (this.width > this.height) ? this.width : this.height;
             this.scene = "";
 
-            //var image = tm.display.Sprite(this.image, this.width, this.height);
             var image = tm.display.Sprite("image", this.width, this.height);
             image.setFrameIndex(this.frameIndex).addChildTo(this);
             if(this.type === "boss"){
@@ -52,7 +51,7 @@ var game = game || {};
                 this.scene.timeBonus += this.maxHp;
             }
             if(this.danmaku !== ""){
-                game.setDanmaku(this, this.scene.player, this.scene);
+                game.setDanmaku(this, this.scene.player, this.scene, {rank: this.scene.phase});
             }
             if(this.addedAnimation !== ""){
                 switch(this.addedAnimation){

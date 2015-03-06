@@ -125,6 +125,7 @@ game.FirePattern = {};
             return d.fire(
                 d.offsetX(offsetX),
                 d.offsetY(offsetY),
+                d.autonomy(true),
                 d.direction(direction, directionType),
                 d.speed(speed),
                 d.bullet(bullet)
