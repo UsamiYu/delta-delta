@@ -237,6 +237,7 @@ var game = game || {};
             "stage1_01": function(obj){
                 boss.hp = 1800;
                 zakoT.hp = 9;
+                zakoT.addedAnimation = "zoom";
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -391,6 +392,7 @@ var game = game || {};
             },
             "stage2_02": function(obj){
                 zakoP.danmaku = "single02";
+                zakoP.addedAnimation = "zoom";
                 return {
                     "top": d.action([
                         d.wait(60),
