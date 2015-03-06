@@ -192,10 +192,9 @@ var game = game || {};
         },
         speed: 32,
         boundingtype: "rect",
-        hitFlag: false,
 
         update: function(app){
-            if(this.hitFlag || game.GameFieldOut(this)){
+            if(game.GameFieldOut(this)){
                 this.remove();
                 return;
             }
@@ -207,9 +206,11 @@ var game = game || {};
                     var target = enemies[i - 1];
                     if(this.isHitEnemy(target)){
                         target.hp -= this.damage;
-                        this.scaleX = 0.25;
-                        this.scaleY = 1.4;
-                        this.hitFlag = true;
+                        this.tweener
+                            .clear()
+                            .to({scaleX: 0.2, scaleY: 3.0}, 120)
+                            .call(function(){ this.remove(); }.bind(this));
+                        this.update = function(){};
                         return;
                     }
                 }
@@ -257,14 +258,14 @@ var game = game || {};
             this.syncRotation();
         },
         boundingType: "rect",
-        hitFlag: false,
+        //hitFlag: false,
         
         update: function(app){
             if(game.GameFieldOut(this)){
                 this.remove();
                 return;
             }
-            if(this.hitFlag) return;
+            //if(this.hitFlag) return;
             
             var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;

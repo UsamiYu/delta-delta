@@ -265,13 +265,13 @@ var game = game || {};
                     "zakomove": d.action([
                         act["change_speed"](6, 240, 30),
                         d.repeat(2, [
-                            act["change_direction"](0, "aim", 45),
+                            act["change_direction"](0, "aim", 60),
                         ])
                     ])
                 };    
             },
             "stage1_02": function(obj){
-                boss.hp = 600;
+                boss.hp = 600 + obj.rank * 100;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -312,11 +312,13 @@ var game = game || {};
                         d.wait(15),
                         d.changeDirection(d.direction(180, "aim"), 1),
                         d.changeSpeed(d.speed(2), 1),
-                        d.repeat(15, [
-                            f["normal"]("$rand * 120 + 120", "relative", 9, longBullet, d.actionRef("change_speed" , 2, 60)),
-                            f["normal"]("$rand * 120 + 120", "relative", 8, middleBullet, d.actionRef("change_speed", 2, 45)),
-                            f["normal"]("$rand * 120 + 120", "relative", 7, {}, d.actionRef("change_speed", 2, 30)),
-                            d.wait(2)
+                        d.repeat(10, [
+                            d.repeat(2, [
+                                f["normal"]("$rand * 120 + 120", "relative", 9, longBullet, d.actionRef("change_speed" , 2, 60)),
+                                f["normal"]("$rand * 120 + 120", "relative", 8, middleBullet, d.actionRef("change_speed", 2, 45)),
+                            ]),
+                            f["normal"]("$rand * 120 + 120", "relative", 7, largeBullet, d.actionRef("change_speed", 2, 30)),
+                            d.wait(3)
                         ]),
                     ]),
                     "change_speed": d.action([
@@ -969,7 +971,7 @@ var game = game || {};
             "single02": function(obj){
                 return {
                     "top": d.action([
-                        d.wait(65),
+                        d.wait("~~($rand * 120) + 65"),
                         d.repeat(12, [
                             f["normal"](180, "absolute", 0, {}, d.action([ d.changeSpeed(d.speed(4), 180) ])),
                             d.wait("80 - $loop.index * 5")
@@ -1270,10 +1272,10 @@ var game = game || {};
                         d.repeat(99, [
                             d.repeat(5, [
                                 f["normal"]("$loop.index * 3", "absolute", 3, middleBullet),
-                                d.repeat(19, [
-                                    f["normal"](18, "sequence", 3, middleBullet)
+                                d.repeat(14, [
+                                    f["normal"](24, "sequence", 3, middleBullet)
                                 ]),
-                                d.wait(20)
+                                d.wait(30)
                             ]),
                             d.wait(180),
                         ])

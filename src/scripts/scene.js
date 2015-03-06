@@ -101,7 +101,7 @@ var game = game || {};
             if(this.danmaku === "") return;
 
             this.stopDanmaku();
-            game.setDanmaku(this, this.player, this);
+            game.setDanmaku(this, this.player, this, {rank: this.phase});
             this.timeBonus += 60 * GAME_FPS;
             this.phase++;
 
@@ -328,13 +328,9 @@ var game = game || {};
         
         init: function(){
             this.superInit();
-            tm.display.RectangleShape({
-                width: 640,
-                height: 960,
-                fillStyle: "rgba(0, 0, 0, 0.8)",
-                strokeStyle: "rgb(0, 0, 0)"
-            }).setPosition(320, 480).addChildTo(this);
-            
+
+            game.BlackScreen().addChildTo(this);
+
             var config = game.config;
             var param = game.param.DEFAULT_TEXT_SHAPE;
             var onStyle = "hsl(240, 100%, 95%)";
@@ -465,12 +461,8 @@ var game = game || {};
         
         init: function(){
             this.superInit();
-            tm.display.RectangleShape({
-                width: 640,
-                height: 960,
-                fillStyle: "rgba(0, 0, 0, 0.8)",
-                strokeStyle: "rgb(0, 0, 0)"
-            }).setPosition(320, 480).addChildTo(this);
+
+            game.BlackScreen().addChildTo(this);
 
             var high = game.data.highScore;
             var param = game.param.DEFAULT_TEXT_SHAPE;
@@ -522,13 +514,8 @@ var game = game || {};
         
         init: function(text){
             this.superInit();
-
-            tm.display.RectangleShape({
-                width: 640,
-                height: 960,
-                fillStyle: "rgba(0, 0, 0, 0.8)",
-                strokeStyle: "rgb(0, 0, 0)"
-            }).setPosition(320, 480).addChildTo(this);
+            
+            game.BlackScreen().addChildTo(this);
 
             tm.display.TextShape({fontSize: 32, text: text}.$safe(game.param.DEFAULT_TEXT_SHAPE))
                 .setPosition(320, 300).addChildTo(this);
@@ -557,13 +544,8 @@ var game = game || {};
         init: function(){
             this.superInit();
             
-            tm.display.RectangleShape({
-                width: 640,
-                height: 960,
-                fillStyle: "rgba(0, 0, 0, 0.8)",
-                strokeStyle: "rgb(0, 0, 0)"
-            }).setPosition(320, 480).addChildTo(this);
-            
+            game.BlackScreen().addChildTo(this);
+
             tm.display.TextShape({text: "Pause"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
                 .setPosition(320, 300).addChildTo(this);
             

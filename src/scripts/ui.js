@@ -320,6 +320,21 @@ var game = game || {};
         }
     });
     
+    game.BlackScreen = tm.createClass({
+        superClass: tm.display.RectangleShape,
+        
+        init: function(){
+            this.superInit({
+                width: 640,
+                height: 960,
+                fillStyle: "rgba(0, 0, 0, 0.75)",
+                strokeStyle: "rgb(0, 0, 0)",
+                x: 320,
+                y: 480
+            });
+        }
+    });
+    
     game.Result = tm.createClass({
         superClass: tm.display.CanvasElement,
         
