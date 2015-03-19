@@ -116,17 +116,22 @@ This software is released under the MIT License, see LICENSE.txt.
 
 libディレクトリ以下のスクリプトファイルは、各ページにてご確認ください。
 
-   * bulletml.min.js
-    * https://github.com/daishihmr/bulletml.js
+* tmlib.js
+ * https://github.com/phi-jp/tmlib.js
 
-   * marked.js
-    * https://github.com/chjj/marked
+* bulletml.min.js
+ * https://github.com/daishihmr/bulletml.js
+
+
+* marked.js
+ * https://github.com/chjj/marked
 
 
 fontsディレクトリ以下のフォントファイルの利用については、各フォルダのtxtファイルをご覧ください。
 
-   * Audiowide
-    * OFL.txt
+* Audiowide
+ * OFL.txt
 
-   *Inconsolata
-    * OFL.txt
+
+* Inconsolata
+ * OFL.txt

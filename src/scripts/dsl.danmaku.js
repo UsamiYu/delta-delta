@@ -76,7 +76,7 @@ var game = game || {};
             width: 96,
             height: 96,
             frameIndex: 10,
-            hp: 2000
+            hp: 1500
         };
 
         var dummy = {
@@ -142,7 +142,7 @@ var game = game || {};
                 };
             },
             "stage0_02": function(obj){
-                boss.hp = 1400;
+                boss.hp = 1000;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -169,7 +169,7 @@ var game = game || {};
                 };
             },
             "stage0_03": function(obj){
-                boss.hp = 1000;
+                boss.hp = 750;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -207,7 +207,7 @@ var game = game || {};
                 };
             },
             "stage1_01": function(obj){
-                boss.hp = 1800;
+                boss.hp = 1350;
                 zakoT.hp = 9;
                 zakoT.addedAnimation = "zoom";
                 return {
@@ -244,7 +244,7 @@ var game = game || {};
                 };
             },
             "stage1_02": function(obj){
-                boss.hp = 640 + obj.rank * 10;
+                boss.hp = 500 + obj.rank * 10;
                 zakoP.danmaku = "zako05";
                 return {
                     "top": d.action([
@@ -286,25 +286,12 @@ var game = game || {};
                         d.wait(15),
                         d.changeDirection(d.direction(180, "aim"), 1),
                         d.changeSpeed(d.speed(2), 1),
-                        /*d.repeat(10, [
-                            d.repeat(2, [
-                                f["normal"]("$rand * 120 + 120", "relative", 9, longBullet, d.actionRef("change_speed" , 2, 60)),
-                                f["normal"]("$rand * 120 + 120", "relative", 8, middleBullet, d.actionRef("change_speed", 2, 45)),
-                            ]),
-                            f["normal"]("$rand * 120 + 120", "relative", 7, largeBullet, d.actionRef("change_speed", 2, 30)),
-                            d.wait(3)
-                        ]),
-                    ]),
-                    "change_speed": d.action([
-                        d.changeSpeed(d.speed("$1"), "$2"),
-                        d.wait("$2 * 3"),
-                        d.changeSpeed(d.speed("$1 * 2"), "$2") */
                     ])
                 };
             },
             "stage1_03": function(obj){
                 boss.danmaku = "boss2";
-                boss.hp = 1600;
+                boss.hp = 1200;
                 largeR.danmaku = "zako04";
                 return {
                     "top": d.action([
@@ -333,7 +320,7 @@ var game = game || {};
                 };
             },
             "stage2_01": function(obj){
-                boss.hp = 2300;
+                boss.hp = 1700;
                 boss.danmaku = "boss4";
                 return {
                     "top": d.action([
@@ -395,7 +382,7 @@ var game = game || {};
             },
             "stage2_03": function(obj){
                 zakoR.addedAnimation = "drop";
-                boss.hp = 900;
+                boss.hp = 650;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -450,7 +437,7 @@ var game = game || {};
                 largeR.fieldOutCheck = zakoP.fieldOutCheck = false;
                 zakoP.isSyncRotation = false;
                 largeR.hp = zakoP.hp = 550;
-                boss.hp = 1200;
+                boss.hp = 900;
                 boss.danmaku = "boss3";
                 zakoP.danmaku = "whip01";
                 return {
@@ -479,7 +466,7 @@ var game = game || {};
             },
             "stage3_02": function(obj){
                 boss.danmaku = "boss7";
-                boss.hp = 2500;
+                boss.hp = 1850;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -495,7 +482,7 @@ var game = game || {};
                 };
             },
             "stage3_03": function(obj){
-                boss.hp = 1200;
+                boss.hp = 900;
                 boss.danmaku = "boss1_01";
                 middleR.hp = 75;
                 middleR.danmaku = "single01";
@@ -537,7 +524,7 @@ var game = game || {};
             },
             "stage4_01": function(obj){
                 boss.danmaku = "boss8";
-                boss.hp = 2200;
+                boss.hp = 1650;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -551,7 +538,7 @@ var game = game || {};
             "stage4_02": function(obj){
                 zakoR.hp = 120;
                 zakoR.danmaku = "single03";
-                boss.hp = 1800;
+                boss.hp = 1350;
                 boss.danmaku = "boss5";
                 return {
                     "top": d.action([
@@ -624,7 +611,7 @@ var game = game || {};
                 };
             },
             "stage4_04": function(obj){
-                boss.hp = 1500;
+                boss.hp = 1100;
                 boss.danmaku = "boss6";
                 return {
                     "top": d.action([
@@ -656,7 +643,7 @@ var game = game || {};
             },
             "stage5_01": function(obj){
                 zakoP.danmaku = "zako01";
-                boss.hp = 1500;
+                boss.hp = 1100;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -834,7 +821,7 @@ var game = game || {};
                 middleR.danmaku = "boss3";
                 middleR.hp = 500;
                 boss.danmaku = "boss11";
-                boss.hp = 2400;
+                boss.hp = 1800;
                 return {
                     "top": d.action([
                         d.wait(60),
@@ -1415,10 +1402,8 @@ var game = game || {};
                         d.wait(60),
                         d.repeat(99, [
                             act["nway_shot"](obj.rank, -15, 60, "aim", 12, largeBullet, longBullet),
-                            //d.actionRef("nway_bullet", 1),
                             d.wait(75),
                             act["nway_shot"](obj.rank, 15, -60, "aim", 12, largeBullet, longBullet),
-                            //d.actionRef("nway_bullet", -1),
                             d.wait(180)
                         ]),
                     ]),
