@@ -162,11 +162,17 @@ var game = game || {};
             this.superInit(runner);
             
             this.fieldOutCheck = attr.fieldOutCheck;
+            this.danmaku = attr.danmaku || "";
+            //デバッグ用
+            //tm.display.CircleShape({width: 24, height:24, fillStyle: "black", strokeStyle: "white"}).addChildTo(this);
             
         },
         
         onadded: function(){
-            this.scene = this.getRoot();
+            this.scene = this.getRoot().app.currentScene;
+            if(this.danmaku !== ""){
+                game.setDanmaku(this, this.scene.player, this.scene, {rank: this.scene.phase});
+            }
         },
 
         update: function(){

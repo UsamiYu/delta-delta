@@ -28,7 +28,7 @@ tm.main(function() {
         var scene = this.currentScene;
         var player = scene.player;
         var key = this.keyboard;
-        
+
         if (key.getKeyDown("space") == true) {
             (scene.isUpdate == true) ? scene.sleep() : scene.wakeUp();
         }

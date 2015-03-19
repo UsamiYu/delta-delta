@@ -6,7 +6,7 @@
 
 『弾幕、どんとこい！』
 
-Δ・Δ（デルタ・デルタ）はタッチデバイスで遊ぶことを想定した『簡単爽快シューティング』です。
+Δ・Δ（デルタ・デルタ）はタッチデバイスで遊ぶことを想定した『簡単爽快２Ｄシューティング』です。
 
 [tmlib.js](https://github.com/phi-jp/tmlib.js)で制作しています。
 
@@ -19,19 +19,19 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 ## 操作方法
 
-  * タッチデバイス
-  
-    * スライド：自機移動
-    * ダブルタップor「C」マークをタッチ : モード切り替え
+### タッチデバイス
 
-  * PC
-  
-    * マウスドラッグ : 自機移動
-    * ダブルクリック or Zキー : モード切り替え
+* スライド：自機移動
+* ダブルタップor「C」マークをタッチ : モード切り替え
 
-  * （非推奨） 
-    * カーソルキー : 自機移動
-    * Xキー : 低速移動
+### PC
+
+* マウスドラッグ : 自機移動
+* ダブルクリック or Zキー : モード切り替え
+
+####（非推奨操作）
+* カーソルキー : 自機移動
+* Xキー : 低速移動
 
 
 
@@ -39,8 +39,8 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 ## 目的
 
    弾（bullet）や敵（Object）に当たらずに、コア（core）を出来るだけ早く破壊してください。
-   
-   
+
+
 <img src="./src/images/screenshot2.png" />
 
 
@@ -49,9 +49,9 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 ## ショットモードとリフレクションモードについて
 
    初期状態はショットモードで、自動的にショットが発射されます。
-   
+
    モードを切り替えてリフレクションモードになると、敵の弾を跳ね返すバリアが生成されます。
-   
+
    跳ね返した弾は敵にダメージを与えることが出来ます。
 
 
@@ -59,14 +59,14 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 ## モード切り替えについて
 
-   
+
 <img src="./src/images/screenshot3.png" />
 
 
    モードチェンジボタン（もしくはダブルタップ）操作で、モードを切り替えることが出来ます。
-   
+
    ショットモードからリフレクションモードに切り替えるためには、エネルギーが50%以上必要です。
-   
+
    リフレクションモード中にショットモードへ切り替えはいつでも行うことが出来ます。
 
 
@@ -76,9 +76,9 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 
    エネルギーはショットモード時は少しずつ増加して、リフレクションモード時は少しずつ減少します。
-   
+
    ショットモード時に敵弾が自機の近くにある場合、通常より多くエネルギーが増加します。
-   
+
    リフレクションモード時にエネルギーが0になると、リフレクションモードから自動的にショットモードに戻ります。
 
 
@@ -91,7 +91,7 @@ http://usamiyu.github.io/delta-delta/ (Google Chrome/Safari/mobile Safari 推奨
 
 
    オブジェクトを破壊すると、弾をばら撒きます。これを利用して、弾をたくさん反射させましょう。
-   
+
    ただし、オブジェクトがバリアに激突すると、エネルギーが大幅に減少します。
 
 
@@ -130,4 +130,3 @@ fontsディレクトリ以下のフォントファイルの利用については
 
    *Inconsolata
     * OFL.txt
-

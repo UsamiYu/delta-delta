@@ -10,10 +10,10 @@ var game = game || {};
 
     game.ShootingScene = tm.createClass({
         superClass: tm.app.Scene,
-        
+
         init: function(num){
             this.superInit();
-            
+
             this.stage = num || 0;
 
             this.background = game.BackGround().setPosition(320, 480).addChildTo(this);
@@ -40,7 +40,7 @@ var game = game || {};
             this.enemyLayer = tm.display.CanvasElement().addChildTo(this.gameField);
             //弾描画レイヤー
             this.bulletLayer = tm.display.CanvasElement().addChildTo(this.gameField);
-            
+
             //ゲーム描画領域より上に描画するもの
             var frame = game.GameFieldFrame().setPosition(320,480).addChildTo(this);
             var titleSprite = tm.display.Sprite("title", 300, 120).setPosition(320, 840).addChildTo(this);
@@ -50,10 +50,10 @@ var game = game || {};
             }.$safe(game.param.DEFAULT_TEXT_SHAPE));
             title.autoRender = false;
             title.setPosition(480, 930).addChildTo(this);
-                
+
             //デバッグ情報用
             var info = game.EnemyInfomation().setPosition(542, 776).addChildTo(this);
-            
+
             this.scoreLabel = game.ScoreLabel().setPosition(616, 104);
             this.highScore = game.HighScoreLabel(game.data.highScore[this.stage - 1])
                 .setPosition(616, 56);
@@ -65,7 +65,7 @@ var game = game || {};
                 this.scoreLabel.addChildTo(this);
                 this.highScore.addChildTo(this);
             }
-            
+
             if(game.config.modeChangeButton !== "none"){
                 this.button = game.ModeChangeButton()
                     .setPosition((game.config.modeChangeButton === "left") ? 64 : 576, 654)
@@ -76,8 +76,14 @@ var game = game || {};
                     .setAlpha(0.3)
                     .addChildTo(this);
             }
-            
+
             this.danmakuList = game.danmakuList(this.stage);
+            if(this.stage === 6){
+                this.danmakuList = this.danmakuList.shuffle();
+                this.timer = game.Timer()
+                    .setPosition((game.config.modeChangeButton === "right") ? 144 : 576, 156)
+                    .addChildTo(this);
+            }
             this.stepTick();
         },
         //ダブルタップチェック用変数
@@ -91,9 +97,10 @@ var game = game || {};
         missCount: 0,
         danmaku: "",
         phase: 0,
+        timer: "",
 
         stepTick: function(){
-            this.danmaku = (this.stage < 6) ? this.danmakuList[this.phase] : this.danmakuList.random();
+            this.danmaku = (this.stage < 6) ? this.danmakuList[this.phase] : this.danmakuList[this.phase % this.danmakuList.length];
             if(this.stage < 6 && this.danmakuList.length <= this.phase){
                 this.result();
                 return;
@@ -104,16 +111,16 @@ var game = game || {};
             game.setDanmaku(this, this.player, this, {rank: this.phase});
             this.timeBonus += 60 * GAME_FPS;
             this.phase++;
-            
+
             var text = "Phase " + ("00" + this.phase).substr(-2);
             if(this.stage < 6){
                 text += "/" + ("00" + this.danmakuList.length).substr(-2);
             }
             game.EffectiveText(text)
-                   .setPosition(320, 240)
+                   .setPosition(320, 280)
                    .addChildTo(this);
         },
-        
+
         update: function(){
             this.age++;
             if(this.pointingCheck.count > 0 && game.config.enableDoubleTap){
@@ -124,7 +131,7 @@ var game = game || {};
                 }
             }
         },
-        
+
         onpointingstart: function(){
             if(!game.config.enableDoubleTap){
                 this.onpointingstart = function(){};
@@ -148,7 +155,7 @@ var game = game || {};
             if(player.getParent() === this.gameField){
                 player.vx = player.vy = 0;
             }
-            
+
         },
 
         onpointingmove: function(e){
@@ -175,6 +182,8 @@ var game = game || {};
             }
             this.bulletLayer.removeChildren();
 
+            if(this.timer){ this.timer.dispatchEvent(tm.event.Event("stop")); }
+
             this.stepTick();
         },
 
@@ -185,8 +194,8 @@ var game = game || {};
         },
         result: function(){
             if(this.stage !== 0){
-                var bonus = Math.max(0, ~~((this.timeBonus - this.age) / (this.missCount + 1)) * 250);
-                var result = game.Result(this.stage, this.age, this.missCount, bonus).addChildTo(this);
+                var bonus = Math.max(0, ~~((this.timeBonus - this.age) * (10 - this.missCount)) * 30);
+                var result = game.Result(this.stage, this.age, this.missCount, bonus, this.phase).addChildTo(this);
                 this.scoreLabel.score += bonus;
                 if(this.highScore.score < this.scoreLabel.score) this.highScore.score = this.scoreLabel.score;
                 game.data.highScore[this.stage - 1] = this.highScore.score;
@@ -200,14 +209,14 @@ var game = game || {};
                  fontFamily: game.FONT,
             });
             text.setPosition(320, 680);
-            
+
             text.tweener
                 .wait(1000)
                 .fadeOut(1)
                 .wait(500)
                 .fadeIn(1)
                 .setLoop(true);
-            
+
             this.tweener
                 .clear()
                 .wait(1500)
@@ -221,25 +230,35 @@ var game = game || {};
                         this.app.replaceScene(game.TitleScene());
                     };
                 }.bind(this));
-        } 
+        }
     });
-    
+
     game.TitleScene = tm.createClass({
         superClass: tm.app.Scene,
-        
+
         init: function(){
             this.superInit();
-            
+
+            //セーブデータ周り
             game.data = game.data.$extend(game.loadData());
-            if(game.data.version < game.DEFAULT_DATA.version) game.data.version = game.DEFAULT_DATA.version;
+            if(game.data.version < game.DEFAULT_DATA.version){
+                game.data.version = game.DEFAULT_DATA.version;
+            }
+            if(game.data.highScore.length < game.DEFAULT_DATA.highScore.length){
+                for(var i = 0;i < game.DEFAULT_DATA.highScore.length;i++){
+                    if(!game.data.highScore[i] && game.data.highScore[i] !== "0"){
+                        game.data.highScore[i] = game.DEFAULT_DATA.highScore[i];
+                    }
+                }
+            }
             game.config = game.data.config;
-            
+
             this.setInteractive(false);
             game.BackGround().setPosition(320, 480).addChildTo(this);
-            
+
             var title = tm.display.Sprite("title", 300, 120);
             title.setAlpha(0).setPosition(320, 280).setScale(2).addChildTo(this);
-            
+
             title.tweener
                  .clear()
                  .fadeIn(1500)
@@ -278,14 +297,14 @@ var game = game || {};
                 this.setScale(1);
                 window.location.href = "./manual.html";
             };
-                
-            
+
+
             this.onpointingend = function(){};
         },
         touchEnable: function(){
             this.setInteractive(true);
             var param = game.param.DEFAULT_TEXT_SHAPE;
-            
+
             var title = tm.display.TextShape({fontSize: 24, text: "delta-delta Ver." + game.data.version}.$safe(param)).setPosition(480, 380).addChildTo(this);
             var touch = tm.display.TextShape({text: "Touch Screen"}.$safe(param)).setPosition(320, 640).addChildTo(this);
             touch.tweener
@@ -300,14 +319,14 @@ var game = game || {};
 
     game.SelectScene = tm.createClass({
         superClass: tm.app.Scene,
-        
+
         init: function(){
             this.superInit();
-            
+
             var param = game.param.DEFAULT_TEXT_SHAPE;
-            
+
             var bg = game.BackGround().setPosition(320, 480).addChildTo(this);
-            
+
             var backButton = game.TextButton({
                 text: "<",
                 fontSize: 80,
@@ -315,15 +334,15 @@ var game = game || {};
             backButton.onpointingend = function(){
                 this.parent.app.replaceScene(game.TitleScene());
             };
-            
+
             var select = tm.display.TextShape({fontSize: 80, text: "Stage Select"}.$safe(param))
                 .setPosition(320, 140).addChildTo(this);
 
             var buttons = ["Stage1", "Stage2", "Stage3", "Stage4", "Stage5"];
-            
+
             for(var i = 0,l = buttons.length;i < l;i++){
                 var button = game.TextButton({text: buttons[i]})
-                .setPosition(320, i * 100 + 280).addChildTo(this);
+                .setPosition(320, i * 120 + 280).addChildTo(this);
                 button.num = i + 1;
                 button.setInteractive(true);
                 button.onpointingend = function(){
@@ -332,10 +351,10 @@ var game = game || {};
             }
         },
     });
-    
+
     game.ConfigScene = tm.createClass({
         superClass: tm.app.Scene,
-        
+
         init: function(){
             this.superInit();
 
@@ -345,20 +364,20 @@ var game = game || {};
             var param = game.param.DEFAULT_TEXT_SHAPE;
             var onStyle = "hsl(240, 100%, 95%)";
             var offStyle = "rgb(50%, 50%, 50%)";
-            
+
             var backButton = game.TextButton({fontSize: 80, text: "<"})
                 .setPosition(48, 48).addChildTo(this);
             backButton.onpointingend = function(){
                 game.saveData(game.data);
                 this.parent.app.popScene();
             };
-            
+
             var configLabel = tm.display.TextShape({text: "Config"}.$safe(param))
                 .setPosition(320, 100).addChildTo(this);
-            
+
             var doubleTapLabel = tm.display.TextShape({fontSize: 32, text: "DoubleTap ModeChange"}.$safe(param))
                 .setPosition(320, 200).addChildTo(this);
-                
+
             var doubleTapOn = game.TextButton({
                 text: "O N",
                 fillStyle: offStyle
@@ -381,7 +400,7 @@ var game = game || {};
                 this.setScale(1);
                 config.enableDoubleTap = false;
             };
-            
+
             var changeButtonPosition = tm.display.TextShape({fontSize: 32, text: "Button Position"}.$safe(param))
                 .setPosition(320, 340).addChildTo(this);
             var leftButton = game.TextButton({
@@ -417,14 +436,14 @@ var game = game || {};
                 this.setScale(1);
                 config.modeChangeButton = "none";
             };
-            
+
             var moveRatio = tm.display.TextShape({fontSize: 32, text:"Move Ratio"}.$safe(param))
                 .setPosition(320, 480).addChildTo(this);
             var moveRatioLabel = tm.display.Label(config.moveRatio).setPosition(320, 520).addChildTo(this);
             moveRatioLabel.fontColor = offStyle;
             moveRatioLabel.fontFamily = game.FONT;
             moveRatioLabel.update = function(){ this.text = ~~(config.moveRatio * 100) + "%"; }
-            
+
             for(var i = 0;i < 20;i++){
                 var buttons = [];
                 buttons[i] = tm.display.RectangleShape({
@@ -442,20 +461,20 @@ var game = game || {};
                     this.setFillStyle((config.moveRatio < this.id * 0.05 + 0.55) ? offStyle : onStyle);
                 };
             }
-            
+
             var record = game.TextButton({text: "Record"})
                 .setPosition(320, 740).addChildTo(this);
             record.onpointingend = function(){
                 this.setScale(1);
                 this.parent.app.pushScene(game.RecordScene());
             };
-            
+
             var resetConfig = game.TextButton({text: "Reset Config"})
                 .setPosition(320, 840).addChildTo(this);
             resetConfig.onpointingend = function(){
                 this.setScale(1);
                 var scene = game.YesNoDialog("Reset Config?");
-                
+
                 scene.onyes = function(){
                     config = game.data.config = {}.$extend(game.DEFAULT_CONFIG);
                     game.saveData(game.data);
@@ -465,10 +484,10 @@ var game = game || {};
             };
         }
     });
-    
+
     game.RecordScene = tm.createClass({
         superClass: tm.app.Scene,
-        
+
         init: function(){
             this.superInit();
 
@@ -476,7 +495,7 @@ var game = game || {};
 
             var high = game.data.highScore;
             var param = game.param.DEFAULT_TEXT_SHAPE;
-            
+
             var backButton = game.TextButton({fontSize: 80, text: "<"})
                 .setPosition(48, 48).addChildTo(this);
             backButton.onpointingend = function(){
@@ -485,9 +504,10 @@ var game = game || {};
 
             tm.display.TextShape({text: "High-Score Record", fontSize: 48}.$safe(param))
                 .setPosition(320, 140).addChildTo(this);
-                
-            for(var i = 0;i < high.length;i++){
-                tm.display.TextShape({text: "Stage" + (i + 1), fontSize: 48}.$safe(param))
+
+            for(var i = 0;i < 6;i++){
+                var text = (i < 5) ? "Stage" + (i + 1) : "60sec";
+                tm.display.TextShape({text: text, fontSize: 48}.$safe(param))
                     .setPosition(160, i * 80 + 280).addChildTo(this);
 
                 var label = tm.display.Label((!high[i]) ? "0" : high[i])
@@ -502,7 +522,7 @@ var game = game || {};
                     this.text = (!game.data.highScore[this.id]) ? "0" : game.data.highScore[this.id];
                 }
             }
-            
+
             var resetButton = game.TextButton({fontSize: 48, text: "Reset High-Score"})
                 .setPosition(320, 840).addChildTo(this);
             resetButton.onpointingend = function(){
@@ -518,13 +538,13 @@ var game = game || {};
             };
         },
     });
-    
+
     game.YesNoDialog = tm.createClass({
         superClass: tm.app.Scene,
-        
+
         init: function(text){
             this.superInit();
-            
+
             game.BlackScreen().addChildTo(this);
 
             tm.display.TextShape({fontSize: 32, text: text}.$safe(game.param.DEFAULT_TEXT_SHAPE))
@@ -542,23 +562,23 @@ var game = game || {};
             };
         },
         onyes: function(){},
-        
+
         onno: function(){
             this.app.popScene();
         },
     });
-    
+
     game.PauseScene = tm.createClass({
         superClass: tm.app.Scene,
-        
+
         init: function(){
             this.superInit();
-            
+
             game.BlackScreen().addChildTo(this);
 
             tm.display.TextShape({text: "Pause"}.$safe(game.param.DEFAULT_TEXT_SHAPE))
                 .setPosition(320, 300).addChildTo(this);
-            
+
             var exit = game.TextButton({fontSize: 48, text: "GiveUp"})
                 .setPosition(180, 420).addChildTo(this);
             exit.onpointingend = function(){
@@ -567,7 +587,7 @@ var game = game || {};
                 app.popScene();
                 app.replaceScene(game.TitleScene());
             }
-            
+
             var cont = game.TextButton({fontSize: 48, text: "Continue"})
                 .setPosition(460, 420).addChildTo(this);
             cont.onpointingend = function(){

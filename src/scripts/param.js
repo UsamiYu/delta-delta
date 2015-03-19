@@ -5,7 +5,7 @@
 /*
  * 定数
  */
- 
+
 var SCREEN_WIDTH      = 640;
 var SCREEN_HEIGHT     = 960;
 
@@ -19,7 +19,7 @@ var GAME_FPS          = 60;
 /*
  *  自分用クラスをグローバルに確保
  */
- 
+
 var game = game || {};
 
 (function(){
@@ -55,28 +55,28 @@ var game = game || {};
             strokeStyle: "hsl(240, 100%, 75%)",
         },
     };
-    
+
     game.DEFAULT_CONFIG = {
         enableDoubleTap : true, // true or false
         modeChangeButton: "right", // "left" or "right" or "none"
         enableBackGround: true, // true or false
         moveRatio       : 1.0,
     };
-    
+
     game.DEFAULT_DATA = {
         title: "delta-delta",
         version: "0.2",
         config: game.DEFAULT_CONFIG,
-        highScore: [0, 0, 0, 0, 0]
+        highScore: [0, 0, 0, 0, 0, 0]
     };
-    
+
     game.data = {};
 
     game.saveData = function(obj){
         obj = obj || {};
         localStorage.setItem("gameData", JSON.stringify(obj));
     };
-    
+
     game.loadData = function(){
         if(!localStorage.getItem("gameData")){
             game.saveData(game.DEFAULT_DATA);
@@ -89,7 +89,7 @@ var game = game || {};
            elm.bottom < GAME_FIELD_TOP ||
            elm.left   > GAME_FIELD_RIGHT ||
            elm.right  < GAME_FIELD_LEFT) return true;
-           
+
         return false;
     }
 
@@ -100,7 +100,7 @@ var game = game || {};
             alpha   : 1.0,
             rotation: 0,
         });
-        
+
         if(time < 1) return;
 
         switch (type){
@@ -152,19 +152,23 @@ var game = game || {};
         elm.startDanmaku(game.danmakuPattern(elm.danmaku, param), config);
 
     };
-    
+
     game.danmakuList = function(num){
         var list = [
             ["stage0_01", "stage0_02", "stage0_03"],
             ["stage1_01", "stage1_02", "stage1_03"],
             ["stage2_01", "stage2_02", "stage2_03"],
-            ["stage3_01", "stage3_02", "stage3_03"],
+            //["stage3_01", "stage3_02", "stage3_03"],
+            ["stage3_02"],
             ["stage4_01", "stage4_02", "stage4_03", "stage4_04"],
             ["stage5_01", "stage5_02", "stage5_03", "stage5_04", "stage5_05"],
-            ["stage1_02", "ta01", "ta02"]
+            ["ta01", "ta02", "ta03", "ta04", "ta05", "ta06", "ta07", "ta08", "ta09", "ta10"]
+            //["ta10"]
         ];
-        
+
         return list[num];
     };
 
+    //game.bossDanmaku = ["boss10", "boss12", "boss13", "boss14", "whip02"].shuffle();
+    game.bossDanmaku = ["boss15"];
 })();

@@ -56,8 +56,7 @@ var game = game || {};
             this.setFontSize(64);
             this.setFontFamily(game.NUMBER_FONT);
             this.setAlpha(0.5);
-            this.score = parseInt(score);
-            this.v = 600 / GAME_FPS; //スコア係数
+            this.score = parseInt(score, 10);
         },
         update: function(){
             if(this.parent){
@@ -338,7 +337,7 @@ var game = game || {};
     game.Result = tm.createClass({
         superClass: tm.display.CanvasElement,
         
-        init: function(stage, age, miss, bonus){
+        init: function(stage, age, miss, bonus, phase){
             this.superInit();
 
             var t = age / GAME_FPS;
@@ -346,21 +345,23 @@ var game = game || {};
             var mm = Math.floor(t / 60);
             var ss = Math.floor(t) - mm * 60;
             
-            this.addLabel("Stage " + stage + " Clear", "center", game.FONT, 48, 320, 190);
+            if(stage < 6){
+                this.addLabel("Stage " + stage + " Clear", "center", game.FONT, 48, 320, 190);
+                this.addLabel("Time", "left", game.FONT, 48, 120, 360);
+                this.addLabel(
+                    ("00" + mm).substr(-2) + ":" + ("00" + ss).substr(-2) + "." + ("00" + ms).substr(-2),
+                    "right",
+                    game.NUMBER_FONT,
+                    48,
+                    520,
+                    360);
+            }else{
+                this.addLabel("Phase", "left", game.FONT, 48, 120, 360);
+                this.addLabel(phase + "", "right", game.NUMBER_FONT, 48, 520, 360);
+            }
             
             this.addLabel("Result", "center", game.FONT, 48, 320, 280);
             
-            this.addLabel("Time", "left", game.FONT, 48, 120, 360);
-
-            
-            this.addLabel(
-                ("00" + mm).substr(-2) + ":" + ("00" + ss).substr(-2) + "." + ("00" + ms).substr(-2),
-                "right",
-                game.NUMBER_FONT,
-                48,
-                520,
-                360);
-
             this.addLabel("Miss", "left", game.FONT, 48, 120, 440);
             
             this.addLabel(miss + "", "right", game.NUMBER_FONT, 48, 520, 440);
@@ -377,6 +378,88 @@ var game = game || {};
                  .setFontFamily(font)
                  .setPosition(x, y)
                  .addChildTo(this);
+        }
+    });
+    
+    game.Timer = tm.createClass({
+        superClass: tm.display.CanvasElement,
+        
+        init: function(){
+            this.superInit();
+            
+            tm.display.Label("Time")
+                .setPosition(-64, 0)
+                .setFontSize(48)
+                .setFontFamily(game.FONT)
+                .setAlpha(0.5)
+                .addChildTo(this);
+
+            this.sec = tm.display.Label("60")
+                .setFontSize(80)
+                .setFontFamily(game.NUMBER_FONT)
+                .setAlpha(0.5)
+                .setPosition(-80, 48)
+                .addChildTo(this);
+            this.ms = tm.display.Label(".00")
+                .setFontSize(48)
+                .setFontFamily(game.NUMBER_FONT)
+                .setAlpha(0.5)
+                .setPosition(-12, 36)
+                .addChildTo(this);
+                
+            this.timer = 60 * GAME_FPS;
+        },
+        update: function(){
+            if(this.tweener.isPlaying){ return; }
+            this.timer -= 1;
+            var sec = ~~(this.timer / GAME_FPS);
+            var score = 0;
+            this.ms.text = "." + ("0" + ~~((this.timer / GAME_FPS - sec) * 100)).substr(-2);
+            this.sec.text = ("0" + sec).substr(-2);
+            if(this.timer === 0){
+                var scene = this.parent;
+                scene.stopDanmaku();
+                var enemies = scene.enemyLayer.children;
+                for(var i = 0, l = enemies.length;i < l;i++){
+                    enemies[i]._isHitTestEnable = false;
+                    if(enemies[i].type === "boss"){
+                        score = 500 * (1 - enemies[i].hp / enemies[i].maxHp);
+                    }
+                    enemies[i].stopDanmaku();
+                    game.TweenAnimation(enemies[i], "out", 250, {scaleX: 8.0, scaleY: 0.0});
+                }
+                scene.bulletLayer.removeChildren();
+                
+                scene.phase -= 1;
+
+                scene.timeBonus = scene.phase * 1500 + score;
+
+                this.tweener
+                    .clear()
+                    //.wait(500)
+                    .call(function(){
+                        game.EffectiveText("Time Up")
+                            .setPosition(320, 280)
+                            .addChildTo(this);
+                    }.bind(scene))
+                    .wait(2000)
+                    .call(function(){ this.result(); }.bind(scene));
+
+                this.update = function(){};
+            }
+        },
+        onstop: function(){
+            this.sec.tweener
+                .clear()
+                .fadeIn(1)
+                .to({alpha: 0.5}, 1500);
+            this.ms.tweener
+                .clear()
+                .fadeIn(1)
+                .to({alpha: 0.5}, 1500);
+            this.tweener
+                .clear()
+                .wait(1000);
         }
     });
 

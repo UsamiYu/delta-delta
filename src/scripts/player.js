@@ -320,14 +320,12 @@ var game = game || {};
         explode: function(app){
             var enemies = app.currentScene.enemyLayer.children;
             var l = enemies.length;
-            //var bounding = tm.geom.Circle(this.x, this.y, this.radius * this.scaleX);
             var r = this.radius * this.scaleX;
             var bounding = tm.geom.Rect(this.x - r, this.y - r, this.width * this.scaleX, this.height * this.scaleY);
             if(l > 0){
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
                     if(!target.tweener.isPlaying && target.parent){
-                        //if(tm.collision.testCircleCircle(bounding, target.getBoundingCircle())){
                         if(tm.collision.testRectRect(bounding, target.getBoundingRect())){
                             target.hp -= 1;
                         }
