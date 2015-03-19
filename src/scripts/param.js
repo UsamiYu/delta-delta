@@ -65,7 +65,7 @@ var game = game || {};
 
     game.DEFAULT_DATA = {
         title: "delta-delta",
-        version: "0.2",
+        version: "0.3",
         config: game.DEFAULT_CONFIG,
         highScore: [0, 0, 0, 0, 0, 0]
     };
@@ -158,8 +158,7 @@ var game = game || {};
             ["stage0_01", "stage0_02", "stage0_03"],
             ["stage1_01", "stage1_02", "stage1_03"],
             ["stage2_01", "stage2_02", "stage2_03"],
-            //["stage3_01", "stage3_02", "stage3_03"],
-            ["stage3_02"],
+            ["stage3_01", "stage3_02", "stage3_03"],
             ["stage4_01", "stage4_02", "stage4_03", "stage4_04"],
             ["stage5_01", "stage5_02", "stage5_03", "stage5_04", "stage5_05"],
             ["ta01", "ta02", "ta03", "ta04", "ta05", "ta06", "ta07", "ta08", "ta09", "ta10"]
@@ -169,6 +168,6 @@ var game = game || {};
         return list[num];
     };
 
-    //game.bossDanmaku = ["boss10", "boss12", "boss13", "boss14", "whip02"].shuffle();
-    game.bossDanmaku = ["boss15"];
+    game.bossDanmaku = ["boss10", "boss12", "boss13", "boss14", "boss15", "whip02"].shuffle();
+    //game.bossDanmaku = ["boss15"];
 })();

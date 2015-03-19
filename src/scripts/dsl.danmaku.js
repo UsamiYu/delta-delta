@@ -1094,7 +1094,7 @@ var game = game || {};
                           (obj.rank > 6) ? obj.rank - (~~(obj.rank - 4) * 0.5) : obj.rank;
                 return {
                     "top": d.action([
-                        d.bindVar("r", "$rand * 100 + 40"),
+                        d.bindVar("r", Math.random() * 360 / Math.min(6, way) + 30),
                         f["normal"]("$rand * 300 + 30", "aim", 6, {}, act["change_speed"](2, 8)),
                         d.repeat(way - 1, [
                             f["normal"]("$r", "sequence", 6, {},
