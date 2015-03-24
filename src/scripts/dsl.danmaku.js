@@ -1087,6 +1087,7 @@ var game = game || {};
                             f["normal"]("$r", "sequence", 6, {},
                                 act["change_speed"](2, "$loop.index * 2 + 10")
                             ),
+                            d.wait(1)
                         ]),
                         d.notify("destroy"),
                     ])
@@ -1216,7 +1217,7 @@ var game = game || {};
                         d.wait(60),
                         d.bindVar("r", r),
                         d.repeat(99, [
-                            f["normal"]("-90 * $r", "aim", 5 + obj.rank, {}),
+                            f["normal"]("-90 * $r", "aim", 10, {}),
                             d.repeat(50, [
                                 d.wait(Math.max(3, 8 - ~~(obj.rank * 0.5))),
                                 f["normal"]("$loop.index * $r", "sequence", 5 + obj.rank, {}, act["change_speed"](3, 45 - obj.rank)),
@@ -1228,7 +1229,7 @@ var game = game || {};
                         d.wait(90),
                         d.bindVar("r", r),
                         d.repeat(99, [
-                            f["normal"]("90 * $r", "aim", 6 + obj.rank, middleBullet),
+                            f["normal"]("90 * $r", "aim", 11, middleBullet),
                             d.repeat(50, [
                                 d.wait(Math.max(4, 9 - ~~(obj.rank * 0.5))),
                                 f["normal"]("-$loop.index * $r * 2", "sequence", 5 + obj.rank, middleBullet, act["change_speed"](3, 45 - obj.rank)),
@@ -1240,7 +1241,7 @@ var game = game || {};
                         d.wait(120),
                         d.bindVar("r", r),
                         d.repeat(99, [
-                            f["normal"]("-90 * $r", "aim", 5 + obj.rank, longBullet),
+                            f["normal"]("-90 * $r", "aim", 10, longBullet),
                             d.repeat(50, [
                                 d.wait(Math.max(5, 10 - ~~(obj.rank * 0.5))),
                                 f["normal"]("$loop.index * $r * 2", "sequence", 5 + obj.rank, longBullet, act["change_speed"](3, 45 - obj.rank)),
@@ -1252,7 +1253,7 @@ var game = game || {};
                         d.wait(150),
                         d.bindVar("r", r),
                         d.repeat(99, [
-                            f["normal"]("90 * $r", "aim", 2 + obj.rank, missile),
+                            f["normal"]("90 * $r", "aim", 7, missile),
                             d.repeat(20, [
                                 d.wait(Math.max(10, 20 - obj.rank)),
                                 f["normal"]("-$loop.index * $r * 5", "sequence", 2 + obj.rank, missile),

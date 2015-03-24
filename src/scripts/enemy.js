@@ -4,10 +4,10 @@
 var game = game || {};
 
 (function(){
-    
+
     game.Enemy = tm.createClass({
         superClass: tm.bulletml.Bullet,
-        
+
         init: function(runner, attr){
             this.superInit(runner);
 
@@ -18,6 +18,7 @@ var game = game || {};
             this.maxHp = this._lastHp = this.hp;
             this.preHitTestArea = (this.width > this.height) ? this.width : this.height;
             this.scene = "";
+            this.mortonNumber = 0;
 
             var image = tm.display.Sprite("image", this.width, this.height);
             image.setFrameIndex(this.frameIndex).addChildTo(this);
@@ -37,7 +38,8 @@ var game = game || {};
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
             //プレイヤーとの距離100px ^ 2 && 画面内のbulletの数が130未満の場合、弾を発生させない。
-            if(dist > 10000 && scene.bulletLayer.children.length < 130){
+            //if(dist > 10000 && scene.bulletLayer.children.length < 130){
+            if(dist > 9999){
                 var explode = game.EnemyExplosion(this.x, this.y, ~~((this.radius + this.maxHp) / 10));
                 explode.addChildTo(this.scene.bulletLayer);
             }
@@ -66,6 +68,7 @@ var game = game || {};
                     break;
                 }
             }
+            //this.mortonNumber = game.object4Tree.GetMortonNumberObject(this);
         },
 
         onremoved: function(){
@@ -79,6 +82,7 @@ var game = game || {};
                 this.rotation = Math.radToDeg(vec);
             }
             this.setPosition(this.runner.x, this.runner.y);
+            this.mortonNumber = game.object4Tree.GetMortonNumberObject(this);
 
             if(this.fieldOutCheck && game.GameFieldOut(this) && this.parent){
                 this.remove();
@@ -131,7 +135,7 @@ var game = game || {};
                 }
             }
         },
-        preHitTest: function(player){
+        /*preHitTest: function(player){
             if((this.width === this.heigth) || this.rotation === 0 || this.rotation === 180){
                 return this.isHitElementRect(player);
             }
@@ -141,9 +145,9 @@ var game = game || {};
                 this.preHitTestArea,
                 this.preHitTestArea);
             return tm.collision.testRectRect(rect, player.getBoundingRect());
-        },
+        }, */
         isHitPlayer: function(player){
-            if(!this.preHitTest(player)){ return false; }
+            if(!game.object4Tree.match(this.mortonNumber, player.mortonNumber)){ return false; }
             if(this.boundingType === "circle"){
                 return this.isHitPointCircle(player.x, player.y);
             }
@@ -157,17 +161,17 @@ var game = game || {};
 
     game.InvisibleEnemy = tm.createClass({
         superClass: tm.bulletml.Bullet,
-        
+
         init: function(runner, attr){
             this.superInit(runner);
-            
+
             this.fieldOutCheck = attr.fieldOutCheck;
             this.danmaku = attr.danmaku || "";
             //デバッグ用
             //tm.display.CircleShape({width: 24, height:24, fillStyle: "black", strokeStyle: "white"}).addChildTo(this);
-            
+
         },
-        
+
         onadded: function(){
             this.scene = this.getRoot().app.currentScene;
             if(this.danmaku !== ""){
@@ -178,7 +182,7 @@ var game = game || {};
         update: function(){
             this.runner.update();
             this.setPosition(this.runner.x, this.runner.y);
-            
+
             if(this.fieldOutCheck && this.parent){
                 if(this.x < GAME_FIELD_LEFT ||
                    this.x > GAME_FIELD_RIGHT ||
@@ -193,7 +197,7 @@ var game = game || {};
 
     game.EnemyBullet = tm.createClass({
         superClass: tm.bulletml.Bullet,
-        
+
         init: function(runner, attr){
             this.superInit(runner);
             attr = attr.$safe(game.param.BULLET_DEFAULT_ATTR);
@@ -203,10 +207,12 @@ var game = game || {};
             graphic.setFrameIndex(attr.frameIndex).setAlpha(0.8);
             graphic.addChildTo(this);
 
+            this.mortonNumber = 0;
+
         },
 
         fieldOutCheck: true,
-        
+
         onadded: function(){
             this.scene = this.getRoot();
             if(this.scene.player.mode === "refrection" &&
@@ -224,6 +230,7 @@ var game = game || {};
                 this.rotation = Math.radToDeg(vec);
             }
             this.setPosition(this.runner.x, this.runner.y);
+            this.mortonNumber = game.object4Tree.GetMortonNumberObject(this);
 
             if(this.fieldOutCheck && game.GameFieldOut(this) && this.parent){
                 this.remove();
@@ -233,40 +240,39 @@ var game = game || {};
             var field = this.scene.gameField;
             var player = this.scene.player;
             var scoreLabel = this.scene.scoreLabel;
-            if(player.getParent() === field && player.hitFlag && this.parent){
-                switch (player.mode) {
-                    case "shot": 
-                        if(this.preHitTest(player)){
-                            player.power++;
-                            scoreLabel.score += scoreLabel.v;
-                            if(this.isHitPlayer(player)){
-                                player.dispatchEvent(tm.event.Event("destroy"));
-                                return;
-                            }
-                        }
-                    break;
-                    case "refrection":
-                        var bounding = player.refrectionField.getBoundingCircle();
-
-                        if(tm.collision.testCircleCircle(this, bounding)){
-                        //反射
-                            var vec = tm.geom.Vector2(this.x - bounding.x, this.y - bounding.y);
-                            var len = vec.length();
-                            vec.normalize();
-                            var distance = (this.radius + bounding.radius) - len;
-                            var bulletPoint = tm.geom.Vector2.mul(vec, distance);
-
-                            vec.mul(bounding.radius - this.radius);
-                            var bullet = game.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, vec.x, vec.y, this);
-                            bullet.addChildTo(field);
-                            this.remove();
-                            scoreLabel.score += (scoreLabel.v * this.radius);
+            if(player.getParent() !== field || !player.hitFlag || !this.parent){ return; }
+            if(!game.object4Tree.match(this.mortonNumber, player.mortonNumber)){ return; }
+            switch (player.mode) {
+                case "shot":
+                    if(this.preHitTest(player)){
+                        player.power++;
+                        scoreLabel.score += scoreLabel.v;                            if(this.isHitPlayer(player)){
+                            player.dispatchEvent(tm.event.Event("destroy"));
                             return;
                         }
-                    break;
-                    default:
-                    break;
-                }
+                    }
+                break;
+                case "refrection":
+                    var bounding = player.refrectionField.getBoundingCircle();
+
+                    if(tm.collision.testCircleCircle(this, bounding)){
+                        //反射
+                        var vec = tm.geom.Vector2(this.x - bounding.x, this.y - bounding.y);
+                        var len = vec.length();
+                        vec.normalize();
+                        var distance = (this.radius + bounding.radius) - len;
+                        var bulletPoint = tm.geom.Vector2.mul(vec, distance);
+
+                        vec.mul(bounding.radius - this.radius);
+                        var bullet = game.RefrectionBullet(this.x + bulletPoint.x, this.y + bulletPoint.y, vec.x, vec.y, this);
+                        bullet.addChildTo(field);
+                        this.remove();
+                        scoreLabel.score += (scoreLabel.v * this.radius);
+                        return;
+                    }
+                break;
+                default:
+                break;
             }
         },
         preHitTest: function(player){
@@ -291,22 +297,22 @@ var game = game || {};
             if((p.x > -hW) && (p.x < hW) && (p.y > -hH) && (p.y < hH)){ return true; }
             return false;
         },
-        
+
     });
-    
+
     game.EnemyExplosion = tm.createClass({
         superClass: tm.display.CanvasElement,
-        
+
         init: function(x, y, rank){
             this.superInit();
-            
+
             this.setPosition(x, y);
             this.rank = rank;
         },
         danmaku: "explode",
         onadded: function(){
             var scene = this.getRoot().app.currentScene;
-            
+
             game.setDanmaku(this, scene.player, scene, {rank: this.rank});
         },
         ondestroy: function(){
