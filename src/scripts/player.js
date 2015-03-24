@@ -22,8 +22,6 @@ var game = game || {};
             this.refrectionField.addChildTo(this);
             this.powerGauge.addChildTo(this);
 
-            this.mortonNumber = 0;
-
             this.initStatus();
         },
 
@@ -79,8 +77,6 @@ var game = game || {};
 
             this.x = Math.clamp(this.x + this.keyX + this.vx, GAME_FIELD_LEFT + this.radius, GAME_FIELD_RIGHT - this.radius);
             this.y = Math.clamp(this.y + this.keyY + this.vy, GAME_FIELD_TOP + this.radius, GAME_FIELD_BOTTOM - this.radius);
-
-            this.mortonNumber = this.getMortonNumber();
         },
 
         ondestroy: function(){
@@ -181,9 +177,6 @@ var game = game || {};
         getBoundingCircle: function(){
             return tm.geom.Circle(this.parent.x, this.parent.y, 40); //refrection radius
         },
-        getBoundingRect: function(){
-            return tm.geom.Rect(this.parent.x - 40, this.parent.y - 40, 80, 80);  //refrection width & height
-        }
     });
 
     game.PlayerBullet = tm.createClass({
@@ -199,7 +192,6 @@ var game = game || {};
             this.setRotation(90);
             this.vy = -this.speed;
             this.damage = damage;
-            this.mortonNumber = 0;
         },
         speed: 32,
         boundingtype: "rect",
@@ -227,7 +219,6 @@ var game = game || {};
                 }
             }
             this.y += this.vy;
-            this.mortonNumber = game.object4Tree.GetMortonNumberObject(this);
         },
         getBoundingRect: function(){
             //Spriteを９０度傾けているので、widthとheightを逆に適応
@@ -238,8 +229,7 @@ var game = game || {};
                 this.width);
         },
         isHitEnemy: function(target){
-            if(target.tweener.isPlaying || !target.parent) return false;
-            if(!game.object4Tree.match(this.mortonNumber, target.mortonNumber)) return false;
+            if(target.tweener.isPlaying || !target.parent){ return false; }
             if(this.x - 48 > target.x || this.x + 48 < target.x || this.y + 96 < target.y) return false;
             if((target.width === target.height) ||
                 (target.rotation === 0) ||
@@ -269,7 +259,6 @@ var game = game || {};
             this.isSyncRotation = obj.isSyncRotation;
 
             this.syncRotation();
-            this.mortonNumber = 0;
         },
         boundingType: "rect",
         //hitFlag: false,
@@ -288,16 +277,14 @@ var game = game || {};
                 for(var i = l;i > 0;i--){
                     var target = enemies[i - 1];
                     if(!target.tweener.isPlaying && target.parent){
-                        if(game.object4Tree.match(this.mortonNumber, target.mortonNumber)){
-                            if(this.isHitElementRect(target)){
-                                target.hp -= this.damage;
-                                this.update = this.explode;
-                                this.tweener
-                                    .clear()
-                                    .to({scaleX: 5.0, scaleY:5.0, alpha: 0.5}, 200)
-                                    .call(function(){ this.remove(); }.bind(this));
-                                break;
-                            }
+                        if(this.isHitElementRect(target)){
+                            target.hp -= this.damage;
+                            this.update = this.explode;
+                            this.tweener
+                                .clear()
+                                .to({scaleX: 5.0, scaleY:5.0, alpha: 0.5}, 200)
+                                .call(function(){ this.remove(); }.bind(this));
+                            break;
                         }
                     }
                 }
@@ -332,7 +319,6 @@ var game = game || {};
                     this.syncRotation();
                 }
             }
-            this.mortonNumber = game.object4Tree.GetMortonNumberObject(this);
         },
         explode: function(app){
             var enemies = app.currentScene.enemyLayer.children;

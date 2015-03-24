@@ -18,7 +18,6 @@ var game = game || {};
             this.maxHp = this._lastHp = this.hp;
             this.preHitTestArea = (this.width > this.height) ? this.width : this.height;
             this.scene = "";
-            this.mortonNumber = 0;
 
             var image = tm.display.Sprite("image", this.width, this.height);
             image.setFrameIndex(this.frameIndex).addChildTo(this);
@@ -37,9 +36,8 @@ var game = game || {};
                 return;
             }
             var dist = tm.geom.Vector2(this.x, this.y).distanceSquared(player);
-            //プレイヤーとの距離100px ^ 2 && 画面内のbulletの数が130未満の場合、弾を発生させない。
-            //if(dist > 10000 && scene.bulletLayer.children.length < 130){
-            if(dist > 9999){
+            //プレイヤーとの距離100px ^ 2 && 画面内のbulletの数が130未満の場合、弾を発生させる。
+            if(dist > 10000 && scene.bulletLayer.children.length < 130){
                 var explode = game.EnemyExplosion(this.x, this.y, ~~((this.radius + this.maxHp) / 10));
                 explode.addChildTo(this.scene.bulletLayer);
             }
@@ -82,7 +80,6 @@ var game = game || {};
                 this.rotation = Math.radToDeg(vec);
             }
             this.setPosition(this.runner.x, this.runner.y);
-            this.mortonNumber = game.object4Tree.GetMortonNumberObject(this);
 
             if(this.fieldOutCheck && game.GameFieldOut(this) && this.parent){
                 this.remove();
@@ -135,7 +132,7 @@ var game = game || {};
                 }
             }
         },
-        /*preHitTest: function(player){
+        preHitTest: function(player){
             if((this.width === this.heigth) || this.rotation === 0 || this.rotation === 180){
                 return this.isHitElementRect(player);
             }
@@ -145,9 +142,9 @@ var game = game || {};
                 this.preHitTestArea,
                 this.preHitTestArea);
             return tm.collision.testRectRect(rect, player.getBoundingRect());
-        }, */
+        },
         isHitPlayer: function(player){
-            if(!game.object4Tree.match(this.mortonNumber, player.mortonNumber)){ return false; }
+            if(!this.preHitTest(player)){ return false; }
             if(this.boundingType === "circle"){
                 return this.isHitPointCircle(player.x, player.y);
             }
@@ -207,8 +204,6 @@ var game = game || {};
             graphic.setFrameIndex(attr.frameIndex).setAlpha(0.8);
             graphic.addChildTo(this);
 
-            this.mortonNumber = 0;
-
         },
 
         fieldOutCheck: true,
@@ -230,7 +225,6 @@ var game = game || {};
                 this.rotation = Math.radToDeg(vec);
             }
             this.setPosition(this.runner.x, this.runner.y);
-            this.mortonNumber = game.object4Tree.GetMortonNumberObject(this);
 
             if(this.fieldOutCheck && game.GameFieldOut(this) && this.parent){
                 this.remove();
@@ -241,7 +235,6 @@ var game = game || {};
             var player = this.scene.player;
             var scoreLabel = this.scene.scoreLabel;
             if(player.getParent() !== field || !player.hitFlag || !this.parent){ return; }
-            if(!game.object4Tree.match(this.mortonNumber, player.mortonNumber)){ return; }
             switch (player.mode) {
                 case "shot":
                     if(this.preHitTest(player)){
